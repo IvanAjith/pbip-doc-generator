@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PATTERNS = [r"sk-ant-[A-Za-z0-9_-]{20,}", r"sk-[A-Za-z0-9_-]{32,}", r"sk-proj-[A-Za-z0-9_-]{20,}",
             r"AIza[0-9A-Za-z_-]{30,}", r"(?i)(api[_-]?key|secret|token)\s*[:=]\s*['\"][A-Za-z0-9_\-]{24,}['\"]"]
-SKIP = {"test_secrets.py", "test_secret_scan.py"}       # these contain obviously fake sample keys
+SKIP = {"test_secrets.py", "test_secret_scan.py", "test_menu.py"}       # these contain obviously fake sample keys
 
 
 def tracked_files():
