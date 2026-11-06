@@ -51,14 +51,25 @@ assert AIDrafter("custom", verbose=False, post=fake).usable
 buf = []; ai_setup.show_status(out=buf.append); t = "\n".join(buf)
 assert "api.groq.com" in t and "llama-x" in t and "FAKEKEY" not in t
 # the start-up question accepts it too (saved key offered, Enter uses it)
-r = ai_setup.choose_mode(ask=scripted(["1", ""]), out=lambda *_: None)
+r = ai_setup.choose_mode(ask=scripted(["1", ""]), post=fake, out=lambda *_: None)
 assert r["provider"] == "custom" and r["settings"]["model"] == "llama-x"
 # a bad web address is refused before any key is sent
 S.delete_key("custom")
 seen.clear()
-ok = ai_setup.setup(None, ask=scripted(["4", "http://evil.example.com", "4", "http://evil.example.com", "4", "http://evil.example.com"]),
+ok = ai_setup.setup(None, ask=scripted(["4", "http://evil.example.com", "y", "4", "http://evil.example.com", "y", "4", "http://evil.example.com", "n"]),
                     ask_secret=lambda p="": KEY, post=fake, out=lambda *_: None)
 assert not ok and not seen and S.get_key("custom")[0] == ""
+# an "sk-" key that is not OpenAI's: the test fails as OpenAI, the tool offers 'different service' and succeeds as Other
+import urllib.error
+def only_groq(url, headers, payload, key):
+    if "api.openai.com" in url:
+        raise urllib.error.HTTPError(url, 401, "no", {}, None)
+    return fake(url, headers, payload, key)
+K2 = "sk-DEEPSEEKFAKE0123456789abcdefgh"
+buf = []
+ok = ai_setup.setup(None, ask=scripted(["y", "https://api.deepseek.com/v1", "deepseek-chat"]), ask_secret=lambda p="": K2, post=only_groq, out=buf.append)
+assert ok and S.get_key("custom")[0] == K2 and S.get_settings("custom")["model"] == "deepseek-chat" and K2 not in "\n".join(buf)
+S.delete_key("custom")
 # forgetting removes key and settings
 S.save_key("custom", KEY); S.save_settings("custom", base_url="https://a.example.com/v1", model="m")
 assert S.delete_key("custom") and S.get_settings("custom") == {"base_url": "", "model": ""}

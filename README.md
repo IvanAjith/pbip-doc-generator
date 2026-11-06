@@ -18,12 +18,13 @@ python run.py
 ```
 `python run.py` asks one question, then produces all three documents:
 ```
-How should the glossary definitions be written?
-  1. AI mode      (needs an API key - choose this if you have one)
-  2. Offline mode (no key and no internet - definitions are drafted from each measure's DAX formula)
+Do you have an AI API key?
+  1. Yes - AI mode      (paste the key; the AI helps write the definitions)
+  2. No  - Offline mode (no key and no internet; definitions are drafted from each measure's DAX formula)
 ```
 * **2** starts straight away.
-* **1** asks you to paste the key (hidden). The tool recognises the service from how the key starts (Anthropic `sk-ant-`, Gemini `AIza`, OpenAI `sk-`) and asks you to confirm; if it does not recognise the key it shows a list that includes **Other**. It then tests the key, offers to save it on this computer so you are never asked again, and runs. If a key was saved before, press Enter to use it.
+* **1** asks you to paste the key (hidden). The tool recognises the service from how the key starts (Anthropic `sk-ant-`, Gemini `AIza`, OpenAI `sk-`) and goes on by itself; if it does not recognise the key it shows a list that includes **Other**. It tests the key with one small request, offers to save it on this computer so you are never asked again, and generates the documents. If a key was saved before, press Enter to use it (it is tested again first).
+* **If the key is rejected** (wrong, expired, revoked, or the service cannot be reached) you see the reason and the question *"Would you like to continue in offline mode instead? (y/n)"*. **y** generates the three documents in offline mode. **n** stops with "Invalid API key - no documents were generated"; run `python run.py` again and enter a new key.
 
 Skip the question with options: `python run.py --offline`, `python run.py --ai` (saved key), `--no-prompt`. Other options: `--name`, `--author --owner`, `--project-code --version --date-issued --document-id --location`, `--skip-html --skip-docx --skip-glossary`, `--version-info`. When started without a keyboard (scheduled jobs, CI) no question is asked.
 

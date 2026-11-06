@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0
+Clearer start-up flow.
+- First question is now "Do you have an AI API key? 1. Yes (AI mode) / 2. No (offline mode)".
+- A recognised key (Anthropic / Gemini / OpenAI) is used straight away, with no confirmation step.
+- A rejected or unreachable key (or a saved key that no longer works) shows the reason and asks "continue in offline mode? (y/n)": y generates the three documents offline; n stops with "Invalid API key" and exit code 1.
+- An "sk-" key that fails as OpenAI offers the Other-service route before giving up.
+
 ## 1.3.0
 Keys from any service.
 - The service no longer has to be chosen first: paste the key and the tool recognises Anthropic / Gemini / OpenAI from its start and asks to confirm.

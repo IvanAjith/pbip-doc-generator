@@ -150,6 +150,8 @@ def main():
     if args.ai is None and not args.offline and not args.no_prompt and sys.stdin.isatty():
         import ai_setup
         choice = ai_setup.choose_mode()
+        if choice["mode"] == "stop":
+            sys.exit(1)
         if choice["mode"] == "ai":
             args.ai, session_key, session_cfg = choice["provider"], choice["key"], choice.get("settings", {})
         else:

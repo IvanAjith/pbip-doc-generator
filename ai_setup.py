@@ -22,19 +22,12 @@ def _label(p):
     return LABELS.get(p, p)
 
 
-def _ask_service(ask, out, detected):
-    """-> provider name or None. Enter accepts the detected service."""
-    if detected:
-        out(f"\nThis key looks like a {_label(detected)} key.")
-        c = ask("Press Enter if that is right, or type 1-4 to choose another (1 Anthropic, 2 Gemini, 3 OpenAI, 4 Other): ").strip()
-        if c == "":
-            return detected
-    else:
-        out("\nWhich service is this key for?")
-        for i, n in enumerate(ORDER, 1):
-            out(f"  {i}. {_label(n)}")
-        out("  (Not in the list? Choose 4. Any service that works like OpenAI's will do - ask IT for its web address and model name.)")
-        c = ask("Type 1, 2, 3 or 4: ").strip()
+def _ask_list(ask, out):
+    out("\nWhich service is this key for?")
+    for i, n in enumerate(ORDER, 1):
+        out(f"  {i}. {_label(n)}")
+    out("  (Not in the list? Choose 4. Any service that works like OpenAI's will do - ask IT for its web address and model name.)")
+    c = ask("Type 1, 2, 3 or 4: ").strip()
     return ORDER[int(c) - 1] if c.isdigit() and 1 <= int(c) <= len(ORDER) else None
 
 
@@ -44,45 +37,69 @@ def _ask_custom_settings(ask, out):
     out("  - the model name, e.g.  llama-3.3-70b-versatile")
     url = ask("Web address: ").strip()
     if not clean_base_url(url):
-        out("That is not a usable web address. It must start with https:// (http:// is accepted only for this computer).")
-        return None
+        return None, "that is not a usable web address (it must start with https://; http:// is accepted only for this computer)"
     model = ask("Model name: ").strip()
     if not model or " " in model:
-        out("The model name is missing or contains spaces.")
-        return None
-    return {"base_url": url, "model": model}
+        return None, "the model name is missing or contains spaces"
+    return {"base_url": url, "model": model}, ""
 
 
-def _acquire(provider, ask, ask_secret, post, out, attempts=3):
-    """Paste + recognise + test. -> {"provider","key","settings"} or None. Never prints the key."""
-    for _ in range(attempts):
-        out(f"\nPaste your API key. It will NOT appear on screen while you type or paste.")
-        out("(Right-click pastes in most Windows consoles. Press Enter when done.)")
-        key = ask_secret("Key: ").strip().strip('"').strip("'")
-        if len(key) < 20 or " " in key:
-            out("That does not look like an API key (too short, or it contains spaces).")
-            continue
-        prov = provider or _ask_service(ask, out, detect_provider(key))
-        if prov is None:
-            out("That was not a valid choice.")
-            continue
-        settings = {}
-        if prov == "custom":
-            settings = _ask_custom_settings(ask, out) or {}
+def _test(prov, key, settings, post):
+    """One small request. -> (sample text or None, reason)"""
+    d = AIDrafter(prov, api_key=key, post=post, verbose=False, report_context="Casino analytics report; pages: Floor",
+                  base_url=settings.get("base_url"), model=settings.get("model"))
+    r = d.draft("Theoretical Win", **SAMPLE)
+    return (r["text"] if r else None), (d.last_error or "the service did not return a usable answer")
+
+
+def _acquire(provider, ask, ask_secret, post, out):
+    """One attempt: paste the key, recognise the service, test. -> (result, reason). Never prints the key."""
+    out("\nPaste your API key. It will NOT appear on screen while you type or paste.")
+    out("(Right-click pastes in most Windows consoles. Press Enter when done.)")
+    key = ask_secret("Key: ").strip().strip('"').strip("'")
+    if len(key) < 20 or " " in key:
+        return None, "that does not look like an API key (too short, or it contains spaces)"
+    guess = None
+    prov = provider
+    if prov is None:
+        guess = detect_provider(key)
+        if guess:
+            prov = guess
+            out(f"\nRecognised as a {_label(prov)} key.")
+        else:
+            prov = _ask_list(ask, out)
+            if prov is None:
+                return None, "that was not a valid choice"
+    settings = {}
+    if prov == "custom":
+        settings, why = _ask_custom_settings(ask, out)
+        if not settings:
+            return None, why
+    out("Testing the key with one small request ...")
+    sample, reason = _test(prov, key, settings, post)
+    if sample is None and guess == "openai" and prov == "openai":
+        # many other services also start their keys with "sk-": offer the 'Other' route before giving up
+        out(f"The test did not work: {reason}.")
+        if _yes_no(ask, "Could this key belong to a different service (for example Groq, DeepSeek, Azure)? (y/n): "):
+            settings, why = _ask_custom_settings(ask, out)
             if not settings:
-                continue
-        out("Testing the key with one small request ...")
-        d = AIDrafter(prov, api_key=key, post=post, verbose=False, report_context="Casino analytics report; pages: Floor",
-                      base_url=settings.get("base_url"), model=settings.get("model"))
-        r = d.draft("Theoretical Win", **SAMPLE)
-        if r:
-            out("Key works. Sample definition:  " + r["text"])
-            return {"provider": prov, "key": key, "settings": settings}
-        out(f"The test did not work: {d.dead_reason or 'the service did not return a usable answer'}.")
-        out("Check that the key, the service and (for Other) the web address and model name are right.")
-        if ask("Type 1 to try again, or 2 to stop: ").strip() == "2":
-            return None
-    return None
+                return None, why
+            prov = "custom"
+            out("Testing the key with one small request ...")
+            sample, reason = _test(prov, key, settings, post)
+    if sample is None:
+        return None, reason
+    out("Key works. Sample definition:  " + sample)
+    return {"provider": prov, "key": key, "settings": settings}, ""
+
+
+def _yes_no(ask, prompt):
+    while True:
+        a = ask(prompt).strip().lower()
+        if a in ("y", "yes"):
+            return True
+        if a in ("n", "no"):
+            return False
 
 
 def _save(res, out):
@@ -94,25 +111,38 @@ def _save(res, out):
 
 
 def setup(provider=None, ask=None, ask_secret=None, post=None, out=print):
-    """One-time setup on its own. -> True when a working key was saved."""
+    """One-time setup on its own (python run.py --setup-ai). -> True when a working key was saved."""
     ask, ask_secret = ask or input, ask_secret or getpass.getpass
-    res = _acquire(provider, ask, ask_secret, post, out)
-    if not res:
-        out("Nothing was saved.")
-        return False
-    _save(res, out)
-    out("From now on, run:   python run.py")
-    return True
+    for _ in range(3):
+        res, reason = _acquire(provider, ask, ask_secret, post, out)
+        if res:
+            _save(res, out)
+            out("From now on, run:   python run.py")
+            return True
+        out(f"\nThe API key was not accepted: {reason}.")
+        if not _yes_no(ask, "Try again? (y/n): "):
+            break
+    out("Nothing was saved.")
+    return False
+
+
+def _offline_or_stop(ask, out, reason, saved_key=False):
+    out(f"\nThe API key was not accepted: {reason}.")
+    if _yes_no(ask, "Would you like to continue in offline mode instead (definitions drafted from the DAX formulas)? (y/n): "):
+        return {"mode": "offline"}
+    out("\nStopped. Invalid API key - no documents were generated.")
+    out("Run  python run.py  again to try a new key" + (" (type N when asked about the saved key)." if saved_key else "."))
+    return {"mode": "stop"}
 
 
 def choose_mode(ask=None, ask_secret=None, post=None, out=print):
     """The question asked when run.py starts with no options.
-    -> {"mode": "offline"} or {"mode": "ai", "provider", "key", "settings"}"""
+    -> {"mode": "offline"} | {"mode": "stop"} | {"mode": "ai", "provider", "key", "settings"}"""
     ask, ask_secret = ask or input, ask_secret or getpass.getpass
     out("")
-    out("How should the glossary definitions be written?")
-    out("  1. AI mode      (needs an API key - choose this if you have one)")
-    out("  2. Offline mode (no key and no internet - definitions are drafted from each measure's DAX formula)")
+    out("Do you have an AI API key?")
+    out("  1. Yes - AI mode      (paste the key; the AI helps write the definitions)")
+    out("  2. No  - Offline mode (no key and no internet; definitions are drafted from each measure's DAX formula)")
     while True:
         c = ask("Type 1 or 2: ").strip()
         if c in ("1", "2"):
@@ -127,15 +157,17 @@ def choose_mode(ask=None, ask_secret=None, post=None, out=print):
         prov, _src, masked = next((r for r in saved if r[0] == dp), saved[0])
         out(f"\nA saved {_label(prov)} key ({masked}) was found on this computer.")
         if ask("Press Enter to use it, or type N to use a different key: ").strip().lower() != "n":
-            return {"mode": "ai", "provider": prov, "key": secrets_store.get_key(prov)[0],
-                    "settings": secrets_store.get_settings(prov)}
+            key, st = secrets_store.get_key(prov)[0], secrets_store.get_settings(prov)
+            out("Testing the saved key with one small request ...")
+            sample, reason = _test(prov, key, st, post)
+            if sample is None:
+                return _offline_or_stop(ask, out, reason, saved_key=True)
+            return {"mode": "ai", "provider": prov, "key": key, "settings": st}
 
-    res = _acquire(None, ask, ask_secret, post, out)
+    res, reason = _acquire(None, ask, ask_secret, post, out)
     if not res:
-        out("\nNo working key was entered, so this run continues in offline mode.")
-        return {"mode": "offline"}
-    a = ask("Save this key on this computer so you are not asked again? (Enter = yes, n = no, e.g. on a shared computer): ")
-    if a.strip().lower() != "n":
+        return _offline_or_stop(ask, out, reason)
+    if _yes_no(ask, "Save this key on this computer so you are not asked again? (y/n - choose n on a shared computer): "):
         _save(res, out)
     else:
         out("Not saved. The key is used for this run only.")

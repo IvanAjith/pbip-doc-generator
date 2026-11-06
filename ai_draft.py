@@ -140,6 +140,7 @@ class AIDrafter:
         self.calls = self.failures = self.drafted = 0
         self.dead = False
         self.dead_reason = ""
+        self.last_error = ""
         self.label = f"{LABEL} ({provider})"
 
     @property
@@ -149,11 +150,12 @@ class AIDrafter:
         return bool(self.api_key) and not self.dead
 
     def _disable(self, why):
-        self.dead, self.dead_reason = True, why
+        self.dead, self.dead_reason, self.last_error = True, why, why
         if self.verbose:
             print(f"  (AI drafting switched off: {why})")
 
     def _fail(self, why):
+        self.last_error = why
         self.failures += 1
         if self.failures >= 3:
             self._disable(f"3 failed calls in a row ({why})")
@@ -198,6 +200,7 @@ class AIDrafter:
         self.failures = 0
         text = re.sub(r"\s+", " ", read_reply(self.provider, data)).strip().strip('"')
         if not text or text.upper().startswith("UNKNOWN") or len(text) < 15:
+            self.last_error = self.last_error or "the service answered, but not with a usable definition"
             return None
         self.drafted += 1
         return {"text": text, "origin": self.label}
