@@ -91,7 +91,17 @@ def build_manual_with_real_toc(manual_gen, project_name, analysis, page_items, d
     return log, True
 
 
+def _console_safe():
+    """Never crash on a character the console cannot show (older Windows consoles)."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")
+        except Exception:
+            pass
+
+
 def main():
+    _console_safe()
     ap = argparse.ArgumentParser(description="Generate a user manual, KPI glossary and HTML reference from a PBIP project.")
     ap.add_argument("--version-info", action="version", version="pbip-doc-generator " + (((HERE / "VERSION").read_text().strip()) if (HERE / "VERSION").exists() else "dev"))
     ap.add_argument("--source", default=str(HERE / "source"))
@@ -104,16 +114,32 @@ def main():
     ap.add_argument("--location", default=""); ap.add_argument("--name", default="", help="override the project name")
     ap.add_argument("--offline", action="store_true", help="do not look anything up on the web")
     ap.add_argument("--max-web-lookups", type=int, default=80)
-    ap.add_argument("--ai", nargs="?", const="anthropic", choices=["anthropic", "gemini", "openai"], default=None,
-                    help="optional AI mode: an AI writes the definitions nothing else could supply. Needs a key in "
-                         "ANTHROPIC_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY. Only names and formula wording are "
-                         "sent, never report data. Without it, definitions are drafted from the formula (offline).")
+    ap.add_argument("--ai", nargs="?", const="default", choices=["default", "anthropic", "gemini", "openai"], default=None,
+                    help="optional AI mode: an AI writes the definitions nothing else could supply. Set the key up once "
+                         "with --setup-ai. Only names and formula wording are sent, never report data. "
+                         "Without it, definitions are drafted from the formula (offline).")
+    ap.add_argument("--setup-ai", nargs="?", const="ask", choices=["ask", "anthropic", "gemini", "openai"], default=None,
+                    help="one-time guided setup: paste your API key (hidden), it is tested and stored safely outside the project")
+    ap.add_argument("--ai-status", action="store_true", help="show which AI keys are set up on this computer (masked)")
+    ap.add_argument("--forget-ai-key", nargs="?", const="all", choices=["all", "anthropic", "gemini", "openai"], default=None,
+                    help="remove the saved AI key from this computer")
     ap.add_argument("--ai-model", default=None, help="override the provider's default model name")
     ap.add_argument("--ai-send-dax", action="store_true",
                     help="also send each measure's DAX text to the AI (more accurate; check your client allows it)")
     ap.add_argument("--skip-html", action="store_true"); ap.add_argument("--skip-docx", action="store_true")
     ap.add_argument("--skip-glossary", action="store_true")
     args = ap.parse_args()
+
+    if args.setup_ai or args.ai_status or args.forget_ai_key:
+        import ai_setup
+        if args.setup_ai:
+            ok = ai_setup.setup(None if args.setup_ai == "ask" else args.setup_ai)
+            sys.exit(0 if ok else 1)
+        if args.forget_ai_key:
+            ai_setup.forget(None if args.forget_ai_key == "all" else args.forget_ai_key)
+            return
+        ai_setup.show_status()
+        return
 
     source, output = Path(args.source), Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
@@ -141,15 +167,25 @@ def main():
     ai = None
     if args.ai:
         from ai_draft import AIDrafter, PROVIDERS
+        import secrets_store
+        if args.ai == "default":
+            args.ai = secrets_store.default_provider() or next((p for p, _, _ in secrets_store.status()), None)
+            if not args.ai:
+                print("  --ai was given but no AI key is set up on this computer.\n"
+                      "  Run once:  python run.py --setup-ai      (definitions are drafted from the formulas meanwhile)")
         ctx = f"{project_name}; pages: " + ", ".join(p["displayName"].strip() for p in primary)
-        ai = AIDrafter(args.ai, model=args.ai_model, verbose=True, report_context=ctx, send_dax=args.ai_send_dax)
-        if not ai.api_key:
-            print(f"  --ai {args.ai} was given but {' / '.join(PROVIDERS[args.ai]['env'])} is not set, so AI drafts are skipped "
-                  "(definitions are drafted from the formulas instead; see README).")
+        ai = AIDrafter(args.ai, model=args.ai_model, verbose=True, report_context=ctx, send_dax=args.ai_send_dax) \
+            if args.ai else None
+        if ai is not None and not ai.api_key:
+            print(f"  --ai {args.ai} was given but no key is set up for it, so AI drafts are skipped "
+                  "(definitions are drafted from the formulas instead). Run once:  python run.py --setup-ai")
             ai = None
+        elif ai is None:
+            pass
         else:
             print(f"  AI mode on ({args.ai}, model {ai.model}): only names, formula wording and page names are sent"
                   + (" plus DAX text" if args.ai_send_dax else "") + " -- no report data.")
+    Path(args.glossary).parent.mkdir(parents=True, exist_ok=True)
     glossary = Glossary(args.glossary, web=web, ai=ai)
     safe = "".join(c if c.isalnum() or c in "-_" else "_" for c in project_name.replace(" ", "_"))
     glossary_docx = output / f"{safe}_KPI_Glossary.docx"

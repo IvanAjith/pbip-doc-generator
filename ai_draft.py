@@ -35,10 +35,9 @@ PROVIDERS = {
 
 
 def key_from_env(provider):
-    for name in PROVIDERS[provider]["env"]:
-        if os.environ.get(name):
-            return os.environ[name]
-    return ""
+    """The provider's key from the environment, the secure store or the private user file (see secrets_store)."""
+    import secrets_store
+    return secrets_store.get_key(provider)[0]
 
 
 def build_request(provider, model, system, user, max_tokens=160):

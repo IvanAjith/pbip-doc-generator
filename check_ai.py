@@ -9,7 +9,7 @@ provider = sys.argv[1] if len(sys.argv) > 1 else "anthropic"
 if provider not in PROVIDERS:
     print("Choose one of:", ", ".join(PROVIDERS)); sys.exit(1)
 if not key_from_env(provider):
-    print(f"No key found. Set {' or '.join(PROVIDERS[provider]['env'])} first (see README)."); sys.exit(1)
+    print("No key found for this service. Run once:  python run.py --setup-ai"); sys.exit(1)
 d = AIDrafter(provider, report_context="Casino analytics report; pages: Slots, Tables")
 r = d.draft("Theoretical Win", calc="Turnover multiplied by Hold %", page="Slots")
 print("PROVIDER:", provider, "| MODEL:", d.model)
