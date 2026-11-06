@@ -14,9 +14,18 @@ It works for any business (revenue, inventory, HR, gaming, streaming, insurance 
 ```
 pip install -r requirements.txt
 # put the Report + SemanticModel folders (or their .zip files) in source/
-python run.py --author "Your Name" --owner "Client"
+python run.py
 ```
-Useful options: `--offline` (no web), `--name`, `--project-code --version --date-issued --document-id --location`, `--skip-html --skip-docx --skip-glossary`, `--version-info`.
+`python run.py` asks one question, then produces all three documents:
+```
+How should the glossary definitions be written?
+  1. AI mode      (needs an API key - choose this if you have one)
+  2. Offline mode (no key and no internet - definitions are drafted from each measure's DAX formula)
+```
+* **2** starts straight away.
+* **1** asks you to paste the key (hidden), tests it, offers to save it on this computer so you are never asked again, then runs. If a key was saved before, press Enter to use it.
+
+Skip the question with options: `python run.py --offline`, `python run.py --ai` (saved key), `--no-prompt`. Other options: `--name`, `--author --owner`, `--project-code --version --date-issued --document-id --location`, `--skip-html --skip-docx --skip-glossary`, `--version-info`. When started without a keyboard (scheduled jobs, CI) no question is asked.
 
 ## Two modes
 
@@ -35,10 +44,10 @@ Anyone can use the tool on their own computer with their own key. Nothing about 
 2. **Install Python 3.10 or newer** (python.org; on Windows tick *Add Python to PATH*).
 3. **Get the tool.** `git clone https://github.com/IvanAjith/pbip-doc-generator` (or download the ZIP from GitHub and unzip it), then open a terminal in that folder.
 4. **Install the helpers.** `pip install -r requirements.txt`
-5. **Save the key – one time.** `python run.py --setup-ai`
+5. **Save the key – one time.** `python run.py`, choose **1**, paste the key (or run `python run.py --setup-ai` on its own)
    * Choose the service (1, 2 or 3), paste the key when asked. **Nothing appears on screen while you paste** – that is normal. Press Enter.
    * The tool makes one small test request and only saves the key if it works.
-6. **Every report after that.** Put the report's `.Report` and `.SemanticModel` folders (or their `.zip` files) in `source/`, then run `python run.py --ai` (or just `python run.py` for offline mode). The three files appear in `output/`.
+6. **Every report after that.** Put the report's `.Report` and `.SemanticModel` folders (or their `.zip` files) in `source/`, then run `python run.py` and choose 1 (Enter uses the saved key) or 2. The three files appear in `output/`.
 
 On Windows you can also double-click `run_windows.bat`; it runs the tool and keeps the window open.
 
@@ -86,6 +95,7 @@ python tests/test_glossary_csv_ai.py    # my_definitions.csv + AI step
 python tests/test_web_glossary.py       # web lookup + precedence (simulated network)
 python tests/test_word_roundtrip.py     # edit the glossary in Word, run again
 python tests/test_end_to_end.py         # made-up inventory / streaming / HR / gaming projects
+python tests/test_menu.py               # the start-up question (AI / offline)
 python tests/test_secrets.py            # key storage, masking, guided setup
 python tests/test_secret_scan.py        # no key-like text in files Git would publish
 ```

@@ -120,6 +120,8 @@ def main():
                          "Without it, definitions are drafted from the formula (offline).")
     ap.add_argument("--setup-ai", nargs="?", const="ask", choices=["ask", "anthropic", "gemini", "openai"], default=None,
                     help="one-time guided setup: paste your API key (hidden), it is tested and stored safely outside the project")
+    ap.add_argument("--no-prompt", action="store_true",
+                    help="do not ask which mode to use (the default when run without a keyboard, e.g. in automation)")
     ap.add_argument("--ai-status", action="store_true", help="show which AI keys are set up on this computer (masked)")
     ap.add_argument("--forget-ai-key", nargs="?", const="all", choices=["all", "anthropic", "gemini", "openai"], default=None,
                     help="remove the saved AI key from this computer")
@@ -140,6 +142,17 @@ def main():
             return
         ai_setup.show_status()
         return
+
+    # Started with no mode option on a normal keyboard session: ask once which mode to use.
+    session_key = None
+    if args.ai is None and not args.offline and not args.no_prompt and sys.stdin.isatty():
+        import ai_setup
+        choice = ai_setup.choose_mode()
+        if choice["mode"] == "ai":
+            args.ai, session_key = choice["provider"], choice["key"]
+        else:
+            args.offline = True
+            print("  Offline mode: nothing is sent anywhere; definitions come from built-in terms and each measure's formula.")
 
     source, output = Path(args.source), Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
@@ -174,7 +187,7 @@ def main():
                 print("  --ai was given but no AI key is set up on this computer.\n"
                       "  Run once:  python run.py --setup-ai      (definitions are drafted from the formulas meanwhile)")
         ctx = f"{project_name}; pages: " + ", ".join(p["displayName"].strip() for p in primary)
-        ai = AIDrafter(args.ai, model=args.ai_model, verbose=True, report_context=ctx, send_dax=args.ai_send_dax) \
+        ai = AIDrafter(args.ai, api_key=session_key, model=args.ai_model, verbose=True, report_context=ctx, send_dax=args.ai_send_dax) \
             if args.ai else None
         if ai is not None and not ai.api_key:
             print(f"  --ai {args.ai} was given but no key is set up for it, so AI drafts are skipped "

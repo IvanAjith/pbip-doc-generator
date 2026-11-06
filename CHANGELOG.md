@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+One universal start: `python run.py`.
+- Asks "1. AI mode (needs an API key) / 2. Offline mode (formula drafts)". AI mode takes the pasted key (hidden), tests it, offers to save it (outside the project), then generates the three documents; offline generates them straight away.
+- A saved key is offered next time (Enter to use it).
+- No question is asked when options are given (`--offline`, `--ai`) or when there is no keyboard (`--no-prompt`, automation).
+
 ## 1.1.0
 Safe, per-computer API keys for team use.
 - New `python run.py --setup-ai`: guided one-time setup. Choose Anthropic / Gemini / OpenAI, paste the key (hidden), one test request, saved only if it works.
