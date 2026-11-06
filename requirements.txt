@@ -1,0 +1,6 @@
+python-docx>=1.1.0
+pypdf>=4.0.0
+# optional: web fallback search for glossary terms (Wikipedia is used without it)
+ddgs>=9.0.0
+# optional: PDF conversion on Windows/macOS with Word installed (LibreOffice is used if present)
+docx2pdf>=0.1.8

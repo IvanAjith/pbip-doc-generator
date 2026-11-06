@@ -1,0 +1,14 @@
+# Your report files and everything generated from them never get committed (client confidential)
+source/*
+!source/.gitkeep
+output/*
+!output/.gitkeep
+glossary/*
+!glossary/.gitkeep
+
+__pycache__/
+*.pyc
+.DS_Store
+.env
+*.key
+~$*
