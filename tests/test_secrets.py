@@ -50,7 +50,7 @@ def scripted(answers):
 
 # guided setup: success saves, output never shows the key
 buf = []
-ok = ai_setup.setup(None, ask=scripted(["2"]), ask_secret=lambda p="": "  AIzaFAKEKEY0123456789abcdefghijkl ", post=lambda u, h, p, k: {
+ok = ai_setup.setup(None, ask=scripted([""]), ask_secret=lambda p="": "  AIzaFAKEKEY0123456789abcdefghijkl ", post=lambda u, h, p, k: {
     "candidates": [{"content": {"parts": [{"text": "Expected win over time."}]}}]}, out=buf.append)
 assert ok and S.get_key("gemini")[0] == "AIzaFAKEKEY0123456789abcdefghijkl" and S.default_provider() == "gemini"
 assert "AIzaFAKEKEY" not in "\n".join(buf), "setup printed the key"
@@ -58,11 +58,11 @@ assert "AIzaFAKEKEY" not in "\n".join(buf), "setup printed the key"
 # a rejected key is not saved
 S.delete_key("gemini")
 buf = []
-ok = ai_setup.setup("anthropic", ask=scripted(["n"]), ask_secret=lambda p="": KEY, post=fake_bad, out=buf.append)
+ok = ai_setup.setup("anthropic", ask=scripted(["2"]), ask_secret=lambda p="": KEY, post=fake_bad, out=buf.append)
 assert not ok and S.get_key("anthropic")[0] == "" and KEY not in "\n".join(buf)
 # junk input is refused
 assert not ai_setup.setup("openai", ask=scripted([]), ask_secret=lambda p="": "abc", post=fake_ok, out=lambda *_: None)
-assert not ai_setup.setup(None, ask=scripted(["9"]), out=lambda *_: None)
+assert not ai_setup.setup(None, ask=scripted(["9", "9", "9"]), ask_secret=lambda p="": "z" * 30, out=lambda *_: None)
 
 # status and forget never show the whole key
 S.save_key("openai", "sk-openaiFAKE0123456789ABCD")

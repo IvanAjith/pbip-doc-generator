@@ -24,6 +24,7 @@ jobs:
           python tests/test_web_glossary.py
           python tests/test_word_roundtrip.py
           python tests/test_menu.py
+          python tests/test_custom_service.py
           python tests/test_secrets.py
           python tests/test_secret_scan.py
           python tests/test_end_to_end.py

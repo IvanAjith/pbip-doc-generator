@@ -23,7 +23,7 @@ How should the glossary definitions be written?
   2. Offline mode (no key and no internet - definitions are drafted from each measure's DAX formula)
 ```
 * **2** starts straight away.
-* **1** asks you to paste the key (hidden), tests it, offers to save it on this computer so you are never asked again, then runs. If a key was saved before, press Enter to use it.
+* **1** asks you to paste the key (hidden). The tool recognises the service from how the key starts (Anthropic `sk-ant-`, Gemini `AIza`, OpenAI `sk-`) and asks you to confirm; if it does not recognise the key it shows a list that includes **Other**. It then tests the key, offers to save it on this computer so you are never asked again, and runs. If a key was saved before, press Enter to use it.
 
 Skip the question with options: `python run.py --offline`, `python run.py --ai` (saved key), `--no-prompt`. Other options: `--name`, `--author --owner`, `--project-code --version --date-issued --document-id --location`, `--skip-html --skip-docx --skip-glossary`, `--version-info`. When started without a keyboard (scheduled jobs, CI) no question is asked.
 
@@ -37,10 +37,18 @@ Skip the question with options: `python run.py --offline`, `python run.py --ai` 
 Set the key up once per computer (see **Team setup** below), then run `python run.py --ai`.
 Only indicator names, formula wording, page names and the report's name/page names are sent – never report data. `--ai-send-dax` also sends the measure's DAX (more accurate; confirm your client allows it). `--ai-model <name>` overrides the default model if a provider retires one. Free keys may let the provider use what you send; check the provider's terms against your client's rules.
 
+## Keys from other services ("Other")
+The tool must know which service a key belongs to because each service has its own web address and message format. You do not have to pick it: it is guessed from the key, and **Other** covers everything else that works like OpenAI's service: Azure OpenAI, Mistral, Groq, DeepSeek, OpenRouter, Together, a company AI gateway, a local Ollama. Ask IT for two things:
+* the **web address** of the service (e.g. `https://api.groq.com/openai/v1`, or the full `.../chat/completions` address, or an Azure deployment address)
+* the **model name** (e.g. `llama-3.3-70b-versatile`, or the Azure deployment name)
+
+The tool asks for both once, tests them, and remembers them (they are not secret; only the key is). Only `https://` addresses are accepted (plain `http://` only for this computer, e.g. Ollama). The key is sent only to the address you gave. Command-line form: `python run.py --ai custom --ai-url <address> --ai-model <name>`.
+Services that use a completely different message format (not OpenAI-style, not Anthropic, not Gemini) are not supported; tell me which one and I will add it. Azure OpenAI and the other "Other" services could not be tried here, only simulated.
+
 ## Team setup (once per computer)
 Anyone can use the tool on their own computer with their own key. Nothing about a key is ever stored in this repository.
 
-1. **Get a key.** Ask IT for an API key for the AI service your company allows (Anthropic, Google Gemini or OpenAI). Skip this for offline mode: `python run.py` works with no key.
+1. **Get a key.** Ask IT for an API key for the AI service your company allows (Anthropic, Google Gemini, OpenAI, or another OpenAI-compatible service: then also ask for its web address and model name). Skip this for offline mode: `python run.py` works with no key.
 2. **Install Python 3.10 or newer** (python.org; on Windows tick *Add Python to PATH*).
 3. **Get the tool.** `git clone https://github.com/IvanAjith/pbip-doc-generator` (or download the ZIP from GitHub and unzip it), then open a terminal in that folder.
 4. **Install the helpers.** `pip install -r requirements.txt`
@@ -60,7 +68,7 @@ On Windows you can also double-click `run_windows.bat`; it runs the tool and kee
 * `python tests/test_secret_scan.py` fails if anything that looks like a key is in a file Git would publish; it also runs on every push.
 
 ### Network allow-list (ask IT if something is blocked)
-* AI mode: `api.anthropic.com`, `generativelanguage.googleapis.com` or `api.openai.com` (only the one you chose).
+* AI mode: `api.anthropic.com`, `generativelanguage.googleapis.com`, `api.openai.com`, or the web address of your 'Other' service (only the one you chose).
 * Web definitions (skipped with `--offline`): `en.wikipedia.org` and the search engines the `ddgs` package uses.
 * Installing: `pypi.org`, `files.pythonhosted.org`, `github.com`.
 If the AI cannot be reached the tool says so and carries on with formula drafts, so a run never fails because of the network.
@@ -96,6 +104,7 @@ python tests/test_web_glossary.py       # web lookup + precedence (simulated net
 python tests/test_word_roundtrip.py     # edit the glossary in Word, run again
 python tests/test_end_to_end.py         # made-up inventory / streaming / HR / gaming projects
 python tests/test_menu.py               # the start-up question (AI / offline)
+python tests/test_custom_service.py     # key recognition, 'Other' services, web-address checks
 python tests/test_secrets.py            # key storage, masking, guided setup
 python tests/test_secret_scan.py        # no key-like text in files Git would publish
 ```

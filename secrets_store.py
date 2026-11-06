@@ -19,6 +19,7 @@ ENV_NAMES = {
     "anthropic": ["ANTHROPIC_API_KEY"],
     "gemini": ["GEMINI_API_KEY", "GOOGLE_API_KEY"],
     "openai": ["OPENAI_API_KEY"],
+    "custom": ["AI_API_KEY"],
 }
 
 
@@ -120,11 +121,27 @@ def delete_key(provider):
     cfg = _read_config()
     if cfg.get("keys", {}).pop(provider, None):
         removed = True
+    cfg.get("settings", {}).pop(provider, None)
     if cfg.get("default_provider") == provider:
         cfg.pop("default_provider")
     if removed or cfg:
         _write_config(cfg)
     return removed
+
+
+def get_settings(provider):
+    """Non-secret settings for a provider (the 'custom' service's web address and model name)."""
+    st = dict(_read_config().get("settings", {}).get(provider, {}))
+    if provider == "custom":
+        st["base_url"] = os.environ.get("AI_BASE_URL") or st.get("base_url", "")
+        st["model"] = os.environ.get("AI_MODEL") or st.get("model", "")
+    return st
+
+
+def save_settings(provider, **values):
+    cfg = _read_config()
+    cfg.setdefault("settings", {}).setdefault(provider, {}).update(values)
+    _write_config(cfg)
 
 
 def default_provider():

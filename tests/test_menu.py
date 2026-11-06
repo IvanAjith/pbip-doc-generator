@@ -20,22 +20,22 @@ def scripted(a):
 assert ai_setup.choose_mode(ask=scripted(["x", "2"]), out=lambda *_: None) == {"mode": "offline"}
 # option 1, new key, test passes, saved
 buf = []
-r = ai_setup.choose_mode(ask=scripted(["1", "2", ""]), ask_secret=lambda p="": " " + KEY + " ", post=GOOD, out=buf.append)
-assert r == {"mode": "ai", "provider": "gemini", "key": KEY} and S.get_key("gemini")[0] == KEY
+r = ai_setup.choose_mode(ask=scripted(["1", "", ""]), ask_secret=lambda p="": " " + KEY + " ", post=GOOD, out=buf.append)
+assert (r["provider"], r["key"]) == ("gemini", KEY) and S.get_key("gemini")[0] == KEY
 assert KEY not in "\n".join(buf), "the key was printed"
 # next time: saved key offered, Enter uses it, no paste needed
 r = ai_setup.choose_mode(ask=scripted(["1", ""]), ask_secret=lambda p="": 1 / 0, out=lambda *_: None)
 assert r["key"] == KEY
 # ... or N to type another, and 'n' to not save it
 S.delete_key("gemini")
-r = ai_setup.choose_mode(ask=scripted(["1", "1", "n"]), ask_secret=lambda p="": "sk-ant-OTHERKEY0123456789abcdefgh",
+r = ai_setup.choose_mode(ask=scripted(["1", "", "n"]), ask_secret=lambda p="": "sk-ant-OTHERKEY0123456789abcdefgh",
                          post=lambda u, h, p, k: {"content": [{"type": "text", "text": "The amount a game is expected to win over time."}]}, out=lambda *_: None)
 assert r["provider"] == "anthropic" and S.get_key("anthropic")[0] == "", "key saved although the user said n"
 # a rejected key -> choose offline
 import urllib.error
 def bad(u, h, p, k): raise urllib.error.HTTPError(u, 401, "no", {}, None)
 buf = []
-r = ai_setup.choose_mode(ask=scripted(["1", "3", "2"]), ask_secret=lambda p="": "sk-OPENAIFAKE0123456789abcdefgh", post=bad, out=buf.append)
+r = ai_setup.choose_mode(ask=scripted(["1", "", "2"]), ask_secret=lambda p="": "sk-OPENAIFAKE0123456789abcdefgh", post=bad, out=buf.append)
 assert r == {"mode": "offline"} and "rejected" in "\n".join(buf) and S.get_key("openai")[0] == ""
 
 # ---- the whole program, as a colleague would start it: python run.py  (keyboard session)
@@ -67,7 +67,7 @@ calls = []
 def http(url, headers, payload, key, provider=None, timeout=40):
     calls.append(key); return GOOD(url, headers, payload, key)
 ai_draft._http_real = ai_draft._http
-text, out = go(["1", "2", "n"], http=lambda u, h, p, k, *a, **kw: http(u, h, p, k))
+text, out = go(["1", "", "n"], http=lambda u, h, p, k, *a, **kw: http(u, h, p, k))
 assert len(list(out.glob("*"))) == 3 and calls and set(calls) == {KEY}, text[-600:]
 assert KEY not in text and S.get_key("gemini")[0] == "", "key leaked or saved"
 assert "AI mode on" in text

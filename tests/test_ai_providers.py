@@ -28,9 +28,11 @@ def fake(url, headers, payload, key):
     seen.append((url, headers, payload, key))
     return {"anthropic": {"content": [{"type": "text", "text": "Expected win: turnover multiplied by the hold percentage."}]},
             "gemini": {"candidates": [{"content": {"parts": [{"text": "Expected win: turnover multiplied by the hold percentage."}]}}]},
-            "openai": {"choices": [{"message": {"content": "Expected win: turnover multiplied by the hold percentage."}}]}}[prov]
+            "openai": {"choices": [{"message": {"content": "Expected win: turnover multiplied by the hold percentage."}}]},
+            "custom": {"choices": [{"message": {"content": "Expected win: turnover multiplied by the hold percentage."}}]}}[prov]
 for prov in PROVIDERS:
-    d = AIDrafter(prov, api_key="K", post=fake, verbose=False, report_context="Casino report; pages: Slots")
+    extra = dict(base_url="https://gateway.example.com/v1", model="m1") if prov == "custom" else {}
+    d = AIDrafter(prov, api_key="K", post=fake, verbose=False, report_context="Casino report; pages: Slots", **extra)
     r = d.draft("Theoretical Win", calc="Turnover multiplied by Hold %", page="Slots", dax="Turnover * [Hold %]", kind="value")
     assert r and r["text"].startswith("Expected win") and prov in r["origin"], r
     blob = json.dumps(seen[-1][2])

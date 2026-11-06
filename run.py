@@ -19,6 +19,7 @@ glossary/glossary.json (yours), a small built-in seed list, and -- unless
 --offline -- the web, saved back to glossary.json for you to review.
 """
 import argparse
+import urllib.parse
 import sys
 import zipfile
 from pathlib import Path
@@ -114,18 +115,19 @@ def main():
     ap.add_argument("--location", default=""); ap.add_argument("--name", default="", help="override the project name")
     ap.add_argument("--offline", action="store_true", help="do not look anything up on the web")
     ap.add_argument("--max-web-lookups", type=int, default=80)
-    ap.add_argument("--ai", nargs="?", const="default", choices=["default", "anthropic", "gemini", "openai"], default=None,
+    ap.add_argument("--ai", nargs="?", const="default", choices=["default", "anthropic", "gemini", "openai", "custom"], default=None,
                     help="optional AI mode: an AI writes the definitions nothing else could supply. Set the key up once "
                          "with --setup-ai. Only names and formula wording are sent, never report data. "
                          "Without it, definitions are drafted from the formula (offline).")
-    ap.add_argument("--setup-ai", nargs="?", const="ask", choices=["ask", "anthropic", "gemini", "openai"], default=None,
+    ap.add_argument("--setup-ai", nargs="?", const="ask", choices=["ask", "anthropic", "gemini", "openai", "custom"], default=None,
                     help="one-time guided setup: paste your API key (hidden), it is tested and stored safely outside the project")
     ap.add_argument("--no-prompt", action="store_true",
                     help="do not ask which mode to use (the default when run without a keyboard, e.g. in automation)")
     ap.add_argument("--ai-status", action="store_true", help="show which AI keys are set up on this computer (masked)")
-    ap.add_argument("--forget-ai-key", nargs="?", const="all", choices=["all", "anthropic", "gemini", "openai"], default=None,
+    ap.add_argument("--forget-ai-key", nargs="?", const="all", choices=["all", "anthropic", "gemini", "openai", "custom"], default=None,
                     help="remove the saved AI key from this computer")
     ap.add_argument("--ai-model", default=None, help="override the provider's default model name")
+    ap.add_argument("--ai-url", default=None, help="web address of an 'other' (OpenAI-compatible) AI service; with --ai custom")
     ap.add_argument("--ai-send-dax", action="store_true",
                     help="also send each measure's DAX text to the AI (more accurate; check your client allows it)")
     ap.add_argument("--skip-html", action="store_true"); ap.add_argument("--skip-docx", action="store_true")
@@ -144,12 +146,12 @@ def main():
         return
 
     # Started with no mode option on a normal keyboard session: ask once which mode to use.
-    session_key = None
+    session_key, session_cfg = None, {}
     if args.ai is None and not args.offline and not args.no_prompt and sys.stdin.isatty():
         import ai_setup
         choice = ai_setup.choose_mode()
         if choice["mode"] == "ai":
-            args.ai, session_key = choice["provider"], choice["key"]
+            args.ai, session_key, session_cfg = choice["provider"], choice["key"], choice.get("settings", {})
         else:
             args.offline = True
             print("  Offline mode: nothing is sent anywhere; definitions come from built-in terms and each measure's formula.")
@@ -187,16 +189,21 @@ def main():
                 print("  --ai was given but no AI key is set up on this computer.\n"
                       "  Run once:  python run.py --setup-ai      (definitions are drafted from the formulas meanwhile)")
         ctx = f"{project_name}; pages: " + ", ".join(p["displayName"].strip() for p in primary)
-        ai = AIDrafter(args.ai, api_key=session_key, model=args.ai_model, verbose=True, report_context=ctx, send_dax=args.ai_send_dax) \
+        ai = AIDrafter(args.ai, api_key=session_key, model=args.ai_model or session_cfg.get("model"),
+                       base_url=args.ai_url or session_cfg.get("base_url"), verbose=True, report_context=ctx, send_dax=args.ai_send_dax) \
             if args.ai else None
-        if ai is not None and not ai.api_key:
+        if ai is not None and args.ai == "custom" and not ai.usable and ai.api_key:
+            print("  --ai custom needs the service's web address and model name. Run once:  python run.py --setup-ai custom")
+            ai = None
+        elif ai is not None and not ai.api_key:
             print(f"  --ai {args.ai} was given but no key is set up for it, so AI drafts are skipped "
                   "(definitions are drafted from the formulas instead). Run once:  python run.py --setup-ai")
             ai = None
         elif ai is None:
             pass
         else:
-            print(f"  AI mode on ({args.ai}, model {ai.model}): only names, formula wording and page names are sent"
+            where = (" at " + urllib.parse.urlparse(ai.base_url).hostname) if args.ai == "custom" else ""
+            print(f"  AI mode on ({args.ai}{where}, model {ai.model}): only names, formula wording and page names are sent"
                   + (" plus DAX text" if args.ai_send_dax else "") + " -- no report data.")
     Path(args.glossary).parent.mkdir(parents=True, exist_ok=True)
     glossary = Glossary(args.glossary, web=web, ai=ai)

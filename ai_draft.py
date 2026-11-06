@@ -31,7 +31,36 @@ PROVIDERS = {
                "url": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"},
     "openai": {"env": ["OPENAI_API_KEY"], "model": "gpt-4o-mini",
                "url": "https://api.openai.com/v1/chat/completions"},
+    # any other service that speaks the OpenAI "chat completions" format (Azure OpenAI, Mistral, Groq, DeepSeek,
+    # OpenRouter, Together, a company gateway, a local Ollama ...). Its web address and model name come from the user.
+    "custom": {"env": ["AI_API_KEY"], "model": "", "url": ""},
 }
+
+
+def clean_base_url(url):
+    """Accept https://host/v1, https://host/v1/chat/completions or an Azure deployment URL -> full request URL.
+    Returns '' when it is not a safe web address (https only; plain http only for this computer)."""
+    url = (url or "").strip().strip('"').strip("'")
+    p = urllib.parse.urlparse(url)
+    local = p.hostname in ("localhost", "127.0.0.1", "::1")
+    if not p.hostname or not (p.scheme == "https" or (p.scheme == "http" and local)):
+        return ""
+    if "/chat/completions" in p.path:
+        return url
+    base = url.split("?")[0].rstrip("/")
+    return base + "/chat/completions" + (("?" + p.query) if p.query else "")
+
+
+def detect_provider(key):
+    """Best guess from how the key starts: 'anthropic' | 'gemini' | 'openai' | None. Only a suggestion."""
+    k = (key or "").strip()
+    if k.startswith("sk-ant-"):
+        return "anthropic"
+    if k.startswith("AIza"):
+        return "gemini"
+    if k.startswith("sk-") and not k.startswith("sk-or-"):
+        return "openai"
+    return None
 
 
 def key_from_env(provider):
@@ -40,10 +69,13 @@ def key_from_env(provider):
     return secrets_store.get_key(provider)[0]
 
 
-def build_request(provider, model, system, user, max_tokens=160):
+def build_request(provider, model, system, user, max_tokens=160, base_url=""):
     """-> (url, headers, payload) for one provider."""
     cfg = PROVIDERS[provider]
-    url = cfg["url"].format(model=urllib.parse.quote(model, safe=""))
+    url = clean_base_url(base_url) if provider == "custom" else cfg["url"].format(model=urllib.parse.quote(model, safe=""))
+    if provider == "custom":
+        return url, {}, {"model": model, "max_tokens": max_tokens * 4, "temperature": 0.2,
+                         "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
     if provider == "anthropic":
         return url, {"anthropic-version": "2023-06-01"}, {
             "model": model, "max_tokens": max_tokens, "system": system,
@@ -79,6 +111,8 @@ def _http(url, headers, payload, key, provider, timeout=40):
         h["x-goog-api-key"] = key
     else:
         h["authorization"] = "Bearer " + key
+        if provider == "custom":
+            h["api-key"] = key                 # Azure OpenAI reads the key from this header instead
     req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=h)
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.loads(r.read().decode("utf-8"))
@@ -86,11 +120,17 @@ def _http(url, headers, payload, key, provider, timeout=40):
 
 class AIDrafter:
     def __init__(self, provider="anthropic", api_key=None, model=None, max_calls=150, post=None,
-                 verbose=True, report_context="", send_dax=False):
+                 verbose=True, report_context="", send_dax=False, base_url=None):
         if provider not in PROVIDERS:
             raise ValueError(f"unknown AI provider {provider!r}; choose one of {', '.join(PROVIDERS)}")
         self.provider = provider
         self.api_key = api_key or key_from_env(provider)
+        self.base_url = ""
+        if provider == "custom":
+            import secrets_store
+            st = secrets_store.get_settings("custom")
+            self.base_url = base_url or st.get("base_url", "")
+            model = model or st.get("model", "")
         self.model = model or PROVIDERS[provider]["model"]
         self.max_calls = max_calls
         self.post = post                      # injectable for tests: post(url, headers, payload, key) -> dict
@@ -104,6 +144,8 @@ class AIDrafter:
 
     @property
     def usable(self):
+        if self.provider == "custom" and not (clean_base_url(self.base_url) and self.model):
+            return False
         return bool(self.api_key) and not self.dead
 
     def _disable(self, why):
@@ -136,7 +178,7 @@ class AIDrafter:
     def draft(self, term, **ctx):
         if not self.usable or self.calls >= self.max_calls or not term:
             return None
-        url, headers, payload = build_request(self.provider, self.model, SYSTEM, self.facts(term, **ctx))
+        url, headers, payload = build_request(self.provider, self.model, SYSTEM, self.facts(term, **ctx), base_url=self.base_url)
         self.calls += 1
         try:
             data = (self.post or (lambda u, h, p, k: _http(u, h, p, k, self.provider)))(url, headers, payload, self.api_key)

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+Keys from any service.
+- The service no longer has to be chosen first: paste the key and the tool recognises Anthropic / Gemini / OpenAI from its start and asks to confirm.
+- New **Other (OpenAI-compatible)** option for Azure OpenAI, Mistral, Groq, DeepSeek, OpenRouter, company gateways, Ollama: asks once for the service's web address and model name (https only), stored with the key's other settings; `--ai custom --ai-url --ai-model`.
+- `--ai-status` shows the host and model of an Other service, never the key.
+
 ## 1.2.0
 One universal start: `python run.py`.
 - Asks "1. AI mode (needs an API key) / 2. Offline mode (formula drafts)". AI mode takes the pasted key (hidden), tests it, offers to save it (outside the project), then generates the three documents; offline generates them straight away.
