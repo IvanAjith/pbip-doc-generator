@@ -66,15 +66,18 @@ def _split_expr_and_props(raw):
 
 
 def _table_name(text):
-    mm = re.match(r"table\s+('([^']+)'|(\S+))", text)
+    """Name from the 'table <name>' line. It need not be the first line (doc comments '///', blank lines or a
+    byte-order mark can come before it), and a quoted name may contain doubled quotes ('It''s')."""
+    mm = re.search(r"^[ \t]*table[ \t]+(?:'((?:[^']|'')+)'|\"([^\"]+)\"|([^\s=]+))", text, re.M)
     if not mm:
         return None
-    return mm.group(2) or mm.group(3)
+    name = mm.group(1) or mm.group(2) or mm.group(3)
+    return name.replace("''", "'") if mm.group(1) else name
 
 
 def parse_table_file(path: Path):
-    text = path.read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n")
-    name = _table_name(text)
+    text = path.read_text(encoding="utf-8-sig", errors="replace").replace("\r\n", "\n")
+    name = _table_name(text) or path.stem        # a table can never be nameless
     is_hidden = bool(re.search(r"^\tisHidden\b", text, re.M))
 
     columns = []
@@ -170,7 +173,7 @@ def _col_ref(s):
 def parse_relationships(path: Path):
     if not path.exists():
         return []
-    text = path.read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n")
+    text = path.read_text(encoding="utf-8-sig", errors="replace").replace("\r\n", "\n")
     out = []
     for m in REL_BLOCK_RE.finditer(text):
         rid, body = m.group(1), m.group(2)
@@ -206,7 +209,7 @@ def parse_roles(roles_dir: Path):
     if not roles_dir.exists():
         return out
     for f in sorted(roles_dir.glob("*.tmdl")):
-        text = f.read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n")
+        text = f.read_text(encoding="utf-8-sig", errors="replace").replace("\r\n", "\n")
         m = ROLE_BLOCK_RE.search(text)
         if not m:
             continue
@@ -291,7 +294,7 @@ def _extract_title(visual_obj):
 
 
 def parse_page(page_dir: Path):
-    page_json = json.loads((page_dir / "page.json").read_text(encoding="utf-8"))
+    page_json = json.loads((page_dir / "page.json").read_text(encoding="utf-8-sig"))
     visuals = []
     vdir = page_dir / "visuals"
     if vdir.exists():
@@ -300,7 +303,7 @@ def parse_page(page_dir: Path):
             if not vfile.exists():
                 continue
             try:
-                vjson = json.loads(vfile.read_text(encoding="utf-8"))
+                vjson = json.loads(vfile.read_text(encoding="utf-8-sig"))
             except Exception:
                 continue
             vobj = vjson.get("visual", {})
@@ -336,7 +339,7 @@ def flag_nonprod(display_name: str):
 
 
 def parse_report(report_dir: Path):
-    pages_meta = json.loads((report_dir / "definition" / "pages" / "pages.json").read_text(encoding="utf-8"))
+    pages_meta = json.loads((report_dir / "definition" / "pages" / "pages.json").read_text(encoding="utf-8-sig"))
     order = pages_meta.get("pageOrder", [])
     pages_dir = report_dir / "definition" / "pages"
     pages = []

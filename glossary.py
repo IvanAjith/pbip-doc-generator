@@ -64,7 +64,7 @@ class Glossary:
         self.unresolved = []
         if self.path.exists():
             try:
-                _j = json.loads(self.path.read_text(encoding="utf-8"))
+                _j = json.loads(self.path.read_text(encoding="utf-8-sig"))
                 self.entries = _j.get("terms", {})
                 self.generated = _j.get("generated", {})
             except Exception:

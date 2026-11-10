@@ -104,6 +104,7 @@ python tests/test_glossary_csv_ai.py    # my_definitions.csv + AI step
 python tests/test_web_glossary.py       # web lookup + precedence (simulated network)
 python tests/test_word_roundtrip.py     # edit the glossary in Word, run again
 python tests/test_end_to_end.py         # made-up inventory / streaming / HR / gaming projects
+python tests/test_tmdl_variants.py      # TMDL files with BOM / CRLF / description lines
 python tests/test_menu.py               # the start-up question (AI / offline)
 python tests/test_custom_service.py     # key recognition, 'Other' services, web-address checks
 python tests/test_secrets.py            # key storage, masking, guided setup

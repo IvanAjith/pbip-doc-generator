@@ -235,7 +235,7 @@ def scan_report(report_dir: Path, explainer: Explainer):
     nav_re = re.compile(r'"navigationSection"\s*:\s*\{\s*"expr"\s*:\s*\{\s*"Literal"\s*:\s*\{\s*"Value"\s*:\s*"\'([^\']+)\'"')
     for pdir in sorted(p for p in root.iterdir() if p.is_dir()):
         try:
-            pj = json.loads((pdir / "page.json").read_text(encoding="utf-8"))
+            pj = json.loads((pdir / "page.json").read_text(encoding="utf-8-sig"))
         except Exception:
             continue
         binding = pj.get("pageBinding") or {}
@@ -246,7 +246,7 @@ def scan_report(report_dir: Path, explainer: Explainer):
         if vroot.exists():
             for vf in sorted(vroot.glob("*/visual.json")):
                 try:
-                    text = vf.read_text(encoding="utf-8")
+                    text = vf.read_text(encoding="utf-8-sig")
                     vj = json.loads(text)
                 except Exception:
                     continue
@@ -278,7 +278,7 @@ def scan_report(report_dir: Path, explainer: Explainer):
     if bdir.exists():
         for bf in sorted(bdir.glob("*.bookmark.json")):
             try:
-                bj = json.loads(bf.read_text(encoding="utf-8"))
+                bj = json.loads(bf.read_text(encoding="utf-8-sig"))
             except Exception:
                 continue
             sec = (bj.get("explorationState") or {}).get("activeSection")

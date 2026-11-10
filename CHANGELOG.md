@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.1
+- Fix: a crash ("TypeError ... NoneType" in `tables_referenced`) on semantic models whose table files start with a byte-order mark, Windows line endings or `///` description lines. The table name is now found anywhere in the file, quoted names with doubled quotes work, and a table that cannot be read takes its file name instead of no name.
+- Byte-order marks are ignored when reading all TMDL and JSON files.
+- New test `tests/test_tmdl_variants.py`.
+
 ## 1.4.0
 Clearer start-up flow.
 - First question is now "Do you have an AI API key? 1. Yes (AI mode) / 2. No (offline mode)".

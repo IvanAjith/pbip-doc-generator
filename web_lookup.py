@@ -137,7 +137,7 @@ class WebLookup:
         self.cache = {}
         if self.cache_path and self.cache_path.exists():
             try:
-                raw = json.loads(self.cache_path.read_text(encoding="utf-8"))
+                raw = json.loads(self.cache_path.read_text(encoding="utf-8-sig"))
                 if isinstance(raw, dict) and raw.get("_v") == CACHE_VERSION:      # older caches held wrong matches
                     self.cache = raw.get("terms", {})
             except Exception:
