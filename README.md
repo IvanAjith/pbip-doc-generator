@@ -41,6 +41,20 @@ Skip the question with options: `python run.py --offline`, `python run.py --ai` 
 Set the key up once per computer (see **Team setup** below), then run `python run.py --ai`.
 Only indicator names, formula wording, page names and the report's name/page names are sent – never report data. `--ai-send-dax` also sends the measure's DAX (more accurate; confirm your client allows it). `--ai-model <name>` overrides the default model if a provider retires one. Free keys may let the provider use what you send; check the provider's terms against your client's rules.
 
+### The tool checks every AI sentence before it is used
+
+An AI that sees only a name and a formula sometimes guesses. So each AI definition is compared with what was sent:
+- a number, target or percentage that is not in the report is refused;
+- an abbreviation the AI spelled out on its own (for example *CB* turned into "customer bracket") is refused;
+- a sentence copied from another measure, or one that ignores that the formula is a ratio, is refused;
+- "shown on the X page of the Y report" is removed (the document already says where a measure is shown);
+- a sentence with several words that appear nowhere in the report is kept, but its Source cell says **Check:** and lists them.
+
+A refused draft keeps the exact formula-based draft. Abbreviations the AI had to guess are written into `glossary/context.txt`
+(next to `glossary.json`). Type each meaning after the `=` sign (`CB = chargeback`), add a line like `Domain: manufacturing`, save, and
+run again: the AI then receives your meanings and the refused terms are redrafted. Abbreviations the report spells out itself
+(for example "Direct Labour (DL)") need no entry. AI drafts saved by an older run are checked again on every run.
+
 ## Keys from other services ("Other")
 The tool must know which service a key belongs to because each service has its own web address and message format. You do not have to pick it: it is guessed from the key, and **Other** covers everything else that works like OpenAI's service: Azure OpenAI, Mistral, Groq, DeepSeek, OpenRouter, Together, a company AI gateway, a local Ollama. Ask IT for two things:
 * the **web address** of the service (e.g. `https://api.groq.com/openai/v1`, or the full `.../chat/completions` address, or an Azure deployment address)
@@ -111,6 +125,7 @@ python tests/test_end_to_end.py         # made-up inventory / streaming / HR / g
 python tests/test_tmdl_variants.py      # TMDL files with BOM / CRLF / description lines
 python tests/test_menu.py               # the start-up question (AI / offline)
 python tests/test_custom_service.py     # key recognition, 'Other' services, web-address checks
+python tests/test_checks.py             # the checks on AI sentences + context.txt
 python tests/test_secrets.py            # key storage, masking, guided setup
 python tests/test_secret_scan.py        # no key-like text in files Git would publish
 ```

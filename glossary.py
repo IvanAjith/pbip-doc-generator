@@ -45,6 +45,7 @@ class Definition:
     url: str = ""
     category: str = ""
     better: str = None     # general convention; glossary document only
+    note: str = ""         # what to look at before trusting an AI draft (set by checks.py)
 
     @property
     def verified(self):
@@ -52,7 +53,8 @@ class Definition:
 
 
 class Glossary:
-    def __init__(self, path, web=None, ai=None):
+    def __init__(self, path, web=None, ai=None, checker=None):
+        self.checker = checker
         self.path = Path(path)
         self.web = web
         self.ai = ai
@@ -112,6 +114,14 @@ class Glossary:
         for k in keys:                                    # 3. learned earlier
             e = self.entries.get(k)
             if e and e.get("definition"):
+                if e.get("source") == "ai" and self.checker is not None and ai_context is not None:
+                    import checks            # an AI draft saved by an earlier run must pass today's checks too
+                    res = self.checker.validate(names[0], e["definition"], checks.facts_text(names[0], **ai_context))
+                    if not res.ok:
+                        self.entries[k] = {"term": names[0], "definition": "", "source": "unresolved"}
+                        self.dirty = True
+                        continue
+                    e["note"] = "; ".join(res.soft)
                 return self._from_entry(e)
         if self.web is not None and web:                  # 4. web
             for n in (web_names if web_names is not None else names):
@@ -130,7 +140,8 @@ class Glossary:
             if r:
                 k = keys[0]
                 self.entries[k] = {"term": names[0], "definition": r["text"], "source": "ai",
-                                   "origin": r["origin"], "url": "", "verified": False, "wv": WEB_VERSION}
+                                   "origin": r["origin"], "url": "", "verified": False, "wv": WEB_VERSION,
+                                   "note": r.get("note", "")}
                 self.dirty = True
                 return self._from_entry(self.entries[k])
         if draft:                                         # 6. draft rephrased from the report's own formula (offline)
@@ -231,7 +242,7 @@ class Glossary:
     @staticmethod
     def _from_entry(e):
         return Definition(e["definition"], e.get("source", "manual"), e.get("origin", ""),
-                          e.get("url", ""), e.get("category", ""))
+                          e.get("url", ""), e.get("category", ""), note=e.get("note", ""))
 
     # -------------------------------------------------------------- persistence
     def save(self):

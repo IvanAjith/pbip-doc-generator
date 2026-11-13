@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.0 - 13/11/2026
+- New: every AI definition is checked against what was sent before it is used (checks.py). Refused: numbers or targets that
+  are not in the report, abbreviations the AI spelled out by itself, sentences copied from another measure, ratios described
+  as plain counts. A refused draft keeps the formula draft. Drafts with several words that are not in the report are kept and
+  marked "Check: ..." in the Source column. "shown on the X page of the Y report" is removed from AI sentences.
+- New: optional `glossary/context.txt` (or `--context FILE`): your domain and abbreviations (`CB = chargeback`). It is sent to the
+  AI, it stops the "guessed abbreviation" refusals, and the tool creates/extends it with the abbreviations the AI had to guess.
+- AI drafts saved by earlier runs are checked again; failures are dropped and redrafted.
+- The run summary lists refused drafts with the reasons.
+
 ## 1.4.5 - 13/11/2026
 - Fixed: free AI keys allow only a few requests per minute, and the tool used to switch AI off at the first "HTTP 429"
   (in a real run only 14 of ~80 terms got an AI draft). It now waits for the time the provider asks for (up to about

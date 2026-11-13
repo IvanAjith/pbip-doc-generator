@@ -128,6 +128,9 @@ def main():
                     help="remove the saved AI key from this computer")
     ap.add_argument("--ai-model", default=None, help="override the provider's default model name")
     ap.add_argument("--ai-url", default=None, help="web address of an 'other' (OpenAI-compatible) AI service; with --ai custom")
+    ap.add_argument("--context", default=None,
+                    help="optional text file telling the AI and the tool's checks what your company's abbreviations "
+                         "mean (default: context.txt next to the glossary file; created for you when the AI had to guess)")
     ap.add_argument("--ai-send-dax", action="store_true",
                     help="also send each measure's DAX text to the AI (more accurate; check your client allows it)")
     ap.add_argument("--skip-html", action="store_true"); ap.add_argument("--skip-docx", action="store_true")
@@ -177,6 +180,11 @@ def main():
         if not p.get("mainNav"):
             print(f"    left out of the manual: {p['displayName'].strip()!r} -- {p['nonprodFlag']}")
 
+    import checks
+    context = checks.Context(args.context or (Path(args.glossary).parent / checks.CONTEXT_NAME))
+    context.learn_from_report(m.get("expression") or "" for m in analysis["measuresByName"].values())
+    checker = checks.Checker(context)
+
     web = None
     if not args.offline:
         web = WebLookup(cache_path=Path(args.glossary).parent / "web_cache.json",
@@ -208,7 +216,9 @@ def main():
             print(f"  AI mode on ({args.ai}{where}, model {ai.model}): only names, formula wording and page names are sent"
                   + (" plus DAX text" if args.ai_send_dax else "") + " -- no report data.")
     Path(args.glossary).parent.mkdir(parents=True, exist_ok=True)
-    glossary = Glossary(args.glossary, web=web, ai=ai)
+    if ai is not None:
+        ai.checker = checker
+    glossary = Glossary(args.glossary, web=web, ai=ai, checker=checker)
     safe = "".join(c if c.isalnum() or c in "-_" else "_" for c in project_name.replace(" ", "_"))
     glossary_docx = output / f"{safe}_KPI_Glossary.docx"
     try:
@@ -277,6 +287,27 @@ def main():
     if ai is not None:
         print(f"* AI drafts ({ai.provider}): {ai.drafted} written in {ai.calls} calls" + (f"; stopped: {ai.dead_reason}" if ai.dead else "")
               + ". Marked 'AI draft - please verify' in the documents.")
+    if checker.rejected:
+        print(f"* The tool's checks refused {len(checker.rejected)} AI draft(s); those keep the formula draft: "
+              + ", ".join(t for t, _ in checker.rejected[:8]) + (" ..." if len(checker.rejected) > 8 else ""))
+        why = {}
+        for _, reasons in checker.rejected:
+            for r in reasons:
+                key = ("copied another measure's sentence" if r.startswith("almost the same") else r.split(":")[0])
+                why[key] = why.get(key, 0) + 1
+        print("  Reasons: " + "; ".join(f"{k} ({n})" for k, n in sorted(why.items(), key=lambda x: -x[1])) + ".")
+    if checker.flagged:
+        print(f"* {len(checker.flagged)} AI draft(s) contain words that are not in the report; the Source column says "
+              "'Check:' with the words: " + ", ".join(t for t, _ in checker.flagged[:6]) + (" ..." if len(checker.flagged) > 6 else ""))
+    if checker.guessed:
+        made = context.write_template(checker.guessed)
+        undefined = sorted(checker.guessed)
+        print(f"* The AI had to guess what these abbreviations mean, so its drafts were refused: {', '.join(undefined)}.")
+        if made:
+            print(f"  I created {context.path} with them listed. Type each meaning after the = sign (for example "
+                  "CB = chargeback), save, and run again.")
+        else:
+            print(f"  Add their meanings to {context.path} (one line each, like CB = chargeback) and run again.")
     if unresolved:
         print(f"* {len(unresolved)} indicator(s) have no definition yet: " + ", ".join(unresolved[:12]) +
               (" ..." if len(unresolved) > 12 else ""))

@@ -20,6 +20,7 @@ jobs:
         run: |
           python tests/test_formula_draft.py
           python tests/test_ai_providers.py
+          python tests/test_checks.py
           python tests/test_glossary_csv_ai.py
           python tests/test_web_glossary.py
           python tests/test_word_roundtrip.py

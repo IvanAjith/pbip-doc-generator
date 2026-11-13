@@ -21,8 +21,10 @@ SYSTEM = (
     "page name, report name) plus the widely accepted meaning of the term in that industry. If the term is "
     "company-specific and the information does not make its meaning clear, restate what the formula does in plain "
     "words and do not invent details. If you cannot say anything useful, reply with exactly: UNKNOWN. "
-    "No marketing language, no numbers that were not supplied, at most 35 words, no leading phrase such as "
-    "'This KPI'. Reply with the definition only."
+    "No marketing language, at most 35 words, no leading phrase such as 'This KPI' and do not start with the "
+    "indicator's own name. Never use a number, target, threshold or category that was not supplied. Keep "
+    "abbreviations exactly as written unless the information defines them: never guess what an abbreviation "
+    "stands for. Do not mention the page or the report by name. Reply with the definition only."
 )
 
 PROVIDERS = {
@@ -179,6 +181,8 @@ class AIDrafter:
         self.dead = False
         self.dead_reason = ""
         self.last_error = ""
+        self.checker = None                   # checks.Checker, set by run.py: vets every draft before it is used
+        self.rejected_n = 0
         self.label = f"{LABEL} ({provider})"
 
     @property
@@ -213,6 +217,8 @@ class AIDrafter:
         f = []
         if self.report_context:
             f.append(f"Report: {self.report_context}")
+        if self.checker is not None:
+            f.extend(self.checker.context.prompt_lines())
         f.append(f"Indicator name: {term}")
         if calc:
             f.append(f"How the report calculates it (in words): {calc}")
@@ -266,5 +272,13 @@ class AIDrafter:
         if not text or text.upper().startswith("UNKNOWN") or len(text) < 15:
             self.last_error = self.last_error or "the service answered, but not with a usable definition"
             return None
+        note = ""
+        if self.checker is not None:
+            import checks
+            res = self.checker.validate(term, text, checks.facts_text(term, **ctx))
+            if not res.ok:
+                self.rejected_n += 1
+                return None                   # the measure keeps its formula-based draft
+            text, note = res.text, "; ".join(res.soft)
         self.drafted += 1
-        return {"text": text, "origin": self.label}
+        return {"text": text, "origin": self.label, "note": note}

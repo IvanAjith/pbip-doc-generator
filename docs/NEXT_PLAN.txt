@@ -15,7 +15,9 @@ WHERE I AM TODAY
   real report. Direct Lake runs and produces all three files, but the Lakehouse / Warehouse behind each table is
   not read yet. The storage mode of a table is not shown. A report-only project (live connection to a published
   model) is not supported: the tool needs the .Report and .SemanticModel folders side by side.
-- NOT yet verified: AI mode with a real key, Windows and macOS runs of the automated tests, the GitHub
+- AI checks (13/11/2026): replayed on 68 real Gemini drafts for a Standex report (approximate inputs): 12 refused (guessed CB/DOC/EOL/FT,
+  invented 95 / 400, copied or ratio-blind sentences), 9 marked "Check:". Offline-vs-AI comparison run by me on a free Gemini key.
+- NOT yet verified: AI mode with a real key after 1.5.0 checks, Windows and macOS runs of the automated tests, the GitHub
   test workflow (written, never seen running), the web look-up on my own network after the last fixes.
 
 

@@ -34,7 +34,7 @@ def _source_text(item):
         if d.source == "manual":
             return "Your own definition (my_definitions.csv)"
         if d.source == "ai":
-            return "AI draft — please verify."
+            return "AI draft — please verify." + (f"\nCheck: {d.note}" if getattr(d, "note", "") else "")
         if d.source == "draft":
             return "Draft from the formula — please verify."
         return "Built-in glossary"
