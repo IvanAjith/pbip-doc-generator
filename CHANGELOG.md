@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.3
+- Added the leadership presentation as `docs/PBIP_Presentation.html`. No change to the tool itself.
+
 ## 1.4.2
 - Wording only: correcting a definition in the glossary Word file needs no re-run for that file. Re-running is needed only to carry the wording into the User Manual and the HTML reference (and to store it for later runs). Updated in the glossary's own instructions, the console hint and the README.
 

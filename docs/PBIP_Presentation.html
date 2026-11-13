@@ -1,0 +1,962 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>PBIP Documentation Generator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="author" content="Ajith Khan, Systech, Employee ID IN1661">
+<!-- Created by Ajith Khan (Employee ID IN1661), Systech. PBIP Documentation Generator presentation. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky Systech header with progress bar; three slides (any project, impact, setup and security) swapped with a directional slide-in.
+   Motion: floating background glows, staged reveals, count-ups, typed terminal, spinning engine ring, confetti on run finish. */
+:root {
+  --bg: #F3F8FE;
+  --surface: #FFFFFF;
+  --surface-2: #E6F0FB;
+  --fg: #0B1B33;
+  --muted: #4B5D78;
+  --line: #C9DAEE;
+  --blue: #2888D8;
+  --blue-text: #0F5FA8;
+  --btn: #0F5FA8;
+  --btn-ink: #FFFFFF;
+  --amber: #FFB81C;
+  --amber-ink: #2A1B00;
+  --mint: #0E9F71;
+  --coral: #D9482F;
+  --code-bg: #0B1B33;
+  --code-fg: #DCE9FA;
+  --wm-o: .06;
+  --glow-a: rgba(40,136,216,.22);
+  --glow-b: rgba(255,184,28,.22);
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #07111E; --surface: #0F1D31; --surface-2: #172A45; --fg: #E8F1FC; --muted: #9BB0CC; --line: #223A5A;
+    --blue: #3D9BE8; --blue-text: #7CC0F7; --btn: #2B7BD0; --btn-ink: #FFFFFF; --amber: #FFC247; --amber-ink: #2A1B00;
+    --mint: #34D3A0; --coral: #FF7A63; --code-bg: #050C16; --code-fg: #DCE9FA;
+    --glow-a: rgba(61,155,232,.20); --glow-b: rgba(255,194,71,.10); --wm-o: .09; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #07111E; --surface: #0F1D31; --surface-2: #172A45; --fg: #E8F1FC; --muted: #9BB0CC; --line: #223A5A;
+  --blue: #3D9BE8; --blue-text: #7CC0F7; --btn: #2B7BD0; --btn-ink: #FFFFFF; --amber: #FFC247; --amber-ink: #2A1B00;
+  --mint: #34D3A0; --coral: #FF7A63; --code-bg: #050C16; --code-fg: #DCE9FA;
+  --glow-a: rgba(61,155,232,.20); --glow-b: rgba(255,194,71,.10); --wm-o: .09; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.5; position: relative; overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.015em; }
+.mono { font-family: var(--font-mono); }
+
+/* drifting glows */
+.glow { position: fixed; z-index: 0; border-radius: 50%; filter: blur(70px); pointer-events: none; }
+.glow.a { width: 46vw; height: 46vw; max-width: 620px; max-height: 620px; background: var(--glow-a); top: -10vw; right: -8vw; animation: drift 16s ease-in-out infinite alternate; }
+.glow.b { width: 38vw; height: 38vw; max-width: 520px; max-height: 520px; background: var(--glow-b); bottom: -12vw; left: -10vw; animation: drift 19s ease-in-out infinite alternate-reverse; }
+@keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(-40px, 50px) scale(1.15); } }
+
+/* header */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line);
+  padding-block: 8px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.bar-in { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 10px 18px; flex-wrap: wrap; }
+.logo { background: #fff; border-radius: 10px; padding: 3px 10px; display: flex; align-items: center; border: 1px solid var(--line); }
+.logo img { height: 42px; width: auto; display: block; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.02rem; margin-right: auto; line-height: 1.1; }
+.brand small { display: block; font-family: var(--font-body); font-weight: 500; font-size: .72rem; color: var(--muted); letter-spacing: .04em; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab { border: 1px solid var(--line); background: transparent; padding: 7px 14px; border-radius: 999px; font-weight: 600; font-size: .88rem; color: var(--muted); transition: background .2s, transform .15s; }
+.tab:hover { transform: translateY(-1px); }
+.tab[aria-selected="true"] { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.nav { display: flex; gap: 6px; align-items: center; }
+.nav button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); font-size: 1.05rem; }
+.nav button:hover { background: var(--surface-2); }
+.prog { position: absolute; left: 0; bottom: -1px; height: 3px; width: 33.33%; background: linear-gradient(90deg, var(--blue), var(--amber)); transition: width .5s cubic-bezier(.2,.8,.2,1); }
+@media (max-width: 760px) { .brand small { display: none; } .tab { padding: 6px 10px; font-size: .8rem; } }
+
+.slide { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding-block: 30px 60px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px; }
+.slide[hidden] { display: none; }
+.slide.from-right { animation: inR .5s cubic-bezier(.2,.8,.2,1) both; }
+.slide.from-left { animation: inL .5s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes inR { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: none; } }
+@keyframes inL { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: none; } }
+/* staged reveal: only plays when JS adds .play, so the resting state is always visible */
+.slide.play .rv { animation: up .65s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 90ms + 120ms); }
+@keyframes up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+
+.kicker { font-size: .78rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; color: var(--blue-text); }
+.title { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.02; max-width: 22ch; }
+mark { background: linear-gradient(var(--amber), var(--amber)) no-repeat left / 100% 100%; color: var(--amber-ink); padding: 0 .16em; border-radius: 5px; }
+.slide.play mark { animation: hl .8s .45s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes hl { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+.lede { color: var(--muted); max-width: 62ch; font-size: 1.06rem; }
+.head { display: flex; flex-direction: column; gap: 12px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; min-width: 0; }
+.row { display: grid; gap: 20px; }
+.two { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.two-b { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+@media (max-width: 900px) { .two, .two-b { grid-template-columns: minmax(0, 1fr); } }
+.note { font-size: .82rem; color: var(--muted); }
+.btn { border: 0; background: var(--btn); color: var(--btn-ink); font-weight: 700; padding: 11px 20px; border-radius: 12px; transition: transform .15s, filter .2s; }
+.btn:hover { transform: translateY(-2px) scale(1.02); filter: brightness(1.08); }
+.btn:disabled { opacity: .65; cursor: progress; transform: none; }
+.btn.amber { background: var(--amber); color: var(--amber-ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); padding: 6px 13px; border-radius: 999px; font-size: .86rem; font-weight: 500; transition: transform .15s, background .2s; }
+.chip:hover { transform: translateY(-2px); }
+.chip[aria-pressed="true"], .chip[aria-selected="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* ---------- slide 1: flow ---------- */
+.flow { display: grid; grid-template-columns: minmax(0, 1fr) 70px minmax(0, 1.1fr) 70px minmax(0, 1fr); align-items: center; gap: 6px; }
+@media (max-width: 860px) { .flow { grid-template-columns: minmax(0, 1fr); justify-items: center; } }
+.fcol { display: grid; gap: 10px; width: 100%; max-width: 320px; }
+.fcol .lbl { font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-align: center; }
+.folder { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: .88rem; box-shadow: 0 6px 18px -10px rgba(11,27,51,.35); }
+.folder::before { content: ""; width: 22px; height: 16px; border-radius: 3px 3px 4px 4px; background: var(--amber); box-shadow: inset 0 4px 0 rgba(0,0,0,.12); flex: none; }
+.folder.f1 { animation: bob 3.4s ease-in-out infinite; }
+.folder.f2 { animation: bob 3.4s ease-in-out -1.7s infinite; margin-left: 18px; }
+@keyframes bob { 50% { transform: translateY(-7px); } }
+.conn { position: relative; height: 4px; width: 100%; background: var(--line); border-radius: 4px; overflow: hidden; }
+.conn i { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--blue), var(--amber), transparent); background-size: 60% 100%; background-repeat: no-repeat; animation: run 1.8s linear infinite; }
+@keyframes run { from { background-position: -80% 0; } to { background-position: 180% 0; } }
+@media (max-width: 860px) { .conn { width: 4px; height: 44px; } .conn i { background-size: 100% 60%; animation-name: runv; } @keyframes runv { from { background-position: 0 -80%; } to { background-position: 0 180%; } } }
+.engine { display: grid; justify-items: center; gap: 14px; }
+.orb { position: relative; width: 132px; height: 132px; display: grid; place-items: center; }
+.orb::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(var(--blue), var(--amber), var(--mint), var(--blue));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 5px));
+  animation: spin 6s linear infinite; }
+.engine.run .orb::before { animation-duration: 1.1s; }
+.orb .core { width: 104px; height: 104px; border-radius: 50%; background: var(--surface); border: 1px solid var(--line); display: grid; place-content: center; text-align: center; gap: 0; transition: box-shadow .3s; }
+.engine.run .orb .core { box-shadow: 0 0 0 8px var(--glow-a), 0 0 34px var(--glow-b); }
+.core b { font-family: var(--font-mono); font-size: 1rem; } .core span { font-size: .72rem; color: var(--muted); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.esteps { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.estep { font-size: .8rem; font-weight: 600; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); transition: all .25s; }
+.estep.on { background: var(--amber); color: var(--amber-ink); border-color: var(--amber); transform: scale(1.1); }
+.estep.done { background: var(--mint); color: #fff; border-color: var(--mint); }
+.doc { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; display: grid; grid-template-columns: auto 1fr; gap: 0 12px; align-items: center; transition: transform .35s, box-shadow .35s, opacity .35s; }
+.doc b { font-family: var(--font-display); } .doc span { font-size: .78rem; color: var(--muted); grid-column: 2; }
+.doc em { grid-row: 1 / span 2; font-style: normal; font-family: var(--font-mono); font-size: .72rem; font-weight: 500; padding: 8px 8px; border-radius: 8px; background: var(--surface-2); color: var(--blue-text); }
+.doc.wait { opacity: .35; transform: translateX(8px) scale(.97); }
+.doc.pop { animation: pop .6s cubic-bezier(.3,1.6,.5,1) both; box-shadow: 0 10px 26px -12px var(--blue); }
+@keyframes pop { from { transform: translateX(20px) scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.term { background: var(--code-bg); color: var(--code-fg); border-radius: 14px; padding: 16px 18px; font-family: var(--font-mono); font-size: .84rem; line-height: 1.65; min-height: 270px; overflow-x: auto; white-space: pre; position: relative; }
+.term .p { color: #FFB81C; } .term .d { color: #8FA6C9; } .term .ok { color: #4EE0AE; }
+.term .cur { display: inline-block; width: .55em; height: 1em; background: #DCE9FA; vertical-align: -2px; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.runhead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.why { display: grid; gap: 14px; align-content: start; }
+.why .w { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
+.why .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--surface-2); font-family: var(--font-mono); font-weight: 500; color: var(--blue-text); font-size: .95rem; transition: transform .3s; }
+.why .w:hover .ic { transform: rotate(-8deg) scale(1.1); background: var(--amber); color: var(--amber-ink); }
+.why b { font-family: var(--font-display); font-size: 1.08rem; display: block; }
+.why p { color: var(--muted); font-size: .92rem; }
+
+.vocab { display: grid; gap: 14px; }
+.terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 760px) { .terms { grid-template-columns: minmax(0, 1fr); } }
+.tcard { background: var(--surface-2); border-radius: 12px; padding: 14px; display: grid; gap: 6px; align-content: start; animation: flipin .5s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 80ms); }
+@keyframes flipin { from { opacity: 0; transform: perspective(500px) rotateX(-35deg) translateY(14px); } to { opacity: 1; transform: none; } }
+.tcard b { font-family: var(--font-display); font-size: 1.3rem; }
+.tcard p { font-size: .88rem; color: var(--muted); }
+.dir { display: inline-block; font-size: .72rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; width: fit-content; }
+.dir.up { background: color-mix(in srgb, var(--mint) 18%, transparent); color: var(--mint); }
+.dir.dn { background: color-mix(in srgb, var(--coral) 16%, transparent); color: var(--coral); }
+.dir.nn { background: var(--surface); color: var(--muted); border: 1px solid var(--line); }
+
+/* ---------- slide 2 ---------- */
+.counters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .counters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cn { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; position: relative; overflow: hidden; transition: transform .2s; }
+.cn:hover { transform: translateY(-4px) rotate(-.6deg); }
+.cn::after { content: ""; position: absolute; right: -18px; top: -18px; width: 64px; height: 64px; border-radius: 50%; background: var(--glow-a); }
+.cn b { display: block; font-family: var(--font-display); font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.cn span { font-size: .84rem; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--surface); gap: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; padding: 7px 15px; border-radius: 999px; font-weight: 600; color: var(--muted); }
+.seg button[aria-selected="true"] { background: var(--fg); color: var(--bg); }
+.bars { display: grid; gap: 7px; margin-top: 14px; }
+.brow { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) 40px; gap: 10px; align-items: center; background: transparent; border: 0; padding: 3px 4px; border-radius: 8px; text-align: left; font-size: .88rem; }
+.brow:hover { background: var(--surface-2); }
+.brow .t { height: 22px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+.brow:hover .t { background: var(--surface); }
+.brow .f { height: 100%; width: 0; background: var(--blue); border-radius: 6px; transition: width .8s cubic-bezier(.2,.8,.2,1), background .2s; }
+.brow[aria-pressed="true"] .f { background: var(--amber); }
+.brow .v { font-family: var(--font-mono); font-size: .82rem; text-align: right; font-variant-numeric: tabular-nums; }
+.barnote { margin-top: 10px; min-height: 2.6em; font-size: .9rem; color: var(--muted); }
+.ptiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+@media (max-width: 520px) { .ptiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pt { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 10px; display: grid; gap: 1px; transition: transform .15s, background .2s; min-width: 0; }
+.pt:hover { transform: translateY(-2px) rotate(-.8deg); }
+.pt b { font-size: .84rem; font-weight: 600; overflow-wrap: anywhere; }
+.pt span { font-size: .72rem; color: var(--muted); }
+.pt.flag { border-style: dashed; opacity: .72; }
+.pt[aria-pressed="true"] { background: var(--amber); border-color: var(--amber); color: var(--amber-ink); opacity: 1; border-style: solid; }
+.pt[aria-pressed="true"] span { color: var(--amber-ink); }
+.pdet { margin-top: 14px; background: var(--surface-2); border-radius: 12px; padding: 14px; display: grid; gap: 10px; }
+.pdet h3 { font-size: 1.15rem; }
+.stack { display: flex; height: 26px; border-radius: 8px; overflow: hidden; gap: 2px; }
+.stack i { display: block; height: 100%; width: 0; transition: width .7s cubic-bezier(.2,.8,.2,1); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .82rem; }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; background: var(--c); }
+.finds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .finds { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .finds { grid-template-columns: minmax(0, 1fr); } }
+.find { border-radius: 16px; padding: 16px; background: var(--fg); color: var(--bg); display: grid; gap: 4px; align-content: start; transition: transform .25s; }
+.find:hover { transform: translateY(-5px) rotate(.8deg); }
+.find b { font-family: var(--font-display); font-size: 2.2rem; line-height: 1; color: var(--amber); font-variant-numeric: tabular-nums; }
+.find span { font-size: .88rem; opacity: .92; }
+.landed { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .landed { grid-template-columns: minmax(0, 1fr); } }
+.lcard { border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; background: var(--surface); display: grid; gap: 4px; }
+.lcard .ext { font-family: var(--font-mono); font-size: .74rem; color: var(--blue-text); }
+.lcard h3 { font-size: 1.1rem; } .lcard p { font-size: .88rem; color: var(--muted); }
+
+.model { margin-top: 20px; border-top: 1px dashed var(--line); padding-top: 16px; display: grid; gap: 10px; }
+.model h3 { font-size: 1.02rem; }
+.mrow { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) 40px; gap: 10px; align-items: center; font-size: .88rem; padding: 0 4px; }
+.mrow .t { display: block; height: 22px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+.mrow .f { display: block; height: 100%; width: 0; background: var(--blue); border-radius: 6px; transition: width .8s cubic-bezier(.2,.8,.2,1); }
+.mrow .v { font-family: var(--font-mono); font-size: .82rem; text-align: right; }
+/* ---------- slide 3 ---------- */
+.chat { display: grid; gap: 12px; min-height: 230px; align-content: start; margin-top: 14px; }
+.bub { max-width: 86%; padding: 12px 16px; border-radius: 18px; font-size: .98rem; animation: up .4s ease both; }
+.bub.q { background: var(--surface-2); border-bottom-left-radius: 4px; justify-self: start; }
+.bub.a { background: var(--btn); color: var(--btn-ink); border-bottom-right-radius: 4px; justify-self: end; }
+.bub .where { display: inline-block; margin-top: 8px; font-size: .76rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--amber); color: var(--amber-ink); }
+.bub .dots { display: inline-flex; gap: 4px; } .bub .dots i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: dot 1s infinite; } .bub .dots i:nth-child(2) { animation-delay: .15s; } .bub .dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 50% { transform: translateY(-5px); opacity: .5; } }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+@media (max-width: 640px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.item { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; align-content: start; animation: up .4s ease both; animation-delay: calc(var(--i) * 45ms); transition: transform .2s; }
+.item:hover { transform: translateY(-3px); }
+.item b { font-family: var(--font-display); font-size: 1rem; } .item p { font-size: .88rem; color: var(--muted); }
+.item .fix { font-size: .85rem; border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 4px; }
+.item .fix i { font-style: normal; font-weight: 700; color: var(--mint); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; margin-right: 6px; }
+.item.lim b::before { content: "!"; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--coral); color: #fff; font-size: .72rem; margin-right: 8px; vertical-align: 2px; }
+.item.adv b::before { content: "✓"; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--mint); color: #fff; font-size: .72rem; margin-right: 8px; vertical-align: 2px; }
+.calc { display: grid; gap: 13px; align-content: start; }
+.sl { display: grid; gap: 2px; } .sl label { display: flex; justify-content: space-between; font-size: .88rem; font-weight: 500; gap: 8px; }
+.sl output { font-family: var(--font-mono); font-size: .85rem; color: var(--blue-text); }
+input[type="range"] { width: 100%; accent-color: var(--blue); }
+.cbar { display: grid; grid-template-columns: 76px minmax(0, 1fr) 62px; gap: 8px; align-items: center; font-size: .85rem; }
+.cbar .t { height: 22px; background: var(--surface-2); border-radius: 6px; overflow: hidden; } .cbar .f { height: 100%; border-radius: 6px; transition: width .4s ease; }
+.cbar .f.a { background: var(--coral); } .cbar .f.b { background: var(--blue); }
+.cbar span:last-child { font-family: var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; }
+.big { background: var(--amber); color: var(--amber-ink); border-radius: 14px; padding: 14px 16px; display: grid; gap: 2px; }
+.big b { font-family: var(--font-display); font-size: 2.3rem; line-height: 1; font-variant-numeric: tabular-nums; } .big span { font-size: .88rem; }
+.finale { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; background: var(--fg); color: var(--bg); border-radius: 20px; padding: 22px 26px; }
+.finale h2 { font-size: clamp(1.4rem, 3vw, 2rem); max-width: 22ch; }
+.finale .logo { border: 0; padding: 6px 14px; } .finale .logo img { height: 52px; }
+.finale p { opacity: .85; font-size: .95rem; margin-top: 4px; }
+
+
+/* disclaimer, how-to-run, setup and security */
+.notice { display: flex; gap: 12px 14px; align-items: center; flex-wrap: wrap; background: color-mix(in srgb, var(--amber) 22%, var(--surface)); border: 1px solid var(--amber); border-radius: 14px; padding: 12px 16px; }
+.notice .ni { width: 30px; height: 30px; border-radius: 50%; background: var(--amber); color: var(--amber-ink); display: grid; place-items: center; font-weight: 800; flex: none; }
+.notice p { flex: 1 1 320px; font-size: .95rem; min-width: 0; }
+.notice b { font-family: var(--font-display); }
+.btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--fg); padding: 8px 14px; }
+.panel.warn { border: 2px solid var(--coral); }
+.wgrid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 22px; }
+@media (max-width: 900px) { .wgrid { grid-template-columns: minmax(0, 1fr); } }
+.tagc { border: 1px dashed var(--muted); padding: 5px 12px; border-radius: 999px; font-size: .85rem; background: var(--surface-2); transition: transform .2s; }
+.tagc:hover { transform: rotate(-3deg) scale(1.06); }
+.runsteps { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.4fr); gap: 18px; margin-top: 16px; }
+@media (max-width: 860px) { .runsteps { grid-template-columns: minmax(0, 1fr); } }
+.rs-list { display: grid; gap: 8px; align-content: start; }
+.rs { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 9px 12px; transition: transform .15s, background .2s; }
+.rs:hover { transform: translateX(3px); }
+.rs i { font-style: normal; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font-family: var(--font-mono); font-weight: 500; }
+.rs b { font-size: .93rem; font-weight: 600; }
+.rs[aria-selected="true"] { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.rs[aria-selected="true"] i { background: var(--amber); color: var(--amber-ink); }
+.rs-d { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.cmd { position: relative; }
+.cmdbox { background: var(--code-bg); color: var(--code-fg); border-radius: 10px; padding: 12px 84px 12px 14px; font-family: var(--font-mono); font-size: .85rem; line-height: 1.6; white-space: pre; overflow-x: auto; }
+.copy { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); border: 0; background: var(--amber); color: var(--amber-ink); font-weight: 700; font-size: .78rem; padding: 6px 12px; border-radius: 8px; }
+.tree { font-family: var(--font-mono); font-size: .8rem; line-height: 1.7; background: var(--surface-2); border-radius: 10px; padding: 10px 14px; white-space: pre; overflow-x: auto; }
+.tree .hl { background: var(--amber); color: var(--amber-ink); border-radius: 4px; padding: 0 5px; }
+.reqs { display: grid; gap: 10px; margin-top: 14px; }
+.rq { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; background: var(--surface-2); border-radius: 12px; padding: 11px 14px; animation: up .4s ease both; animation-delay: calc(var(--i) * 60ms); }
+.rq b { font-family: var(--font-display); } .rq p { grid-column: 1 / -1; font-size: .86rem; color: var(--muted); }
+.st { font-size: .74rem; font-weight: 700; padding: 3px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); white-space: nowrap; }
+.st.amber { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 28%, var(--surface)); }
+.st.mint { border-color: var(--mint); background: color-mix(in srgb, var(--mint) 20%, var(--surface)); }
+.st.coral { border-color: var(--coral); background: color-mix(in srgb, var(--coral) 18%, var(--surface)); }
+.st.blue { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 20%, var(--surface)); }
+.local { display: grid; gap: 12px; margin-top: 18px; }
+.localbox { position: relative; border: 2px dashed var(--mint); border-radius: 14px; padding: 20px 12px 14px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.localbox .lt { position: absolute; top: -11px; left: 14px; background: var(--surface); padding: 0 8px; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mint); }
+.hop { background: var(--surface-2); border-radius: 10px; padding: 8px 12px; text-align: center; display: grid; }
+.hop b { font-family: var(--font-mono); font-size: .88rem; } .hop span { font-size: .72rem; color: var(--muted); }
+.arr { position: relative; width: 28px; height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.arr i { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--mint), transparent); background-size: 60% 100%; background-repeat: no-repeat; animation: run 1.6s linear infinite; }
+.cloud { display: flex; gap: 10px; align-items: center; border: 1px dashed var(--line); border-radius: 12px; padding: 8px 14px; color: var(--muted); font-size: .88rem; }
+.cloud b { color: var(--coral); font-size: 1.1rem; }
+.verified { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: .9rem; }
+.verified li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; }
+.verified li::before { content: "✓"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--mint); color: #fff; font-size: .72rem; margin-top: 2px; }
+.xp { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.7fr); gap: 18px; margin-top: 14px; }
+@media (max-width: 860px) { .xp { grid-template-columns: minmax(0, 1fr); } }
+.xp-list { display: grid; gap: 8px; align-content: start; }
+.xb { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 10px 14px; font-weight: 600; font-size: .92rem; display: flex; justify-content: space-between; gap: 8px; align-items: center; transition: transform .15s; }
+.xb:hover { transform: translateX(3px); }
+.xb[aria-selected="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.xp-d { display: grid; gap: 0; align-content: start; min-width: 0; animation: up .35s ease both; }
+.xp-d h3 { font-size: 1.25rem; margin-bottom: 6px; }
+.dr { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 4px 14px; padding: 9px 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+@media (max-width: 560px) { .dr { grid-template-columns: minmax(0, 1fr); } }
+.dr b { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+.act { margin-top: 12px; background: color-mix(in srgb, var(--amber) 20%, var(--surface)); border-radius: 12px; padding: 12px 16px; font-size: .94rem; }
+.act b { font-family: var(--font-display); display: block; margin-bottom: 2px; }
+.pbar { height: 10px; background: var(--surface-2); border-radius: 999px; overflow: hidden; margin: 12px 0; }
+.pbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--blue), var(--mint)); transition: width .4s ease; border-radius: 999px; }
+.ckg { margin-top: 10px; } .ckg h3 { font-size: .98rem; margin-bottom: 4px; }
+.ck { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; padding: 6px 0; font-size: .92rem; cursor: pointer; }
+.ck input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--mint); }
+.ck:has(input:checked) span { color: var(--muted); text-decoration: line-through; }
+.decide { margin: 12px 0 0; padding-left: 1.1em; display: grid; gap: 10px; font-size: .94rem; }
+.decide b { font-family: var(--font-display); }
+a { color: var(--blue-text); }
+
+/* ownership marks: tiled watermark, corner tag, per-slide footer */
+#wm { position: fixed; inset: -25%; z-index: 35; pointer-events: none; user-select: none; transform: rotate(-24deg); display: grid; gap: 52px; align-content: center;
+  color: var(--fg); opacity: var(--wm-o); font: 600 13px var(--font-body); letter-spacing: .08em; white-space: nowrap; overflow: hidden; }
+#wm div:nth-child(even) { transform: translateX(-110px); }
+.ctag { position: fixed; z-index: 36; right: max(10px, env(safe-area-inset-right, 0px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); font-size: .68rem; font-weight: 600; letter-spacing: .04em;
+  color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; opacity: .92; pointer-events: none; user-select: none; }
+.credit { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 12px; font-size: .76rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; letter-spacing: .03em; }
+.credit b { color: var(--fg); font-weight: 600; }
+canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } canvas#fx { display: none; } }
+
+/* updated version: keep long console lines scrolling inside the terminal instead of widening the page */
+.row > *, .panel { min-width: 0; }
+
+.term { max-width: 100%; }
+.rs-d, .rs-list, .cmd, .cmdbox { min-width: 0; max-width: 100%; }
+</style>
+
+<div class="glow a"></div><div class="glow b"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABQCAMAAACj8+IRAAADAFBMVEVHcEwAAAAAAAAIHC4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAApi9wAAAAojNwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAciNgAAAAAAAAoi9sAAAAAAAAliNUAAAAAAAAAAAAAAAAnitojhNAoi9sAAAAijdshfskAAAAAAAAni9wmidcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoitsqjd0kiNonjNonh9YpjN0midsnitoAAAAlitomidoAAAAmhtgmit0mh9clh9gAAAAlgM0AAAAAAAAAAAAAAAAmi9glgs0AAAAAAAAqjt8mi9ggdrgjf8kojNokhdUkgs4ih9MifsccmtQmh9Ulg88mkOQoi9srj+EoiNYef8Eoitsjfsopjd0lhdEAAAAjidsniNoAAAAigccAAAAmitUmg84AAAAeiOUoitspi9onidonitwpjdwnitcZYqUkhtYjidckh9UAAAAlitspitwAAAAkiNgAAAAAAAAAAAAAAAAnitonjNkAAAAAAAAuiuonitQwo/8mfckvjOgeesUjhNEwid4eXKIpjOEhVp0litwqjN0kgMkqjtUooPQgicMpiNcqh+EnidYnkt8ljtktn/8TgcYKLlIAAAAnidorjuQaYpgAAAAwnfsjh9kredAlgMckfMsYccofldQAAAAmiNcWdrcoh9Qph9YqkOQhf8kkgdAje8EmkN4rjOEAAAAoi9smitkAAAAoi9wAAAAAAAAojdoViLIicbcqi90vmPooi9opjeAtmvIlf8gAAAAAAAAAAAApi9sqjNwqjd4pi9woitopjN0qjNsrjN4rkOMrjuIqjuEqi9soi9ooi9krjt8qjd8oitosjN8qjd0wkOsoidgqi9swnPsqi90vjuYvj+gumfArk+ctkOErj+Eyj+Isjd4oh9Qpjt4ul+YukuMuidQvm/UwkuI0j+AsiNOn+Ct7AAAA1nRSTlMA0+EBJICednI92e7z38H+Z7uPHKQgDQLoZcu+g8admaeFAglR2hn5Bl78rJW8LN9+CA8VEDJb7WvVMATA4niTqaSPN8TVNZZu9RmlWlMccCY+h0BpVskIS3ppdtyo8rAjichkk4RKSxKmrZyT7wtdZOZjRGRO5BUvjYR0acvltHLNwSo7eSBIFr0qSguMezR1gM1BWKSRc8lVi4+FWF4v4269nH/44cS/keUnJnFEdFnjkXKpYEVXhEyEY57o1EBafYpIPulC0LZkPChFU6z93J64MLIo9A+EmwAABLFJREFUWMPtmGdYU1cYx18SEhClEKmGEYYIRDaI7IDIVBEUUCogaNVa3HtW1Cqugqt277333ru1e/fcmwkEwlPgcSPd45xzE4jWj28+9NH/h9xzz//e333zPy88ORcAUcnFaTvq6mpXrq8qTk2Y1xiOxW2s2L0/8tumrzfXfpjQOA6x4PKykkSTyXR9ZRUmlanqjUKDWRTeasEGw7vLEkV9v3nJImww7Hr/HatBHNi2ZQ86umV7R3tXhz5yHXocsLLJLJqE7rcno5NhQRFdQkHs/2AFOro53ioIglksfAUdvW8pq1qwnNiBn8iqBoa29s9PQEffG2+jaJr21fhl39omcnZDGTp6xdxuhhYshVPR2amJAwZB6DTpS/Ejub3tBCvb0LkZnz3ZaOKZtLlgKa+x6Y0cvgyfPdLCyb+cvgWffSfvQKHr+F0uyGRAYp98EJ+99e9OxjaefACf/eU5A2P3nX0iHJ296xszD+XMH0+hs7/4RwrccPpN/FC++v5KSZVwSWmUu+sEMz1cpgy4rIvrdYVDSTA7X5Gk5rO+Ck3caJjm5EUMjhU1fhmD49xsyPJ0nGTAZwqFOwekUAsiyJDGHqIfscxis7Hq6U4eBDqdrNUOjdVZzlelExLB4WwWjhEiU6mCgnQ6XVAK7KVTTwO400MogD8hXnZPBfk5Mm96q1Ymk2VmeRHi701HspwbQUUvjvHhyoRgQj7ncD9ChkMMITc4heRJr9wEzxNyBUBrDNGOHXTUajn4EuIGIIfRI2jFDsOb5PwU5ceVApmEDJP+fhicVhc4KSQ0TlMTMIFNhhCSTh+/IRsgW0t8dNSbqKmJbuV3RBNyjB1bKVzhy5ThDl6sEIfoV/J2Y5rD4BlDgflzejAb+oxiwwMXegG8cuCV2xVHecHnwQc1HOBoriIuNKReRa+PZvZV1NeutXfSQQ318nRau+cMD9WMYTr0n8q9qgMDA6vdONyhekKu4wPaI7oL2jXY7jnDYSjzOa0g5+LwAj4bxeABsXl5YWFhk2JpJ0zj0x6EqKTbcmPz6pn34wi75wz34tG66diT03nnyHKCoPq8BXVqX39p1fJpc0rwoWTJhlb7c7XsOMEpWflR5z73d/T5JnYWrXQoKUpCzlYqPaTRdIcV4pHCJz5SKjV8XeIG75qYDXsPOE7GwEGlUursKGpd/vd3cfl6ukwzoWCYy1RwaS3Tcy+M5FrqgtcKT/5m5T8fxb9exYc/8nsXY3ee2orPXnKOb736el/DZz/UK+1h/nwJn31P768c3v4YPvva4yYeuHAbPvumUwLffFnm4++P7hYkifH4dS9q42hTx1x89qy+Hl629Q589v0/21iDi/o1+OzH2/k7EUtiMTp63qPdbB9t6L45GT/uh8/QSDr770tDR4eXtHUYWdoL8ct+JlJPA+kRmyrQ0RtLLDzt1Qvwm+S95TbBqLdNWTgeHf3Jzv5uo9CzvBL/NWXFdlEUzObIZ9GrDk/baRGttiml69GLnrHlYwtlf7pqIzr5xSLxrHVb6ZpyZHD5y4sbBqzW+N3NckTquH2ps+q+2x+5umjxOrS3+vLk8VP3/NDcklZ7+MiRw2Uz/je/+/4FwH2gHL5ozFUAAAAASUVORK5CYII=" alt="Systech"></div>
+    <div class="brand">PBIP Documentation Generator<small>Power BI documentation, automated</small></div>
+    <div class="tabs" role="tablist" aria-label="Slides">
+      <button class="tab" role="tab" id="tab-any" data-go="any" aria-selected="true">1 · Any project</button>
+      <button class="tab" role="tab" id="tab-impact" data-go="impact" aria-selected="false">2 · Impact</button>
+      <button class="tab" role="tab" id="tab-security" data-go="security" aria-selected="false">3 · Setup &amp; security</button>
+    </div>
+    <div class="nav"><button id="prev" aria-label="Previous slide">←</button><button id="next" aria-label="Next slide">→</button></div>
+  </div>
+  <div class="prog" id="prog"></div>
+</header>
+
+<main>
+<!-- ================= SLIDE 1 ================= -->
+<section class="slide" id="s-any" aria-labelledby="t1">
+  <div class="notice rv" style="--i:0" role="note">
+    <span class="ni" aria-hidden="true">!</span>
+    <p><b>Early version, not 100% working yet.</b> It needs more PBIP files to learn from: different report types, structures, pages and visuals. Review every output and don't use it blindly.</p>
+    <button class="btn ghost" data-go="security">Setup and security →</button>
+  </div>
+  <div class="head">
+    <div class="kicker rv" style="--i:0">Works on every Power BI project</div>
+    <h1 class="title rv" style="--i:1" id="t1">Drop in <mark>any</mark> PBIP. Get the docs.</h1>
+    <p class="lede rv" style="--i:2">The tool reads whatever it finds in the project files. No page name, table name or KPI is written into the code, so the same single command works on a safety report, a sales report or an HR report. It asks one question, whether you have an AI key, and writes all three files either way.</p>
+  </div>
+
+  <div class="flow rv" style="--i:3" aria-label="How the tool flows">
+    <div class="fcol">
+      <div class="lbl">Any PBIP project</div>
+      <div class="folder f1">Name.Report</div>
+      <div class="folder f2">Name.SemanticModel</div>
+    </div>
+    <div class="conn"><i></i></div>
+    <div class="engine" id="engine">
+      <div class="orb"><div class="core"><b>run.py</b><span>one command</span></div></div>
+      <div class="esteps"><span class="estep" data-e="0">Read</span><span class="estep" data-e="1">Translate</span><span class="estep" data-e="2">Publish</span></div>
+    </div>
+    <div class="conn"><i></i></div>
+    <div class="fcol">
+      <div class="lbl">Three files out</div>
+      <div class="doc" data-doc="0"><em>.docx</em><b>User Manual</b><span>For people using the report</span></div>
+      <div class="doc" data-doc="1"><em>.docx</em><b>KPI Glossary</b><span>Every term in plain English</span></div>
+      <div class="doc" data-doc="2"><em>.html</em><b>KPI Documentation</b><span>Searchable, with DAX</span></div>
+    </div>
+  </div>
+
+  <div class="row two">
+    <div class="panel rv" style="--i:4">
+      <div class="runhead">
+        <div><h2 style="font-size:1.25rem">Watch it run</h2><p class="note">The console messages from run.py. Name and counts fill in from your project.</p></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div class="seg" role="tablist" aria-label="Mode">
+            <button role="tab" id="r-off" aria-selected="true" data-r="off">Offline mode</button>
+            <button role="tab" id="r-ai" aria-selected="false" data-r="ai">AI mode</button>
+          </div>
+          <button class="btn" id="run">▶ Run it</button>
+        </div>
+      </div>
+      <div class="term" id="term" aria-live="polite"></div>
+    </div>
+    <div class="panel why rv" style="--i:5">
+      <h2 style="font-size:1.25rem">Why it travels to any project</h2>
+      <div class="w"><div class="ic">{ }</div><div><b>Nothing hardcoded</b><p>Pages, tables, measures and filters are discovered from the PBIP files themselves.</p></div></div>
+      <div class="w"><div class="ic">177</div><div><b>Standard vocabulary built in</b><p>177 business terms (finance, sales, HR, safety, inventory, gaming, insurance and more) ship with the tool and work with no internet connection.</p></div></div>
+      <div class="w"><div class="ic">2</div><div><b>Offline or AI, same three files</b><p>No key: definitions are drafted from each measure's own formula. With a key from IT: an AI writes them. Either way you get the same documents.</p></div></div>
+      <div class="w"><div class="ic">RO</div><div><b>Read-only and local</b><p>It reads definition files only. It never connects to your data or your warehouse.</p></div></div>
+      <div class="w"><div class="ic">?</div><div><b>Honest about unknowns</b><p>A term it can't look up is drafted from its own formula, shaded yellow and marked "please verify". Nothing is passed off as final.</p></div></div>
+    </div>
+  </div>
+
+  <div class="panel rv" style="--i:6" id="howto">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <div><h2 style="font-size:1.25rem">How to run it on your computer</h2><p class="note">Six steps. Click a step to see the command.</p></div>
+      <span class="dir nn">Command Prompt on Windows, Terminal on a Mac</span>
+    </div>
+    <div class="runsteps">
+      <div class="rs-list" id="rslist" role="tablist" aria-label="Steps"></div>
+      <div class="rs-d" id="rsd" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 3 ================= -->
+<section class="slide" id="s-impact" aria-labelledby="t3" hidden>
+  <div class="head">
+    <div class="kicker rv" style="--i:0">What changes for the people using the report</div>
+    <h1 class="title rv" style="--i:1" id="t3">Fewer pings. Faster answers. <mark>Everyone</mark> on the same page.</h1>
+    <p class="lede rv" style="--i:2">Pick a person and watch a typical question get answered from the generated files instead of a message to the report developer.</p>
+  </div>
+
+  <div class="panel rv" style="--i:3">
+    <div class="chips" id="persons" role="tablist" aria-label="Who is asking"></div>
+    <div class="chat" id="chat" aria-live="polite"></div>
+    <p class="note">Example scenarios built from what the three files contain.</p>
+  </div>
+
+  <div class="row two-b">
+    <div class="panel rv" style="--i:4">
+      <div class="seg" role="tablist" aria-label="Advantages or limits">
+        <button role="tab" id="m-adv" aria-selected="true" data-m="adv">What you gain</button>
+        <button role="tab" id="m-lim" aria-selected="false" data-m="lim">Good to know</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="panel calc rv" style="--i:5">
+      <div>
+        <h2 style="font-size:1.2rem">Developer time saved: your numbers</h2>
+        <p class="note">Starting values are example assumptions, not measurements. Move the sliders to match your team.</p>
+      </div>
+      <div class="sl"><label for="c-pages">Report pages <output id="o-pages"></output></label><input id="c-pages" type="range" min="1" max="60" value="17"></div>
+      <div class="sl"><label for="c-meas">Measures <output id="o-meas"></output></label><input id="c-meas" type="range" min="5" max="500" value="207"></div>
+      <div class="sl"><label for="c-pm">Minutes per page by hand <output id="o-pm"></output></label><input id="c-pm" type="range" min="10" max="180" step="5" value="60"></div>
+      <div class="sl"><label for="c-mm">Minutes per measure by hand <output id="o-mm"></output></label><input id="c-mm" type="range" min="1" max="20" value="5"></div>
+      <div class="sl"><label for="c-rv">Hours to review the output <output id="o-rv"></output></label><input id="c-rv" type="range" min="0.5" max="10" step="0.5" value="2"></div>
+      <div class="sl"><label for="c-rp">Reports documented per year <output id="o-rp"></output></label><input id="c-rp" type="range" min="1" max="40" value="4"></div>
+      <div style="display:grid;gap:8px">
+        <div class="cbar"><span>By hand</span><div class="t"><div class="f a" id="f-a"></div></div><span id="v-a"></span></div>
+        <div class="cbar"><span>With tool</span><div class="t"><div class="f b" id="f-b"></div></div><span id="v-b"></span></div>
+      </div>
+      <div class="big"><b id="v-save"></b><span id="v-save-l"></span></div>
+    </div>
+  </div>
+
+  <div class="finale rv" style="--i:6">
+    <div>
+      <h2>Documentation that writes itself, built at Systech.</h2>
+      <p>Run it on your next report before handover.</p>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+      <button class="btn amber" id="party">Celebrate</button>
+      <div class="logo"><img src="data:image/png;base64,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" alt="Systech"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 4 ================= -->
+<section class="slide" id="s-security" aria-labelledby="t4" hidden>
+  <div class="head">
+    <div class="kicker rv" style="--i:0">Requirements, data security and governance</div>
+    <h1 class="title rv" style="--i:1" id="t4">Runs locally. Handle with <mark>care</mark>.</h1>
+    <p class="lede rv" style="--i:2">What the tool needs, where your data goes, what a PBIP file really contains, and what to do before and after each run. These findings come from reading the tool's code, a test run with all network access blocked, and Microsoft and community documentation.</p>
+  </div>
+
+  <div class="panel warn rv" style="--i:3">
+    <div class="wgrid">
+      <div class="head" style="gap:8px">
+        <div class="kicker" style="color:var(--coral)">Disclaimer</div>
+        <h2 style="font-size:1.5rem">Not 100% working yet. Use the output as a first draft.</h2>
+        <p>The tool has been tested on the Standex report and on made-up inventory, streaming, HR and gaming reports. Reports differ a lot, and every new PBIP can show a pattern it does not handle yet. It follows fixed pattern rules, a built-in glossary of 177 terms and, if you choose, an AI, so it gets better as it is tested on more files. AI mode has been tested with simulated replies and still needs a live check with a company-issued key. Until then, a person must review every output before anyone relies on it.</p>
+      </div>
+      <div>
+        <p class="note" style="margin-bottom:8px">More PBIP files would teach it about</p>
+        <div class="chips"><span class="tagc">Report types</span><span class="tagc">Report structures</span><span class="tagc">Page layouts</span><span class="tagc">Visual types</span><span class="tagc">Naming styles</span><span class="tagc">DAX styles</span></div>
+        <p class="note" style="margin-top:12px">Share extra projects for testing only with the report owner's permission.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row two">
+    <div class="panel rv" style="--i:4">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="font-size:1.25rem">What you need</h2>
+        <div class="seg" role="tablist" aria-label="When">
+          <button role="tab" id="q-setup" aria-selected="true" data-q="setup">First-time setup</button>
+          <button role="tab" id="q-run" aria-selected="false" data-q="run">Every run</button>
+        </div>
+      </div>
+      <div class="reqs" id="reqs"></div>
+    </div>
+    <div class="panel rv" style="--i:5">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="font-size:1.25rem">Where your data goes</h2>
+        <div class="seg" role="tablist" aria-label="Mode">
+          <button role="tab" id="w-off" aria-selected="true" data-wg="off">Offline mode</button>
+          <button role="tab" id="w-ai" aria-selected="false" data-wg="ai">AI mode</button>
+        </div>
+      </div>
+      <div class="local">
+        <div class="localbox"><span class="lt">This computer only</span>
+          <div class="hop"><b>source/</b><span>your project</span></div><div class="arr"><i></i></div>
+          <div class="hop"><b>run.py</b><span>reads text</span></div><div class="arr"><i></i></div>
+          <div class="hop"><b>output/</b><span>3 files</span></div>
+        </div>
+        <div class="cloud" id="cloud"><b>✕</b><span>Internet: no calls while the tool runs</span></div>
+      </div>
+      <p class="note" id="vnote" style="margin:12px 0 8px"></p>
+      <ul class="verified" id="vlist"></ul>
+    </div>
+  </div>
+
+  <div class="panel rv" style="--i:6">
+    <h2 style="font-size:1.25rem">What is inside a PBIP file, and what the tool does with it</h2>
+    <p class="note">Server details do sit in the project, so the files need the same care as the report itself. Click an item.</p>
+    <div class="xp">
+      <div class="xp-list" id="xplist" role="tablist" aria-label="Contents of a PBIP"></div>
+      <div class="xp-d" id="xpd" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="row two">
+    <div class="panel rv" style="--i:7">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="font-size:1.25rem">Safe-use checklist</h2>
+        <span class="dir nn" id="ckcount">0 of 12 done</span>
+      </div>
+      <div class="pbar"><i id="ckfill"></i></div>
+      <div id="chk"></div>
+      <p class="note" id="ckmsg"></p>
+    </div>
+    <div class="panel rv" style="--i:8">
+      <h2 style="font-size:1.25rem">Decisions to agree with leadership</h2>
+      <p class="note">Suggestions, not rules.</p>
+      <ul class="decide">
+        <li><b>Who and what.</b> Which client projects the tool may run on, and who may run it.</li>
+        <li><b>AI and keys.</b> Whether AI mode may be used on client projects, which AI services are approved, and who issues the keys.</li>
+        <li><b>Where the tool lives.</b> The code sits in a private repository on a personal GitHub account today. Agree whether it moves to a company repository, and who gets access.</li>
+        <li><b>Where outputs live.</b> Where the files are stored and who can open them.</li>
+        <li><b>Sign-off.</b> Who reviews the documents before they reach a client.</li>
+        <li><b>More test files.</b> How extra PBIP files are collected for testing, with the owner's permission, so coverage grows safely.</li>
+      </ul>
+      <p class="note" style="margin-top:14px">Sources:
+        <a href="https://learn.microsoft.com/power-bi/developer/projects/projects-overview" target="_blank" rel="noopener">Microsoft Learn, Power BI projects</a>,
+        <a href="https://www.red-gate.com/simple-talk/data-analytics/powerbi/power-bi-project-pbip-format-guide/" target="_blank" rel="noopener">Simple Talk, PBIP format guide</a>,
+        <a href="https://www.red-gate.com/simple-talk/data-analytics/power-bi-tmdl-benefits-security-risks-best-practices/" target="_blank" rel="noopener">Simple Talk, TMDL security risks</a>.
+        Microsoft lists cache.abf as the project's local data cache. The Simple Talk guide describes it as holding the actual data.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+(function () {
+  var REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  /* ---------- confetti ---------- */
+  var cv = $("#fx"), cx = cv.getContext("2d"), bits = [], raf = 0;
+  function sizeCv() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; }
+  sizeCv(); addEventListener("resize", sizeCv);
+  function confetti() {
+    if (REDUCED) return;
+    var cols = ["#2888D8", "#FFB81C", "#0E9F71", "#FFFFFF", "#7CC0F7"];
+    for (var i = 0; i < 160; i++) {
+      bits.push({ x: innerWidth * (.2 + Math.random() * .6), y: innerHeight * .35, vx: (Math.random() - .5) * 16, vy: -Math.random() * 15 - 3,
+        w: 6 + Math.random() * 7, h: 4 + Math.random() * 5, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[i % cols.length], life: 0 });
+    }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  function tick() {
+    cx.clearRect(0, 0, cv.width, cv.height); var k = devicePixelRatio;
+    bits = bits.filter(function (b) { return b.y < innerHeight + 30 && b.life < 260; });
+    bits.forEach(function (b) {
+      b.vy += .38; b.vx *= .992; b.x += b.vx; b.y += b.vy; b.r += b.vr; b.life++;
+      cx.save(); cx.translate(b.x * k, b.y * k); cx.rotate(b.r); cx.fillStyle = b.c; cx.globalAlpha = Math.max(0, 1 - b.life / 260);
+      cx.fillRect(-b.w * k / 2, -b.h * k / 2, b.w * k, b.h * k); cx.restore();
+    });
+    raf = bits.length ? requestAnimationFrame(tick) : 0;
+    if (!bits.length) cx.clearRect(0, 0, cv.width, cv.height);
+  }
+  $("#party").addEventListener("click", confetti);
+
+  /* ---------- count-up ---------- */
+  function countUp(el, to, ms) {
+    var t0 = performance.now();
+    (function f(now) {
+      var p = Math.min(1, (now - t0) / ms), v = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      el.textContent = v.toLocaleString("en-US");
+      if (p < 1) requestAnimationFrame(f);
+    })(t0);
+  }
+  function playCounters(scope) { if (REDUCED) return; $$("[data-to]", scope).forEach(function (b) { countUp(b, +b.dataset.to, 1300); }); }
+
+  /* ---------- slides ---------- */
+  var order = ["any", "impact", "security"], cur = null;
+  function show(id, fromHash) {
+    if (order.indexOf(id) < 0) id = "any";
+    var dir = cur === null ? "" : (order.indexOf(id) >= order.indexOf(cur) ? "from-right" : "from-left");
+    cur = id;
+    order.forEach(function (k) {
+      var s = $("#s-" + k), on = k === id; s.hidden = !on;
+      $("#tab-" + k).setAttribute("aria-selected", on ? "true" : "false");
+      s.classList.remove("from-right", "from-left", "play");
+      if (on) { void s.offsetWidth; if (dir) s.classList.add(dir); s.classList.add("play"); }
+    });
+    $("#prog").style.width = ((order.indexOf(id) + 1) / order.length * 100) + "%";
+    if (!fromHash) { try { history.replaceState(null, "", "#" + id); } catch (e) { location.hash = id; } }
+    window.scrollTo(0, 0);
+    if (id === "impact") startChat(persona);
+  }
+  $$("[data-go]").forEach(function (b) { b.addEventListener("click", function () { show(b.dataset.go); }); });
+  $("#prev").addEventListener("click", function () { show(order[Math.max(0, order.indexOf(cur) - 1)]); });
+  $("#next").addEventListener("click", function () { show(order[Math.min(order.length - 1, order.indexOf(cur) + 1)]); });
+  document.addEventListener("keydown", function (e) {
+    if (e.target && e.target.tagName === "INPUT") return;
+    if (e.key === "ArrowRight") $("#next").click(); else if (e.key === "ArrowLeft") $("#prev").click();
+    else if (e.key === "1") show("any"); else if (e.key === "2") show("impact"); else if (e.key === "3") show("security");
+  });
+  addEventListener("hashchange", function () { var h = location.hash.slice(1); if (h !== cur) show(h, true); });
+
+  /* ---------- slide 1: terminal run ---------- */
+  var HEAD = [
+    ["p", "$ python run.py"],
+    ["", ""],
+    ["", "Do you have an AI API key?"],
+    ["d", "  1. Yes - AI mode (paste the key)"],
+    ["d", "  2. No  - Offline mode (drafts from the formulas)"]
+  ];
+  var BUILD = [
+    ["", "Reading Name.Report + Name.SemanticModel ..."],
+    ["d", "  N pages (N in the main navigation), N measures, N tables"],
+    ["d", "    left out of the manual: 'Name' -- tooltip page"],
+    ["", "Building page content (MODE) ..."],
+    ["ok", "  wrote Name_User_Manual.docx"],
+    ["ok", "  wrote Name_KPI_Glossary.docx"],
+    ["ok", "  wrote Name_KPI_Documentation.html"],
+    ["", ""],
+    ["", "Coverage: N measures have a row in my_definitions.csv"],
+    ["", "Review notes"],
+    ["d", "* N drafts to verify (formula N, AI N, web N)"]
+  ];
+  function mk(tail, mode) { return tail.map(function (l) { return [l[0], l[1].replace("MODE", mode)]; }); }
+  var RUNS = {
+    off: HEAD.concat([["", "Type 1 or 2: 2"],
+      ["d", "  Offline mode: nothing is sent anywhere."]],
+      mk(BUILD, "offline")),
+    ai: HEAD.concat([["", "Type 1 or 2: 1"], ["", ""],
+      ["", "Paste your API key (it will NOT appear on screen)."],
+      ["", "Key: \u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7"], ["", ""],
+      ["", "Recognised as a Google Gemini key."],
+      ["", "Testing the key with one small request ..."],
+      ["ok", "Key works."],
+      ["", "Save this key on this computer? (y/n): n"],
+      ["d", "Not saved. Used for this run only."],
+      ["d", "  AI mode on (gemini): names and formula wording only."]],
+      mk(BUILD, "web lookups on"))
+  };
+  var runMode = "off", LINES = RUNS.off;
+  // which line starts each stage / finishes each file (found by text, so the demo cannot drift out of step)
+  function at(prefix) { for (var i = 0; i < LINES.length; i++) if (LINES[i][1].indexOf(prefix) === 0) return i + 1; return 0; }
+  var term = $("#term"), engine = $("#engine"), running = false, termToken = 0;
+  function renderTerm(n, cursor) {
+    term.innerHTML = LINES.slice(0, n).map(function (l) { return '<span class="' + l[0] + '">' + esc(l[1]) + "</span>"; }).join("\n") + (cursor ? '<span class="cur"></span>' : "");
+  }
+  function setStage(k) { // 0 read, 1 translate, 2 publish, 3 finished
+    $$(".estep").forEach(function (s, i) { s.classList.toggle("on", i === k); s.classList.toggle("done", i < k); });
+  }
+  function resetDocs(state) { $$(".doc").forEach(function (d) { d.classList.remove("pop"); d.classList.toggle("wait", state); }); }
+  renderTerm(LINES.length, false); setStage(3);
+  $$("[data-r]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (running) return; runMode = b.dataset.r; LINES = RUNS[runMode];
+      $$("[data-r]").forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); });
+      renderTerm(LINES.length, false); setStage(3); resetDocs(false);
+    });
+  });
+  $("#run").addEventListener("click", async function () {
+    if (running) return; running = true; var btn = this, tk = ++termToken;
+    btn.disabled = true; btn.textContent = "Running…"; engine.classList.add("run"); resetDocs(true); setStage(-1);
+    for (var i = 1; i <= LINES.length; i++) {
+      renderTerm(i, true);
+      if (i === at("Reading")) setStage(0); if (i === at("  N pages")) setStage(1); if (i === at("Building page content")) setStage(2);
+      if (i === at("  wrote Name_User")) { var d0 = $('[data-doc="0"]'); d0.classList.remove("wait"); d0.classList.add("pop"); }
+      if (i === at("  wrote Name_KPI_Glossary")) { var d1 = $('[data-doc="1"]'); d1.classList.remove("wait"); d1.classList.add("pop"); }
+      if (i === at("  wrote Name_KPI_Doc")) { var d2 = $('[data-doc="2"]'); d2.classList.remove("wait"); d2.classList.add("pop"); }
+      await wait(REDUCED ? 0 : (LINES[i - 1][1] === "" ? 120 : 300));
+      if (tk !== termToken) return;
+    }
+    renderTerm(LINES.length, false); setStage(3); engine.classList.remove("run");
+    confetti(); btn.disabled = false; btn.textContent = "▶ Run it again"; running = false;
+  });
+
+  /* ---------- slide 3: personas ---------- */
+  var PERSONS = [
+    { n: "Plant manager", q: "What does the TRIR card on the Safety page actually tell me?", a: "It shows how often work injuries needing medical treatment are happening, adjusted for hours worked so sites compare fairly. Lower is better.", w: "User Manual › Safety page" },
+    { n: "New team member", q: "I just joined. What is OTIF, and why is the card amber?", a: "OTIF is the share of orders delivered on time and in full. The manual's conventions section lists the status words and colors used across the report.", w: "KPI Glossary + Manual › Display conventions" },
+    { n: "Report developer", q: "Which tables feed the On time Delivery measure, and what's the DAX?", a: "Search the measure by name. You get the full formula, an auto-written summary, the tables and columns it touches, and the relationships between them.", w: "KPI Documentation (HTML)" },
+    { n: "Report owner", q: "A definition in the glossary is wrong. How do I fix it?", a: "Type the right wording over the \u201cWhat it means\u201d cell in the glossary Word file and save. That is all the glossary needs. Run the tool again only if you also want the wording in the manual and the HTML; that run also stores it for later runs.", w: "KPI Glossary (Word) › What it means column" },
+    { n: "Leadership", q: "Which pages are the real report, and can I trust the definitions?", a: "The manual's report structure lists the main pages and how many test or duplicate pages were left out. In the glossary every definition shows its source, and anything drafted from a formula or by an AI is shaded and marked \u201cplease verify\u201d until a person confirms it.", w: "Manual › Report structure + KPI Glossary › Source column" }
+  ];
+  var persona = 0, chatTok = 0, pEl = $("#persons");
+  PERSONS.forEach(function (p, i) {
+    var b = document.createElement("button"); b.className = "chip"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", i === 0 ? "true" : "false"); b.textContent = p.n;
+    b.addEventListener("click", function () { persona = i; $$(".chip", pEl).forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); }); startChat(i); });
+    pEl.appendChild(b);
+  });
+  async function startChat(i) {
+    var tk = ++chatTok, p = PERSONS[i], chat = $("#chat");
+    chat.innerHTML = ""; var q = document.createElement("div"); q.className = "bub q"; chat.appendChild(q);
+    if (REDUCED) { q.textContent = p.q; } else { for (var c = 1; c <= p.q.length; c++) { q.textContent = p.q.slice(0, c); await wait(18); if (tk !== chatTok) return; } }
+    var a = document.createElement("div"); a.className = "bub a"; a.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>'; chat.appendChild(a);
+    await wait(REDUCED ? 0 : 900); if (tk !== chatTok) return;
+    a.innerHTML = esc(p.a) + '<br><span class="where">Found in: ' + esc(p.w) + "</span>";
+  }
+  startChat(0);
+
+  /* ---------- slide 3: advantages / limits ---------- */
+  var ADV = [
+    ["Works on any PBIP", "Names and KPIs are discovered from the files, so the same command suits every project."],
+    ["Nothing is invented", "Every formula, page and filter comes from the source. Drafted text is shaded and labelled \u201cplease verify\u201d."],
+    ["Three readers, one run", "A manual for users, a glossary for everyone, a technical reference for developers. Re-run after every change and all three follow the report."],
+    ["Your choice of privacy", "Offline mode makes no internet calls. AI mode sends only indicator names and formula wording, never report data."],
+    ["Fix a definition in Word", "Edit the \u201cWhat it means\u201d cell in the glossary Word file and save. A re-run reads it back, updates the other documents and keeps it."],
+    ["Real page numbers", "The Word contents page shows measured page numbers, not a placeholder to refresh."],
+    ["Keeps the manual clean", "Test, copy, drill-down, detail and tooltip pages stay out of the manual and in the HTML."],
+    ["Searchable DAX reference", "Filter by area, search any measure, and see its formula, tables and relationships."]
+  ];
+  var LIM = [
+    ["Early version, still learning", "It has been tested on the Standex report and on made-up inventory, streaming, HR and gaming reports. Other structures and visuals may not be handled yet, and AI mode is still to be checked live with a company key.", "Treat the output as a first draft and review it. More PBIP files for testing will widen coverage."],
+    ["No business-purpose text", "It describes what is on a page, not why the page exists.", "The report owner adds the why on top of the generated skeleton."],
+    ["No targets or RAG thresholds", "It can't know the real targets behind a status color.", "It states colors and thresholds only where the report itself defines them, for the owner to confirm."],
+    ["No data-quality checks", "It never queries the data, so it can't spot bad joins or messy values.", "Keep data checks in your existing QA process."],
+    ["Drafted definitions need a person", "Company jargon is drafted from its own formula, or by an AI if you choose. A draft can be too literal or simply wrong.", "Drafts are shaded yellow and marked \u201cplease verify\u201d. Correct them in the Word file and save. One re-run carries the wording into the other documents and remembers it."],
+    ["Summaries are pattern-matched", "Complex DAX gets a general description.", "The full DAX always sits next to the summary in the HTML."],
+    ["One project, PBIP format", "It needs an unzipped PBIP project and handles one per run.", "Save the report as a PBIP project and run each in turn."],
+    ["Contents page needs Word or LibreOffice", "Without either, the manual uses a standard Word contents field.", "Press F9 in Word, or install LibreOffice for automatic numbers."],
+    ["Page selection is rule-based", "Main pages come from the navigation buttons. A report with no navigation falls back to page-name keywords, so an oddly named test page can slip in.", "The console lists what was left out, and every page is still in the HTML."]
+  ];
+  var mode = "adv";
+  function drawGrid() {
+    $("#grid").innerHTML = (mode === "adv" ? ADV : LIM).map(function (x, i) {
+      return '<div class="item ' + mode + '" style="--i:' + i + (mode === "lim" && i === 0 ? ";grid-column:1/-1" : "") + '"><b>' + esc(x[0]) + "</b><p>" + esc(x[1]) + "</p>" + (x[2] ? '<div class="fix"><i>How we cover it</i>' + esc(x[2]) + "</div>" : "") + "</div>";
+    }).join("");
+  }
+  $$("[data-m]").forEach(function (b) { b.addEventListener("click", function () { mode = b.dataset.m; $$("[data-m]").forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); }); drawGrid(); }); });
+  drawGrid();
+
+  /* ---------- slide 3: calculator ---------- */
+  function fmt(n) { return (Math.round(n * 10) / 10).toLocaleString("en-IN", { maximumFractionDigits: 1 }); }
+  function calc() {
+    var v = function (id) { return +$("#c-" + id).value; };
+    var pages = v("pages"), meas = v("meas"), pm = v("pm"), mm = v("mm"), rv = v("rv"), rp = v("rp");
+    $("#o-pages").textContent = pages; $("#o-meas").textContent = meas; $("#o-pm").textContent = pm + " min"; $("#o-mm").textContent = mm + " min"; $("#o-rv").textContent = rv + " h"; $("#o-rp").textContent = rp;
+    var hand = (pages * pm + meas * mm) / 60, saved = Math.max(0, hand - rv), max = Math.max(hand, rv, 1);
+    $("#f-a").style.width = (hand / max * 100) + "%"; $("#f-b").style.width = (rv / max * 100) + "%";
+    $("#v-a").textContent = fmt(hand) + " h"; $("#v-b").textContent = fmt(rv) + " h";
+    $("#v-save").textContent = fmt(saved * rp) + " hours";
+    $("#v-save-l").textContent = "saved per year, about " + fmt(saved * rp / 8) + " working days (" + fmt(saved) + " h per report, " + rp + " reports)";
+  }
+  $$(".calc input").forEach(function (i) { i.addEventListener("input", calc); }); calc();
+
+  /* ---------- slide 1: how to run ---------- */
+  var RS = [
+    { t: "Get the tool from GitHub (first time only)", p: "The tool lives in a private GitHub repository. Once you have access, copy it to your computer with git, or use Code, then Download ZIP, on the repository page and unzip it.",
+      cmds: [["Copy it to your computer", "git clone https://github.com/IvanAjith/pbip-doc-generator.git"], ["Move into the folder", "cd pbip-doc-generator"]],
+      tip: "To pick up later fixes, run git pull in the same folder. Check your version with python run.py --version-info.", hl: "root" },
+    { t: "Install the packages (first time only)", p: "The tool needs four Python packages. This is the only step that always needs the internet, and only once per computer. Python 3.10 or newer must already be installed.",
+      cmds: [["Install once", "pip install -r requirements.txt"]], tip: "", hl: "req" },
+    { t: "Put the project in source/", p: "Copy the Name.Report and Name.SemanticModel folders into the source folder, or drop in their .zip files. One project at a time.",
+      cmds: [], tip: "Leave out the .pbi folder inside the semantic model. It can hold cached data, and the tool does not need it.", hl: "source" },
+    { t: "Run it and answer one question", p: "It asks whether you have an AI API key. Type 2 for offline mode. Type 1 to paste your key (it stays hidden and is recognised and tested automatically). If the key fails you can continue offline or stop and try another key.",
+      cmds: [["Run", "python run.py"], ["Optional: fill in the manual's cover page", 'python run.py --author "Your Name" --owner "Systech" --version 1.0']],
+      tip: "On Windows, py run.py also works if python is not recognised. A key you choose to save is stored in your own user folder or Windows Credential Manager, never in the tool's folder.", hl: "run" },
+    { t: "Collect the three files from output/", p: "The manual, the glossary and the HTML reference appear in the output folder. Review them, then delete the copies in source/ and output/ when you are done.",
+      cmds: [], tip: "", hl: "output" },
+    { t: "Correct definitions in Word (no re-run needed)", p: "In the glossary, pale-yellow rows are drafts to check and strong-yellow rows need your definition. Type over the \u201cWhat it means\u201d cell and save. The glossary is then finished as you saved it.",
+      cmds: [["Only if you also want the manual and HTML to show your wording", "python run.py"]], tip: "That re-run also stores your wording, so later runs keep it. Keep the glossary file in output/ until you have re-run at least once, because the tool reads your edits from that file. Close it in Word before re-running.", hl: "gloss" }
+  ];
+  function treeHtml(hl) {
+    var L = [["pbip-doc-generator/", "root"], ["  run.py", "run"], ["  requirements.txt", "req"], ["  source/        <- project folders go here", "source"]];
+    if (hl === "source") L.push(["    Name.Report/", "source"], ["    Name.SemanticModel/", "source"]);
+    L.push(["  output/        <- the three files appear here", "output"]);
+    if (hl === "output" || hl === "gloss") L.push(["    Name_User_Manual.docx", "output"], ["    Name_KPI_Glossary.docx" + (hl === "gloss" ? "   <- edit here" : ""), "output"], ["    Name_KPI_Documentation.html", "output"]);
+    L.push(["  glossary/      <- your definitions are remembered here", "gloss"]);
+    return L.map(function (l) { return (l[1] === hl || (hl === "gloss" && l[1] === "output" && l[0].indexOf("Glossary") > 0)) ? '<span class="hl">' + esc(l[0]) + "</span>" : esc(l[0]); }).join("\n");
+  }
+  function copyText(txt, btn) {
+    var ok = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy"; }, 1400); };
+    var fb = function () {
+      try { var r = document.createRange(); r.selectNodeContents(btn.previousElementSibling); var s = getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {}
+      btn.textContent = "Press Ctrl+C"; setTimeout(function () { btn.textContent = "Copy"; }, 2200);
+    };
+    try { navigator.clipboard.writeText(txt).then(ok, fb); } catch (e) { fb(); }
+  }
+  var rsList = $("#rslist"), rsd = $("#rsd");
+  RS.forEach(function (s, i) {
+    var b = document.createElement("button"); b.className = "rs"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", i === 0 ? "true" : "false");
+    b.innerHTML = "<i>" + (i + 1) + "</i><b>" + esc(s.t) + "</b>"; b.addEventListener("click", function () { showRS(i); }); rsList.appendChild(b);
+  });
+  function showRS(i) {
+    $$(".rs", rsList).forEach(function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+    var s = RS[i], h = "<p>" + esc(s.p) + "</p>";
+    s.cmds.forEach(function (c, j) { h += '<div class="note">' + esc(c[0]) + '</div><div class="cmd"><div class="cmdbox">' + esc(c[1]) + '</div><button class="copy" data-j="' + j + '">Copy</button></div>'; });
+    if (s.tip) h += '<p class="note"><b>Tip:</b> ' + esc(s.tip) + "</p>";
+    h += '<div class="tree" aria-label="Folder layout">' + treeHtml(s.hl) + "</div>";
+    rsd.innerHTML = h;
+    $$(".copy", rsd).forEach(function (b) { b.addEventListener("click", function () { copyText(s.cmds[+b.dataset.j][1], b); }); });
+  }
+  showRS(0);
+
+  /* ---------- slide 4: where your data goes ---------- */
+  var WG = {
+    off: { cloud: '<b>\u2715</b><span>Internet: no calls while the tool runs</span>', cls: "", note: "Checked in the code and in a test run",
+      li: ["With all network access blocked, offline mode still produced all three files.", "It reads the project as text. It never runs the DAX or Power Query inside it.", "The only other program it can start is Word or LibreOffice, on this computer, to measure page numbers.", "Temporary files for that step go in a temp folder that is removed automatically.", "The HTML reference is one self-contained file with no external links.", "The included .gitignore keeps source/, output/ and glossary/ out of Git."] },
+    ai: { cloud: '<b style="color:var(--amber)">\u2192</b><span>Only indicator names and formula wording go to the AI service you chose, and indicator names to Wikipedia and web search</span>', cls: "ai", note: "What AI mode sends, and how the key is kept",
+      li: ["Sent: the indicator name, its formula described in plain words, the page name, and the report name with its main page names.", "Not sent: report data, rows, server names or credentials. DAX text is sent only with --ai-send-dax.", "Standard definitions are first looked up on Wikipedia and web search by indicator name (up to 80 per run, cached). Offline mode switches this off.", "The key is typed hidden and tested with one small request. It is kept outside the tool's folder, in Windows Credential Manager if available or otherwise a private file in your user folder, and is never printed or written to a document.", "A test scans the code for key-like text, so a key cannot be committed to GitHub by accident.", "Free or personal keys may let the provider keep what you send. Use a company-issued key and check its terms."] }
+  };
+  function drawWG(k) {
+    var w = WG[k], c = $("#cloud"); c.innerHTML = w.cloud; c.style.borderColor = k === "ai" ? "var(--amber)" : ""; c.style.borderStyle = k === "ai" ? "solid" : "";
+    $("#vnote").textContent = w.note;
+    $("#vlist").innerHTML = w.li.map(function (x) { return "<li><span>" + esc(x) + "</span></li>"; }).join("");
+  }
+  $$("[data-wg]").forEach(function (b) { b.addEventListener("click", function () { $$("[data-wg]").forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); }); drawWG(b.dataset.wg); }); });
+  drawWG("off");
+
+  /* ---------- slide 4: requirements, explorer, checklist ---------- */
+  var REQ = {
+    setup: [["Internet", "Yes, once", "amber", "pip downloads four Python packages (python-docx, pypdf, ddgs, docx2pdf). Git or a ZIP download gets the tool itself from GitHub."],
+            ["Python 3", "Required", "blue", "Version 3.10 or newer, installed on the computer that runs the tool."],
+            ["Access to the repository", "Required", "blue", "The code is in a private GitHub repository, so each person needs to be given access."],
+            ["AI API key", "Optional", "", "Only for AI mode. Issued by IT and typed in once, hidden. It is stored outside the project folder, and you can decline to save it."],
+            ["Word or LibreOffice", "Optional", "", "Only used to measure real page numbers for the manual's contents page."],
+            ["Project data leaves the computer", "No", "mint", "Setup sends nothing from your project anywhere."]],
+    run:   [["Internet in offline mode", "Not needed", "mint", "Choose option 2 and the tool makes no network calls. It produced all three files in a test run with every network connection blocked."],
+            ["Internet in AI mode", "Needed", "amber", "To reach the AI service you chose and, for standard terms, Wikipedia and web search (up to 80 look-ups per run, cached). Ask IT to allow those sites."],
+            ["Python 3", "Required", "blue", "Same computer, same Python."],
+            ["Word or LibreOffice", "Optional", "", "With one installed, the manual's contents page gets real page numbers. Without one, it uses a standard Word field you refresh with F9."],
+            ["What leaves the computer", "Names only, in AI mode", "amber", "Indicator names, formulas described in plain words and page names. Never report data, rows, server names or credentials. DAX text goes only if you add --ai-send-dax. Offline mode sends nothing."]]
+  };
+  function drawReq(k) {
+    $("#reqs").innerHTML = REQ[k].map(function (r, i) { return '<div class="rq" style="--i:' + i + '"><b>' + esc(r[0]) + '</b><span class="st ' + r[2] + '">' + esc(r[1]) + "</span><p>" + esc(r[3]) + "</p></div>"; }).join("");
+  }
+  $$("[data-q]").forEach(function (b) { b.addEventListener("click", function () { $$("[data-q]").forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); }); drawReq(b.dataset.q); }); });
+  drawReq("setup");
+
+  var XP = [
+    { k: "Server and database names", risk: "Medium", inp: "Yes. The connection to each source, including the server it points to, is written in the Power Query (M) steps inside the model's table files.",
+      read: "Partly. It reads the connector type, database, schema and table or view name. It does not copy the server address.", out: "Database, schema and view names appear in the HTML reference.",
+      act: "Treat database and schema names as internal. Search the HTML for server addresses before sharing it." },
+    { k: "Business logic (DAX)", risk: "High", inp: "Yes. Every measure formula is stored as plain text.", read: "Yes, all of it.",
+      out: "Full DAX in the HTML reference. The Word manual and glossary describe measures in plain English and show no DAX. In AI mode the DAX is sent to the AI only if you add --ai-send-dax.",
+      act: "Share the HTML only with people cleared to see the logic. Check formulas for names or other values typed in by hand, and leave --ai-send-dax off unless your client allows it." },
+    { k: "Row-level security roles", risk: "Medium", inp: "Yes. Roles and their table filters are part of the model.", read: "Yes. Role names and each table's filter expression.",
+      out: "Only role names, in the Word manual's notes on data sources.", act: "Check role filters for names or email addresses before sharing anything that quotes them." },
+    { k: "Cached data (.pbi/cache.abf)", risk: "High if copied", inp: "Maybe. Power BI Desktop keeps a local data cache in the .pbi folder, and guides describe it as holding the actual data.",
+      read: "No. The tool never opens it.", out: "Not included.", act: "Leave the .pbi folder out when you copy a project into source/. The tool does not need it, and it should stay out of Git." },
+    { k: "Your AI API key", risk: "High if shared", inp: "No. It is not part of any PBIP. IT issues it, and you type it in once on the computer that runs the tool.",
+      read: "Only to call the AI service you chose. The tool shows at most the last four characters.", out: "Never written to a document, a log or the tool's folder.",
+      act: "Never paste it into chat, e-mail or a file in the tool's folder. If one is exposed, ask IT to revoke it and issue a new one. Remove a saved key with python run.py --forget-ai-key." },
+    { k: "Credentials", risk: "Low", inp: "Not by design. People sign in with their own credentials after opening a project.", read: "No.", out: "Not included.",
+      act: "Make sure nobody typed a password or key into a query or parameter. The tool does not scan for these." }
+  ];
+  var xpList = $("#xplist");
+  function riskClass(r) { return r === "Low" ? "mint" : r === "Medium" ? "amber" : "coral"; }
+  XP.forEach(function (x, i) {
+    var b = document.createElement("button"); b.className = "xb"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", i === 0 ? "true" : "false");
+    b.innerHTML = "<span>" + esc(x.k) + "</span>"; b.addEventListener("click", function () { showXP(i); }); xpList.appendChild(b);
+  });
+  function showXP(i) {
+    $$(".xb", xpList).forEach(function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+    var x = XP[i], d = $("#xpd"); d.style.animation = "none"; void d.offsetWidth; d.style.animation = "";
+    d.innerHTML = "<h3>" + esc(x.k) + "</h3>" +
+      '<div class="dr"><b>In a PBIP?</b><span>' + esc(x.inp) + "</span></div>" +
+      '<div class="dr"><b>Tool reads it?</b><span>' + esc(x.read) + "</span></div>" +
+      '<div class="dr"><b>In the outputs?</b><span>' + esc(x.out) + "</span></div>" +
+      '<div class="dr"><b>Risk</b><span><span class="st ' + riskClass(x.risk) + '">' + esc(x.risk) + "</span></span></div>" +
+      '<div class="act"><b>What to do</b>' + esc(x.act) + "</div>";
+  }
+  showXP(0);
+
+  var CHK = [
+    ["Before you run", ["I am authorised to access this project and to document it.", "The project comes from a trusted source.", "I copied only the .Report and .SemanticModel folders, without the .pbi folder.", "I am running it on a company-managed computer.", "If I use AI mode, my key was issued by IT and my client allows indicator names to be sent to that AI service."]],
+    ["Before you share", ["I searched the HTML for server addresses, emails, keys and passwords.", "I chose the audience. The manual and glossary show no DAX. The HTML shows all of it.", "I applied the right classification label myself. The tool does not add labels.", "A person reviewed the auto-written text and every shaded draft definition in the glossary."]],
+    ["When you are done", ["I deleted the copies in source/ and output/.", "On a shared computer I removed my saved key (python run.py --forget-ai-key).", "Any project shared to improve the tool had the owner's permission."]]
+  ];
+  var ckN = 0, ckHtml = "";
+  CHK.forEach(function (g) {
+    ckHtml += '<div class="ckg"><h3>' + esc(g[0]) + "</h3>";
+    g[1].forEach(function (x) { ckN++; ckHtml += '<label class="ck"><input type="checkbox" id="ck-' + ckN + '"><span>' + esc(x) + "</span></label>"; });
+    ckHtml += "</div>";
+  });
+  $("#chk").innerHTML = ckHtml;
+  function ckUpdate(fromUser) {
+    var n = $$("#chk input:checked").length;
+    $("#ckcount").textContent = n + " of " + ckN + " done"; $("#ckfill").style.width = (n / ckN * 100) + "%";
+    $("#ckmsg").textContent = n === ckN ? "All done. You are ready to share the outputs." : "";
+    if (n === ckN && fromUser) confetti();
+  }
+  $$("#chk input").forEach(function (c) { c.addEventListener("change", function () { ckUpdate(true); }); });
+  ckUpdate(false);
+
+  /* ---------- ownership marks ---------- */
+  var WM = "Ajith Khan  ·  Emp ID IN1661  ·  Systech";
+  function marks() {
+    if (!document.getElementById("wm")) {
+      var w = document.createElement("div"); w.id = "wm"; w.setAttribute("aria-hidden", "true"); var r = "";
+      for (var i = 0; i < 16; i++) r += "<div>" + (WM + "        ").repeat(10) + "</div>";
+      w.innerHTML = r; document.body.appendChild(w);
+    }
+    if (!document.getElementById("ctag")) {
+      var c = document.createElement("div"); c.id = "ctag"; c.className = "ctag"; c.setAttribute("aria-hidden", "true"); c.textContent = "Ajith Khan · IN1661"; document.body.appendChild(c);
+    }
+    $$(".slide").forEach(function (s) {
+      if (!s.querySelector(".credit")) {
+        var f = document.createElement("div"); f.className = "credit";
+        f.innerHTML = "<span>Created by <b>Ajith Khan</b>, Systech</span><span>Employee ID <b>IN1661</b></span><span>PBIP Documentation Generator \u00B7 v1.4.1</span>"; s.appendChild(f);
+      }
+    });
+  }
+  marks();
+  try { new MutationObserver(marks).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+
+  show(location.hash.slice(1) || "any", true);
+})();
+</script>
+
+</body></html>
