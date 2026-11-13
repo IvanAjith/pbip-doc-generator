@@ -1,0 +1,75 @@
+PBIP DOCUMENTATION GENERATOR - NEXT PLAN
+Written 13/11/2026. Baseline: version 1.4.3 (GitHub: IvanAjith/pbip-doc-generator).
+Nothing below is started. This is my list of ideas, in the order I would like to tackle them.
+
+
+WHERE I AM TODAY
+- One command, python run.py, asks "Do you have an AI API key?" and writes three files:
+  User Manual (.docx), KPI Glossary (.docx), KPI Documentation (.html).
+- Offline mode drafts definitions from each measure's formula. AI mode (Anthropic, Gemini, OpenAI or any
+  OpenAI-compatible service) writes them. Keys are kept outside the project folder.
+- Definitions can be corrected in the glossary Word file. Re-running carries them into the other two
+  documents and stores them.
+- Tested on the Standex report and on made-up inventory, streaming, HR and gaming reports.
+- NOT yet verified: AI mode with a real key, Windows and macOS runs of the automated tests, the GitHub
+  test workflow (written, never seen running), the web look-up on my own network after the last fixes.
+
+
+1. VERSION 1.5 - MAKE IT WORK ON MORE REAL REPORTS
+   1.1 Older Power BI project formats. The tool reads the newer folder-style projects (TMDL tables and
+       a pages folder). I found no code for the older model.bim / single report.json style, so I expect
+       it to fail on those. Check the NPS Dashboard project, then add support if needed.
+   1.2 Collect anonymised real reports (with the owner's permission) and add them to the automated tests.
+   1.3 Run the automated tests on Windows and macOS through GitHub, not only Linux.
+   1.4 Test AI mode live with a company-issued key (and every provider my colleagues will really use).
+   1.5 Run check_ai.py and check_web.py on my own network and review the output.
+   1.6 Re-run the Standex report and refresh any numbers I show in presentations.
+
+2. VERSION 1.5 - BUILD TRUST (LEADERSHIP AND CLIENTS)
+   2.1 --ai-preview: show exactly what would be sent to the AI, send nothing.
+   2.2 A block-list of words that must never be sent to an AI (client names, project names).
+   2.3 Document and test the "local AI" route (an AI running on a company machine, through the Other
+       option) so that nothing leaves the computer.
+
+3. VERSION 1.5 - A "WHAT CHANGED" DOCUMENT
+   Give the tool an old and a new version of a project. It lists new, changed and removed measures, pages
+   and filters as ready-made release notes.
+
+4. VERSION 1.6 - MORE THAN DOCUMENTATION
+   4.1 Model health check: unused measures, hidden fields, risky relationships, measures with numbers
+       typed in (already flagged today), missing descriptions or formats.
+   4.2 Measure dependency map: which measures feed which, so I can see what breaks if one changes.
+   4.3 AI-written page purposes, confirmed by the report owner (closes the "no business-purpose text"
+       gap listed in the presentation).
+
+5. VERSION 2.0 - EASIER FOR NON-TECHNICAL COLLEAGUES
+   5.1 No Python or Git needed: one downloadable program, or a small window where I drop in the project
+       folder and click Run.
+   5.2 One shared company glossary that every colleague's copy uses, with "approved by" and date columns.
+   5.3 Optional French output for Canadian clients, if it is wanted.
+
+6. LATER - AUTOMATION (ONLY AFTER LEADERSHIP DECISIONS)
+   6.1 A pipeline that regenerates the documents whenever the report changes in Git and publishes them
+       to SharePoint, Teams or Confluence.
+   6.2 Read a report straight from the Power BI service instead of a downloaded project.
+
+
+DECISIONS I NEED FROM LEADERSHIP BEFORE ITEMS 5 AND 6
+- Which client projects the tool may run on, and who may run it.
+- Whether AI mode is allowed on client projects, which AI services are approved, and who issues keys.
+- Whether the code moves from my personal GitHub account to a company repository, and who gets access.
+- Where the output files are stored and who reviews them before they reach a client.
+
+
+OPEN ITEMS FROM THE STANDEX REPORT (report issues, not tool bugs - to raise with the report owner)
+- Delivery Status never shows "On Track".
+- Efficiency Status is driven by OTD only.
+- Revenue Status uses a fixed EBIT value of 0.4 written into the measure.
+- Mid Adj CB % prints "PENDING".
+- Revenue tile TechStreams = 9.
+- A few Standex assumptions (EOL, CB, status L) were my own reading and need the owner's confirmation.
+
+
+HOW I KEEP THIS FILE
+Update the date and the version at the top whenever I change this plan. Move finished items into
+CHANGELOG.md.

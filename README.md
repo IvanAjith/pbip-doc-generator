@@ -117,4 +117,4 @@ python tests/test_secret_scan.py        # no key-like text in files Git would pu
 `.gitignore` excludes `source/`, `output/` and `glossary/` (your reports, generated documents and definitions). Do not remove those lines, and never put API keys in any file in this folder - use `python run.py --setup-ai`.
 
 ## Presentation
-`docs/PBIP_Presentation.html` is the leadership presentation (open it in a browser; arrow keys move between slides). It describes version 1.4.x; update it when the tool's behaviour changes.
+`docs/PBIP_Presentation.html` is the leadership presentation (open it in a browser; arrow keys move between slides). It describes version 1.4.x; update it when the tool's behaviour changes. `docs/NEXT_PLAN.txt` holds the list of planned improvements.
