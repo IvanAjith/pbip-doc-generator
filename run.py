@@ -287,6 +287,15 @@ def main():
     if ai is not None:
         print(f"* AI drafts ({ai.provider}): {ai.drafted} written in {ai.calls} calls" + (f"; stopped: {ai.dead_reason}" if ai.dead else "")
               + ". Marked 'AI draft - please verify' in the documents.")
+    if ai is not None and ai.skipped:
+        cats = {}
+        for term, cat, detail in ai.skipped:
+            cats.setdefault(cat, []).append((term, detail))
+        print(f"* The AI gave no usable answer for {len(ai.skipped)} term(s): "
+              + "; ".join(f"{c} ({len(v)})" for c, v in sorted(cats.items(), key=lambda x: -len(x[1]))) + ".")
+        for c, v in sorted(cats.items(), key=lambda x: -len(x[1])):
+            ex = "; ".join(f"{t}" + (f" [{d}]" if d else "") for t, d in v[:4])
+            print(f"  {c}: {ex}" + (" ..." if len(v) > 4 else ""))
     if checker.rejected:
         print(f"* The tool's checks refused {len(checker.rejected)} AI draft(s); those keep the formula draft: "
               + ", ".join(t for t, _ in checker.rejected[:8]) + (" ..." if len(checker.rejected) > 8 else ""))

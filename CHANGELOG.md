@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.1 - 13/11/2026
+- New: the run summary now says why the AI gave no usable answer for a term: answered UNKNOWN, empty reply (with the service's
+  stop reason, e.g. MAX_TOKENS), reply too short (shows the text), request failed (HTTP code), or cut off at the token limit.
+- Changed: an AI reply that was cut off at the token limit is no longer used (it could end mid-sentence).
+
 ## 1.5.0 - 13/11/2026
 - New: every AI definition is checked against what was sent before it is used (checks.py). Refused: numbers or targets that
   are not in the report, abbreviations the AI spelled out by itself, sentences copied from another measure, ratios described

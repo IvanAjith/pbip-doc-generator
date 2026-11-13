@@ -110,6 +110,22 @@ def read_reply(provider, data):
         return ""
 
 
+_CUT_OFF = {"max_tokens", "length", "max_output_tokens"}
+
+
+def finish_reason(provider, data):
+    """Why the service stopped writing ('' when unknown): 'STOP' is normal, 'MAX_TOKENS' / 'length' means cut off."""
+    try:
+        if provider == "anthropic":
+            return str(data.get("stop_reason") or "")
+        if provider == "gemini":
+            cand = (data.get("candidates") or [{}])[0]
+            return str(cand.get("finishReason") or (data.get("promptFeedback") or {}).get("blockReason") or "")
+        return str(data["choices"][0].get("finish_reason") or "")
+    except (KeyError, IndexError, TypeError, AttributeError):
+        return ""
+
+
 def _http(url, headers, payload, key, provider, timeout=40):
     h = {"content-type": "application/json", **headers}
     if provider == "anthropic":
@@ -183,6 +199,7 @@ class AIDrafter:
         self.last_error = ""
         self.checker = None                   # checks.Checker, set by run.py: vets every draft before it is used
         self.rejected_n = 0
+        self.skipped = []                     # [(term, category, detail)]: calls that gave no usable definition
         self.label = f"{LABEL} ({provider})"
 
     @property
@@ -261,15 +278,28 @@ class AIDrafter:
                 self.calls -= 1
                 return self.draft(term, **ctx)
             else:
+                self.skipped.append((term, "request failed", f"HTTP {e.code}"))
                 self._fail(f"HTTP {e.code}")
             return None
         except Exception as e:
+            self.skipped.append((term, "request failed", type(e).__name__))
             self._fail(type(e).__name__)
             return None
         self.failures = 0
         self.rate_hits = 0
         text = re.sub(r"\s+", " ", read_reply(self.provider, data)).strip().strip('"')
-        if not text or text.upper().startswith("UNKNOWN") or len(text) < 15:
+        why = finish_reason(self.provider, data)
+        reason = None
+        if not text:
+            reason = ("empty reply", f"stopped: {why}" if why else "no text in the reply")
+        elif text.upper().startswith("UNKNOWN"):
+            reason = ("answered UNKNOWN", "")
+        elif len(text) < 15:
+            reason = ("reply too short", f"'{text}'")
+        elif why.lower() in _CUT_OFF:
+            reason = ("cut off at the token limit", why)
+        if reason:
+            self.skipped.append((term,) + reason)
             self.last_error = self.last_error or "the service answered, but not with a usable definition"
             return None
         note = ""

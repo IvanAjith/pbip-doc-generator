@@ -101,4 +101,22 @@ d = AIDrafter("openai", api_key="K", post=lambda *a: (_ for _ in ()).throw(r429(
 d.sleep = slept.append
 assert d.draft("Theoretical Win") is None and d.dead and d.rate_hits == 5      # gives up after 4 waits
 print("ok: 429 handling")
+# --- why a call gave nothing is recorded
+from ai_draft import finish_reason
+def reply(text, fr=None):
+    return lambda *a: {"candidates": [{"content": {"parts": [{"text": text}] if text else []}, **({"finishReason": fr} if fr else {})}]}
+for text, fr, cat in (("UNKNOWN", "STOP", "answered UNKNOWN"), ("", "MAX_TOKENS", "empty reply"), ("", None, "empty reply"),
+                      ("Ok.", "STOP", "reply too short"), ("A measure of how much was earned in the", "MAX_TOKENS", "cut off at the token limit")):
+    d = AIDrafter("gemini", api_key="K", post=reply(text, fr), verbose=False)
+    assert d.draft("Term X") is None and d.skipped and d.skipped[0][1] == cat, (text, fr, d.skipped)
+d = AIDrafter("gemini", api_key="K", post=reply("", "MAX_TOKENS"), verbose=False); d.draft("T")
+assert d.skipped[0][2] == "stopped: MAX_TOKENS"
+d = AIDrafter("gemini", api_key="K", post=reply("A measure of how much was earned in the period.", "STOP"), verbose=False)
+assert d.draft("Term X") and not d.skipped
+def boom(*a): raise urllib.error.HTTPError("u", 503, "x", {}, io.BytesIO(b""))
+d = AIDrafter("gemini", api_key="K", post=boom, verbose=False); d.draft("T")
+assert d.skipped == [("T", "request failed", "HTTP 503")]
+assert finish_reason("openai", {"choices": [{"finish_reason": "length"}]}) == "length"
+assert finish_reason("anthropic", {"stop_reason": "max_tokens"}) == "max_tokens"
+print("ok: skipped-call reasons")
 print("AI provider tests passed")
