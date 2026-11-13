@@ -1,5 +1,5 @@
 PBIP DOCUMENTATION GENERATOR - NEXT PLAN
-Written 13/11/2026. Baseline: version 1.4.3 (GitHub: IvanAjith/pbip-doc-generator).
+Written 13/11/2026, updated 13/11/2026. Baseline: version 1.4.3 (GitHub: IvanAjith/pbip-doc-generator).
 Nothing below is started. This is my list of ideas, in the order I would like to tackle them.
 
 
@@ -11,6 +11,10 @@ WHERE I AM TODAY
 - Definitions can be corrected in the glossary Word file. Re-running carries them into the other two
   documents and stores them.
 - Tested on the Standex report and on made-up inventory, streaming, HR and gaming reports.
+- Data storage: Import mode works. DirectQuery should work (same source definitions) but has not been tried on a
+  real report. Direct Lake runs and produces all three files, but the Lakehouse / Warehouse behind each table is
+  not read yet. The storage mode of a table is not shown. A report-only project (live connection to a published
+  model) is not supported: the tool needs the .Report and .SemanticModel folders side by side.
 - NOT yet verified: AI mode with a real key, Windows and macOS runs of the automated tests, the GitHub
   test workflow (written, never seen running), the web look-up on my own network after the last fixes.
 
@@ -24,6 +28,14 @@ WHERE I AM TODAY
    1.4 Test AI mode live with a company-issued key (and every provider my colleagues will really use).
    1.5 Run check_ai.py and check_web.py on my own network and review the output.
    1.6 Re-run the Standex report and refresh any numbers I show in presentations.
+   1.7 Data storage modes (shown as work in progress in the presentation):
+       a. Direct Lake: read the Lakehouse / Warehouse name, schema and table behind each table, and the
+          shared source expression, and list them in the Data Sources section.
+       b. Show the storage mode of each table (Import, DirectQuery, Direct Lake) in the manual and the HTML.
+       c. Report-only project: first replace the stop message with plain instructions; later let the tool
+          take the model folder from another location (for example a --model option).
+       d. Test with a real DirectQuery report and a real Direct Lake report (names removed, with the owner's
+          permission). My test of Direct Lake used a made-up model written from memory of the format.
 
 2. VERSION 1.5 - BUILD TRUST (LEADERSHIP AND CLIENTS)
    2.1 --ai-preview: show exactly what would be sent to the AI, send nothing.

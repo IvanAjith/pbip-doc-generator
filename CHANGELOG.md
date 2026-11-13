@@ -2,6 +2,7 @@
 
 ## 1.4.3
 - Added the leadership presentation as `docs/PBIP_Presentation.html` and the improvement list as `docs/NEXT_PLAN.txt`. No change to the tool itself.
+- Presentation: tabs renamed Overview / Impact / Security & limitations; new panel on data storage modes (Import works, DirectQuery expected, Direct Lake and report-only projects in progress). README and plan updated to match.
 
 ## 1.4.2
 - Wording only: correcting a definition in the glossary Word file needs no re-run for that file. Re-running is needed only to carry the wording into the User Manual and the HTML reference (and to store it for later runs). Updated in the glossary's own instructions, the console hint and the README.

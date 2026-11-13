@@ -10,6 +10,9 @@ Reads an unzipped Power BI project (`<Name>.Report` + `<Name>.SemanticModel`) an
 
 It works for any business (revenue, inventory, HR, gaming, streaming, insurance ...). Nothing about a business is written into the code: pages, measures, filters, colour rules and formulas are all read from the project.
 
+## Data storage modes
+Import mode works. DirectQuery should work but is untested on a real report. Direct Lake runs, but the Lakehouse / Warehouse behind each table is not listed yet, and no document states a table's storage mode. A report-only project (live connection to a published model) is not supported yet: put the `.Report` and the `.SemanticModel` folders side by side in `source/`. Pages, measures, filters and glossary do not depend on the storage mode. See `docs/NEXT_PLAN.txt`.
+
 ## Quick start
 ```
 pip install -r requirements.txt
