@@ -281,7 +281,8 @@ def main():
         print(f"* {len(unresolved)} indicator(s) have no definition yet: " + ", ".join(unresolved[:12]) +
               (" ..." if len(unresolved) > 12 else ""))
         print(f"  They are the yellow cells in {safe}_KPI_Glossary.docx. Type your definition over the yellow text in that")
-        print("  file (replace the whole cell), save and close it, then run the tool again -- your wording is kept.")
+        print("  file (replace the whole cell) and save it. Run the tool again only if you also want the wording in the")
+        print("  manual and the HTML reference; it is read back from that file and kept for later runs.")
     for n in notes:
         print("* " + n)
     if not notes and not unresolved:

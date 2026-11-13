@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.2
+- Wording only: correcting a definition in the glossary Word file needs no re-run for that file. Re-running is needed only to carry the wording into the User Manual and the HTML reference (and to store it for later runs). Updated in the glossary's own instructions, the console hint and the README.
+
 ## 1.4.1
 - Fix: a crash ("TypeError ... NoneType" in `tables_referenced`) on semantic models whose table files start with a byte-order mark, Windows line endings or `///` description lines. The table name is now found anywhere in the file, quoted names with doubled quotes work, and a table that cannot be read takes its file name instead of no name.
 - Byte-order marks are ignored when reading all TMDL and JSON files.

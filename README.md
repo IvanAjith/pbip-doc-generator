@@ -82,7 +82,8 @@ The INDEX page numbers in the manual need Word or LibreOffice; without them the 
 Open `output\<Name>_KPI_Glossary.docx`:
 * **Strong yellow** = nothing could be built or found: type your definition over the text.
 * **Pale yellow** = a draft (formula / AI / web): correct it if it is wrong, leave it if it is right.
-* Edit the **What it means** cell, save and close the file, then run `python run.py` again. Your wording is read back from the Word file, replaces the draft in all three documents, and is kept on every later run (stored in `glossary/glossary.json`).
+* Edit the **What it means** cell and save. For the glossary itself that is all: no re-run is needed.
+* Run `python run.py` again only if you also want your wording in the User Manual and the HTML reference. Your wording is read back from the Word file (so keep it in `output\` until then), replaces the draft in all three documents, and is stored in `glossary/glossary.json` so every later run keeps it.
 
 Alternatively edit `glossary/my_definitions.csv` in Excel (one row per indicator; type `ok` to accept a suggestion).
 

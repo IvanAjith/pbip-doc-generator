@@ -98,9 +98,10 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
         "AI draft / Found online — written or found by the optional AI or web steps (pale yellow); please verify.",
         "Needs your definition (strong yellow) — nothing could be built or found.",
     ])
-    H.para(document, "To correct or add a definition: type directly over the text in the “What it means” column, save and "
-                     "close this file, and run the tool again. Your wording replaces the draft in this glossary, the user "
-                     "manual and the HTML reference, and is kept for every later run.", size=10.5, bold=True)
+    H.para(document, "To correct or add a definition: type directly over the text in the “What it means” column and save "
+                     "this file. For this glossary that is all you need to do. Run the tool again only if you also want "
+                     "your wording in the user manual and the HTML reference; that run also stores it so every later run "
+                     "keeps it. Keep this file in the output folder until then.", size=10.5, bold=True)
 
     groups = OrderedDict()                      # page name -> {key: entry}
     seen = {}
