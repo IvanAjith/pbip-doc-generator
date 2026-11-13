@@ -46,7 +46,7 @@ assert "Turnover * [Hold %]" in json.dumps(seen[-1][2])
 def http(code):
     def f(*a): raise urllib.error.HTTPError("u", code, "x", {}, io.BytesIO(b""))
     return f
-for code, dead in ((401, True), (404, True), (429, True), (500, False)):
+for code, dead in ((401, True), (404, True), (500, False)):
     d = AIDrafter("openai", api_key="K", post=http(code), verbose=False)
     d.draft("Term One")
     assert d.dead == dead, code
@@ -78,4 +78,27 @@ st = {}
 sample, why = ai_setup._test("gemini", "K" * 30, st, only("gemini-3.6-flash"))
 assert sample and st.get("model") == "gemini-3.6-flash", (sample, st)   # the working name is remembered
 print("ok: Gemini model fallback")
+# --- 429: per-minute limits are waited out; a daily quota (or an endless wait) switches AI off
+def r429(body, headers=None):
+    return urllib.error.HTTPError("u", 429, "x", headers or {}, io.BytesIO(body.encode()))
+state = {"n": 0}
+def flaky(url, h, p, k):
+    state["n"] += 1
+    if state["n"] <= 2:
+        raise r429('{"error":{"details":[{"retryDelay":"23s"}]}}')
+    return {"choices": [{"message": {"content": "A measure of how much was earned in the period."}}]}
+d = AIDrafter("openai", api_key="K", post=flaky, verbose=False); slept = []
+d.sleep = slept.append
+r = d.draft("Theoretical Win")
+assert r and not d.dead and slept == [24.0, 24.0] and d.calls == 1, (r, slept, d.calls)
+d = AIDrafter("openai", api_key="K", post=lambda *a: (_ for _ in ()).throw(r429("quota exceeded PerDay")), verbose=False)
+d.sleep = slept.append
+assert d.draft("Theoretical Win") is None and d.dead and "daily" in d.dead_reason
+d = AIDrafter("openai", api_key="K", post=lambda *a: (_ for _ in ()).throw(r429("", {"Retry-After": "600"})), verbose=False)
+d.sleep = slept.append
+assert d.draft("Theoretical Win") is None and d.dead
+d = AIDrafter("openai", api_key="K", post=lambda *a: (_ for _ in ()).throw(r429("slow down")), verbose=False)
+d.sleep = slept.append
+assert d.draft("Theoretical Win") is None and d.dead and d.rate_hits == 5      # gives up after 4 waits
+print("ok: 429 handling")
 print("AI provider tests passed")

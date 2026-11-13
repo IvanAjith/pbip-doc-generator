@@ -8,6 +8,7 @@ accuracy; check that your client allows it). Every result is labelled as an AI d
 import json
 import os
 import re
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -122,6 +123,31 @@ def _http(url, headers, payload, key, provider, timeout=40):
         return json.loads(r.read().decode("utf-8"))
 
 
+def _retry_wait(err):
+    """How long a 429 asks us to wait. -> (seconds or None, daily_limit_reached). Free tiers allow only a few
+    requests per minute: waiting a little is normal; a DAILY quota will not recover during this run."""
+    body = ""
+    try:
+        body = err.read().decode("utf-8", "replace")
+    except Exception:
+        pass
+    daily = bool(re.search(r"PerDay|per day|daily", body, re.I))
+    wait = None
+    ra = (getattr(err, "headers", None) or {}).get("Retry-After") if getattr(err, "headers", None) else None
+    try:
+        if ra:
+            wait = float(ra)
+    except (TypeError, ValueError):
+        pass
+    if wait is None:
+        m = re.search(r'retryDelay"?\s*[:=]\s*"?(\d+(?:\.\d+)?)s', body)
+        if m:
+            wait = float(m.group(1))
+    if wait is None and not daily:
+        wait = 30.0                           # no hint given: a typical per-minute window
+    return (wait + 1 if wait is not None else None), daily
+
+
 class AIDrafter:
     def __init__(self, provider="anthropic", api_key=None, model=None, max_calls=150, post=None,
                  verbose=True, report_context="", send_dax=False, base_url=None):
@@ -147,6 +173,9 @@ class AIDrafter:
         self.report_context = report_context
         self.send_dax = send_dax
         self.calls = self.failures = self.drafted = 0
+        self.sleep = time.sleep               # injectable for tests
+        self.waited = 0                       # seconds spent waiting for the provider's rate limit
+        self.rate_hits = 0                    # consecutive 429s on the current term
         self.dead = False
         self.dead_reason = ""
         self.last_error = ""
@@ -213,7 +242,18 @@ class AIDrafter:
             elif e.code == 404:
                 self._disable(f"the model name {self.model!r} was not accepted (HTTP 404) -- try --ai-model <name>")
             elif e.code == 429:
-                self._disable("the provider's usage limit was reached (HTTP 429) -- remaining terms get formula drafts")
+                wait, daily = _retry_wait(e)
+                self.rate_hits += 1
+                if daily or wait is None or wait > 70 or self.rate_hits > 4 or self.waited > 900:
+                    self._disable("the provider's " + ("daily " if daily else "") + "usage limit was reached (HTTP 429)"
+                                  " -- remaining terms get formula drafts")
+                    return None
+                if self.verbose:
+                    print(f"  (the provider's per-minute limit was reached; waiting {wait:.0f}s, then continuing)")
+                self.sleep(wait)
+                self.waited += wait
+                self.calls -= 1
+                return self.draft(term, **ctx)
             else:
                 self._fail(f"HTTP {e.code}")
             return None
@@ -221,6 +261,7 @@ class AIDrafter:
             self._fail(type(e).__name__)
             return None
         self.failures = 0
+        self.rate_hits = 0
         text = re.sub(r"\s+", " ", read_reply(self.provider, data)).strip().strip('"')
         if not text or text.upper().startswith("UNKNOWN") or len(text) < 15:
             self.last_error = self.last_error or "the service answered, but not with a usable definition"

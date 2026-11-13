@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.5 - 13/11/2026
+- Fixed: free AI keys allow only a few requests per minute, and the tool used to switch AI off at the first "HTTP 429"
+  (in a real run only 14 of ~80 terms got an AI draft). It now waits for the time the provider asks for (up to about
+  70 seconds, up to 4 times per term) and carries on. A daily limit, or a wait that is too long, still switches AI off
+  and the remaining terms get formula drafts. The console says when it is waiting.
+
 ## 1.4.4 - 13/11/2026
 - Fixed: a new Google Gemini key was refused with "model 'gemini-2.5-flash' was not accepted (HTTP 404)" because Google
   has closed that model name to new accounts. The default is now gemini-3.5-flash-lite, and if a model name gives
