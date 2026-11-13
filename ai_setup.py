@@ -49,6 +49,8 @@ def _test(prov, key, settings, post):
     d = AIDrafter(prov, api_key=key, post=post, verbose=False, report_context="Casino analytics report; pages: Floor",
                   base_url=settings.get("base_url"), model=settings.get("model"))
     r = d.draft("Theoretical Win", **SAMPLE)
+    if r and prov != "custom" and d.model != PROVIDERS[prov]["model"]:
+        settings["model"] = d.model            # a fallback model name was the one that worked: remember it
     return (r["text"] if r else None), (d.last_error or "the service did not return a usable answer")
 
 

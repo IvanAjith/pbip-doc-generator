@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.4 - 13/11/2026
+- Fixed: a new Google Gemini key was refused with "model 'gemini-2.5-flash' was not accepted (HTTP 404)" because Google
+  has closed that model name to new accounts. The default is now gemini-3.5-flash-lite, and if a model name gives
+  HTTP 404 the tool tries the next current name automatically (unless you chose one with --ai-model).
+  The name that worked is remembered at setup.
+
 ## 1.4.3
 - Added the leadership presentation as `docs/PBIP_Presentation.html` and the improvement list as `docs/NEXT_PLAN.txt`. No change to the tool itself.
 - Presentation: tabs renamed Overview / Impact / Security & limitations; new panel on data storage modes (Import works, DirectQuery expected, Direct Lake and report-only projects in progress). README and plan updated to match.

@@ -27,7 +27,11 @@ SYSTEM = (
 PROVIDERS = {
     "anthropic": {"env": ["ANTHROPIC_API_KEY"], "model": "claude-sonnet-5-5",
                   "url": "https://api.anthropic.com/v1/messages"},
-    "gemini": {"env": ["GEMINI_API_KEY", "GOOGLE_API_KEY"], "model": "gemini-2.5-flash",
+    "gemini": {"env": ["GEMINI_API_KEY", "GOOGLE_API_KEY"], "model": "gemini-3.5-flash-lite",
+               # Google retires/limits model names now and then (2.5 Flash is closed to new users): when a name
+               # gives HTTP 404, the next one is tried automatically unless you chose the model yourself.
+               "fallbacks": ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.1-flash-lite",
+                             "gemini-2.5-flash-lite", "gemini-2.5-flash"],
                "url": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"},
     "openai": {"env": ["OPENAI_API_KEY"], "model": "gpt-4o-mini",
                "url": "https://api.openai.com/v1/chat/completions"},
@@ -131,7 +135,12 @@ class AIDrafter:
             st = secrets_store.get_settings("custom")
             self.base_url = base_url or st.get("base_url", "")
             model = model or st.get("model", "")
+        self.model_chosen = bool(model)       # a model named by the user is never swapped automatically
+        if provider != "custom" and not model:
+            import secrets_store
+            model = secrets_store.get_settings(provider).get("model") or None
         self.model = model or PROVIDERS[provider]["model"]
+        self._tried = {self.model}
         self.max_calls = max_calls
         self.post = post                      # injectable for tests: post(url, headers, payload, key) -> dict
         self.verbose = verbose
@@ -148,6 +157,17 @@ class AIDrafter:
         if self.provider == "custom" and not (clean_base_url(self.base_url) and self.model):
             return False
         return bool(self.api_key) and not self.dead
+
+    def _next_model(self):
+        """After HTTP 404 on a default model name: switch to the next fallback name. -> True if one was found."""
+        if self.model_chosen or self.provider == "custom":
+            return False
+        for m in PROVIDERS[self.provider].get("fallbacks", []):
+            if m not in self._tried:
+                self._tried.add(m)
+                self.model = m
+                return True
+        return False
 
     def _disable(self, why):
         self.dead, self.dead_reason, self.last_error = True, why, why
@@ -187,6 +207,9 @@ class AIDrafter:
         except urllib.error.HTTPError as e:
             if e.code in (401, 403):
                 self._disable(f"the key was rejected (HTTP {e.code})")
+            elif e.code == 404 and self._next_model():
+                self.calls -= 1
+                return self.draft(term, **ctx)
             elif e.code == 404:
                 self._disable(f"the model name {self.model!r} was not accepted (HTTP 404) -- try --ai-model <name>")
             elif e.code == 429:

@@ -54,4 +54,28 @@ try:
     AIDrafter("nope"); raise SystemExit("unknown provider accepted")
 except ValueError:
     pass
+# --- Gemini: a retired/closed default model name falls through to the next one (HTTP 404), a chosen one does not
+import os, tempfile
+os.environ["PBIP_DOC_GENERATOR_HOME"] = tempfile.mkdtemp()
+used = []
+def only(good):
+    def f(url, h, p, k):
+        used.append(url)
+        if good not in url:
+            raise urllib.error.HTTPError(url, 404, "x", {}, io.BytesIO(b""))
+        return {"candidates": [{"content": {"parts": [{"text": "A measure of how much was earned in the period."}]}}]}
+    return f
+d = AIDrafter("gemini", api_key="K", post=only("gemini-3.8-flash"), verbose=False)
+r = d.draft("Theoretical Win")
+assert r and d.model == "gemini-3.8-flash" and not d.dead, (r, d.model)
+assert d.calls == 1                                   # the retries are not counted as extra calls
+d = AIDrafter("gemini", api_key="K", post=only("gemini-3.8-flash"), verbose=False, model="gemini-old")
+assert d.draft("Theoretical Win") is None and d.dead   # the user's own model name is never swapped
+d = AIDrafter("gemini", api_key="K", post=only("nothing-matches"), verbose=False)
+assert d.draft("Theoretical Win") is None and d.dead   # every name tried -> switched off with the 404 message
+import ai_setup
+st = {}
+sample, why = ai_setup._test("gemini", "K" * 30, st, only("gemini-3.6-flash"))
+assert sample and st.get("model") == "gemini-3.6-flash", (sample, st)   # the working name is remembered
+print("ok: Gemini model fallback")
 print("AI provider tests passed")
