@@ -53,7 +53,8 @@ def main():
             sys.exit(f"\nThe {k} run stopped (exit code {code}). Fix that first, then run  python compare_test.py  again.")
 
     print("\n" + "=" * 78 + "\n  COMPARISON\n" + "=" * 78)
-    paths, n, changed = compare_modes.write_all(runs["offline"]["gl"], runs["ai"]["gl"], str(root / "Offline_vs_AI"))
+    paths, n, changed = compare_modes.write_all(runs["offline"]["gl"], runs["ai"]["gl"], str(root / "Offline_vs_AI"),
+                                                 a_out=runs["offline"]["out"], b_out=runs["ai"]["out"])
     print(f"Compared {n} KPIs: {n - changed} read the same, {changed} differ.")
     print("\nOpen this first:")
     print(f"  {Path(paths[0]).resolve()}")

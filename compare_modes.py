@@ -7,6 +7,7 @@ Each folder is the glossary folder of one run (it holds my_definitions.csv). Two
   Offline_vs_AI.xlsx   the same as a spreadsheet with a filter (needs openpyxl; a .csv is written without it)
 """
 import csv
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -30,7 +31,30 @@ def _kind(origin, text):
     return "Your own" if not o else origin
 
 
-def read_run(folder):
+def _from_documents(rows, out):
+    """The glossary document is what people read. Fill in what the CSV leaves empty (status badges are described from the report's
+    own colour rules, so the CSV has no sentence for them)."""
+    try:
+        from docx import Document
+        doc = Document(str(next(Path(out).glob("*KPI_Glossary.docx"))))
+    except Exception:
+        return
+    for t in doc.tables:
+        if not t.rows or t.rows[0].cells[0].text.strip() != "KPI":
+            continue
+        for r in t.rows[1:]:
+            c = [x.text.strip() for x in r.cells]
+            term, text = c[0], re.sub(r"\s+", " ", c[1]).strip() if len(c) > 1 else ""
+            if not text or text.startswith("\u26A0") or text == "\u2014":
+                continue
+            k = term.lower()
+            if k in rows and not rows[k]["text"]:
+                rows[k].update(text=text, kind="From the report (status badge)")
+            elif k not in rows:
+                rows[k] = {"term": term, "text": text, "kind": "From the report", "origin": "", "page": "", "calc": c[2] if len(c) > 2 else ""}
+
+
+def read_run(folder, out=None):
     p = Path(folder)
     p = p / CSV_NAME if p.is_dir() else p
     if not p.exists():
@@ -47,11 +71,13 @@ def read_run(folder):
             text = mine or sugg
             rows[term.lower()] = {"term": term, "text": text, "kind": "Your own" if mine else _kind(origin, text),
                                   "origin": origin, "page": r.get("Page", ""), "calc": r.get("Report formula (for reference)", "")}
+    if out:
+        _from_documents(rows, out)
     return rows
 
 
-def compare(a_folder, b_folder, a_name="Offline", b_name="AI"):
-    a, b = read_run(a_folder), read_run(b_folder)
+def compare(a_folder, b_folder, a_name="Offline", b_name="AI", a_out=None, b_out=None):
+    a, b = read_run(a_folder, a_out), read_run(b_folder, b_out)
     out = []
     for k in sorted(set(a) | set(b)):
         x = a.get(k) or {"term": b[k]["term"], "text": "", "kind": "(not in this run)", "origin": "", "page": "", "calc": ""}
@@ -62,8 +88,8 @@ def compare(a_folder, b_folder, a_name="Offline", b_name="AI"):
     return out, Counter(r["a_kind"] for r in out), Counter(r["b_kind"] for r in out)
 
 
-def write(a_folder, b_folder, path="Offline_vs_AI.xlsx", a_name="Offline", b_name="AI"):
-    rows, ca, cb = compare(a_folder, b_folder, a_name, b_name)
+def write(a_folder, b_folder, path="Offline_vs_AI.xlsx", a_name="Offline", b_name="AI", a_out=None, b_out=None):
+    rows, ca, cb = compare(a_folder, b_folder, a_name, b_name, a_out, b_out)
     changed = [r for r in rows if not r["same"]]
     kinds = sorted(set(ca) | set(cb))
     summary = [("Terms compared", len(rows), ""), ("Same definition in both runs", len(rows) - len(changed), ""),
@@ -133,13 +159,13 @@ def _cell(cell, text, bold=False, size=9, color=None, tag=None):
         t.italic = True; t.font.size = Pt(7.5); t.font.color.rgb = RGBColor(0x7F, 0x7F, 0x7F)
 
 
-def write_docx(a_folder, b_folder, path="Offline_vs_AI.docx", a_name="Offline", b_name="AI"):
+def write_docx(a_folder, b_folder, path="Offline_vs_AI.docx", a_name="Offline", b_name="AI", a_out=None, b_out=None):
     """Word document for testing: for every KPI what each run says it means. -> (path, n_terms, n_different)."""
     from datetime import date
     from docx import Document
     from docx.enum.section import WD_ORIENT
     from docx.shared import Inches, Pt
-    rows, ca, cb = compare(a_folder, b_folder, a_name, b_name)
+    rows, ca, cb = compare(a_folder, b_folder, a_name, b_name, a_out, b_out)
     changed = [r for r in rows if not r["same"]]
     agree = [r for r in rows if r["same"]]
     d = Document()
@@ -199,9 +225,9 @@ def write_docx(a_folder, b_folder, path="Offline_vs_AI.docx", a_name="Offline", 
     return path, len(rows), len(changed)
 
 
-def write_all(a_folder, b_folder, base="Offline_vs_AI", a_name="Offline", b_name="AI"):
+def write_all(a_folder, b_folder, base="Offline_vs_AI", a_name="Offline", b_name="AI", a_out=None, b_out=None):
     """The Word document plus the spreadsheet. -> ([paths], n_terms, n_different)."""
     base = str(Path(base).with_suffix(""))
-    docx_path, n, changed = write_docx(a_folder, b_folder, base + ".docx", a_name, b_name)
-    sheet_path, _, _ = write(a_folder, b_folder, base + ".xlsx", a_name, b_name)
+    docx_path, n, changed = write_docx(a_folder, b_folder, base + ".docx", a_name, b_name, a_out, b_out)
+    sheet_path, _, _ = write(a_folder, b_folder, base + ".xlsx", a_name, b_name, a_out, b_out)
     return [docx_path, sheet_path], n, changed

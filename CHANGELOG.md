@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.2 - 18/11/2026
+- The comparison now reads the KPI Glossary document of each run as well as the CSV, so status badges (Revenue Status, Quality Status ...)
+  show the sentence the document really contains instead of "(no definition)". `compare_test.py` does this automatically.
+- An abbreviation answered as itself ("SET = SET") is ignored, so documents no longer say "Here, SET means SET."
+
 ## 1.13.1 - 18/11/2026
 - `python compare_test.py` (temporary, for testing): one command runs offline mode into `compare_test\\offline`, AI mode into
   `compare_test\\ai`, and writes `compare_test\\Offline_vs_AI.docx`. Answers typed in either clarification file are used by both runs

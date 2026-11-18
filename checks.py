@@ -149,7 +149,7 @@ class Context:
                 self.domain = m.group(1).strip()
                 continue
             m = re.match(r"^([A-Za-z][A-Za-z0-9&/]{0,7})\s*(?:=|:|-)\s*(\S.*)$", line)
-            if m:
+            if m and m.group(2).strip().upper() != m.group(1).upper():      # "SET = SET" explains nothing
                 self.abbr[m.group(1).upper()] = m.group(2).strip()
 
     def learn_from_report(self, texts):
@@ -173,7 +173,7 @@ class Context:
     def set_meanings(self, meanings):
         """Store answers ('CB' -> 'comeback') in memory and in the context file (a blank 'CB = ' line is filled in, other
         lines are never touched). -> number stored."""
-        meanings = {k.upper(): v.strip() for k, v in meanings.items() if v and v.strip()}
+        meanings = {k.upper(): v.strip() for k, v in meanings.items() if v and v.strip() and v.strip().upper() != k.upper()}
         if not meanings:
             return 0
         self.abbr.update(meanings)
@@ -205,7 +205,8 @@ class Context:
         for n in names:
             for tok in re.findall(r"[A-Za-z0-9&/]+", n or ""):
                 t = tok.upper()
-                if tok == t and t in self.abbr and t not in found and f"({t})" not in (text or ""):
+                if (tok == t and t in self.abbr and t not in found and f"({t})" not in (text or "")
+                        and self.abbr[t].strip().upper() != t):
                     found.append(t)
         if not found:
             return ""
