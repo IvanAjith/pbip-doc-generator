@@ -168,7 +168,7 @@ def _retry_wait(err):
 
 class AIDrafter:
     def __init__(self, provider="anthropic", api_key=None, model=None, max_calls=150, post=None,
-                 verbose=True, report_context="", send_dax=False, base_url=None):
+                 verbose=True, report_context="", send_dax=False, base_url=None, dax_for_unknown=False):
         if provider not in PROVIDERS:
             raise ValueError(f"unknown AI provider {provider!r}; choose one of {', '.join(PROVIDERS)}")
         self.provider = provider
@@ -190,6 +190,9 @@ class AIDrafter:
         self.verbose = verbose
         self.report_context = report_context
         self.send_dax = send_dax
+        self.dax_for_unknown = dax_for_unknown   # send the DAX only for terms the AI could not answer without it
+        self._force_dax = False
+        self.dax_sent_for = []                   # terms whose DAX was sent (shown in the run summary)
         self.calls = self.failures = self.drafted = 0
         self.sleep = time.sleep               # injectable for tests
         self.waited = 0                       # seconds spent waiting for the provider's rate limit
@@ -237,6 +240,10 @@ class AIDrafter:
         if self.checker is not None:
             f.extend(self.checker.context.prompt_lines())
         f.append(f"Indicator name: {term}")
+        import checks
+        base, period = checks.split_period(term)
+        if period:
+            f.append(f"The name contains a time window ({period}); the indicator itself is '{base}'.")
         if calc:
             f.append(f"How the report calculates it (in words): {calc}")
         if basis:
@@ -245,7 +252,7 @@ class AIDrafter:
             f.append("Colour rules in the report: " + " ".join(rules))
         if page:
             f.append(f"Shown on the report page: {page}")
-        if self.send_dax and dax:
+        if (self.send_dax or self._force_dax) and dax:
             f.append("DAX: " + re.sub(r"\s+", " ", dax)[:1500])
         return "\n".join(f)
 
@@ -293,6 +300,14 @@ class AIDrafter:
         if not text:
             reason = ("empty reply", f"stopped: {why}" if why else "no text in the reply")
         elif text.upper().startswith("UNKNOWN"):
+            if self.dax_for_unknown and not self.send_dax and not self._force_dax and ctx.get("dax"):
+                self._force_dax = True            # ask once more, this time with the formula itself
+                try:
+                    r = self.draft(term, **ctx)
+                finally:
+                    self._force_dax = False
+                self.dax_sent_for.append(term)
+                return r
             reason = ("answered UNKNOWN", "")
         elif len(text) < 15:
             reason = ("reply too short", f"'{text}'")
@@ -305,7 +320,8 @@ class AIDrafter:
         note = ""
         if self.checker is not None:
             import checks
-            res = self.checker.validate(term, text, checks.facts_text(term, **ctx))
+            res = self.checker.validate(term, text, checks.facts_text(term, **ctx),
+                                        extra=(ctx.get("dax") or "") if (self.send_dax or self._force_dax) else "")
             if not res.ok:
                 self.rejected_n += 1
                 return None                   # the measure keeps its formula-based draft

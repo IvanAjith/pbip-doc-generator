@@ -133,6 +133,9 @@ def main():
                          "mean (default: context.txt next to the glossary file; created for you when the AI had to guess)")
     ap.add_argument("--ai-send-dax", action="store_true",
                     help="also send each measure's DAX text to the AI (more accurate; check your client allows it)")
+    ap.add_argument("--ai-dax-for-unknown", action="store_true",
+                    help="send a measure's DAX text to the AI ONLY for terms it could not answer without it (nothing else "
+                         "carries DAX); check your client allows it")
     ap.add_argument("--skip-html", action="store_true"); ap.add_argument("--skip-docx", action="store_true")
     ap.add_argument("--skip-glossary", action="store_true")
     args = ap.parse_args()
@@ -200,7 +203,8 @@ def main():
                       "  Run once:  python run.py --setup-ai      (definitions are drafted from the formulas meanwhile)")
         ctx = f"{project_name}; pages: " + ", ".join(p["displayName"].strip() for p in primary)
         ai = AIDrafter(args.ai, api_key=session_key, model=args.ai_model or session_cfg.get("model"),
-                       base_url=args.ai_url or session_cfg.get("base_url"), verbose=True, report_context=ctx, send_dax=args.ai_send_dax) \
+                       base_url=args.ai_url or session_cfg.get("base_url"), verbose=True, report_context=ctx, send_dax=args.ai_send_dax,
+                       dax_for_unknown=args.ai_dax_for_unknown) \
             if args.ai else None
         if ai is not None and args.ai == "custom" and not ai.usable and ai.api_key:
             print("  --ai custom needs the service's web address and model name. Run once:  python run.py --setup-ai custom")
@@ -215,7 +219,11 @@ def main():
             where = (" at " + urllib.parse.urlparse(ai.base_url).hostname) if args.ai == "custom" else ""
             print(f"  AI mode on ({args.ai}{where}, model {ai.model}): only names, formula wording and page names are sent"
                   + (" plus DAX text" if args.ai_send_dax else "") + " -- no report data.")
+            if args.ai_dax_for_unknown and not args.ai_send_dax:
+                print("  --ai-dax-for-unknown: the DAX of a measure is sent only when the AI could not answer without it; "
+                      "the summary at the end lists those measures.")
     Path(args.glossary).parent.mkdir(parents=True, exist_ok=True)
+    checker.dax_ok = bool(args.ai_send_dax or args.ai_dax_for_unknown)
     if ai is not None:
         ai.checker = checker
     glossary = Glossary(args.glossary, web=web, ai=ai, checker=checker)
@@ -287,6 +295,9 @@ def main():
     if ai is not None:
         print(f"* AI drafts ({ai.provider}): {ai.drafted} written in {ai.calls} calls" + (f"; stopped: {ai.dead_reason}" if ai.dead else "")
               + ". Marked 'AI draft - please verify' in the documents.")
+    if ai is not None and ai.dax_sent_for:
+        print(f"* The DAX text was sent to the AI for {len(ai.dax_sent_for)} measure(s) (--ai-dax-for-unknown): "
+              + ", ".join(ai.dax_sent_for[:10]) + (" ..." if len(ai.dax_sent_for) > 10 else ""))
     if ai is not None and ai.skipped:
         cats = {}
         for term, cat, detail in ai.skipped:

@@ -39,7 +39,7 @@ Skip the question with options: `python run.py --offline`, `python run.py --ai` 
 | **AI** | `python run.py --ai gemini` (or `anthropic`, `openai`) | an API key | an AI writes a one-sentence business definition from the indicator's name, formula wording and page. Marked *AI draft – please verify*. Anything the AI cannot answer falls back to the formula draft. |
 
 Set the key up once per computer (see **Team setup** below), then run `python run.py --ai`.
-Only indicator names, formula wording, page names and the report's name/page names are sent – never report data. `--ai-send-dax` also sends the measure's DAX (more accurate; confirm your client allows it). `--ai-model <name>` overrides the default model if a provider retires one. Free keys may let the provider use what you send; check the provider's terms against your client's rules.
+Only indicator names, formula wording, page names and the report's name/page names are sent – never report data. `--ai-send-dax` also sends the measure's DAX for every measure; `--ai-dax-for-unknown` sends it only for the few measures the AI could not answer without it, and lists them at the end (confirm your client allows either). `--ai-model <name>` overrides the default model if a provider retires one. Free keys may let the provider use what you send; check the provider's terms against your client's rules.
 
 ### The tool checks every AI sentence before it is used
 

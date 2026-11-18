@@ -106,3 +106,41 @@ good = g.lookup("Month End Backlog", context=["Delivery"], ai_context={"calc": "
 assert good and good.source == "ai"
 print("ok: glossary re-checks saved AI drafts")
 print("checks tests passed")
+
+# ==================== time windows in names, seed lookup, DAX only for unknown terms
+from checks import split_period
+for name, want in (("6 months TRIR", ("TRIR", "6 months")), ("30-Day Raw CB %", ("Raw CB", "30 days")), ("NPS By Quarter", ("NPS", "by quarter")),
+                   ("Shipped Sales MTD", ("Shipped Sales", "month to date")), ("Turnover % (12M)", ("Turnover", "12 months")),
+                   ("YTD Revenue", ("Revenue", "year to date")), ("1 month Churn", ("Churn", "1 month")),
+                   ("5S Audit", ("5S Audit", "")), ("3 Whys", ("3 Whys", "")), ("Q3 Revenue", ("Q3 Revenue", "")),
+                   ("Net Revenue / DL Hr", ("Net Revenue / DL Hr", "")), ("Average Tenure (Years)", ("Average Tenure (Years)", ""))):
+    assert split_period(name) == want, (name, split_period(name))
+g = Glossary(Path(tempfile.mkdtemp()) / "g.json")
+d6 = g.lookup("6 months TRIR")
+assert d6 and d6.source == "seed" and d6.text.endswith("(Period shown: 6 months.)") and "injuries" in d6.text, d6
+assert g.lookup("NPS By Quarter").source == "seed"
+assert g.lookup("Recorded Incidents") is None or g.lookup("Recorded Incidents").source != "seed"       # no window -> no guessing
+print("ok: time windows in names")
+
+seen = []
+def dax_server(url, h, p, k):
+    body = json.dumps(p)
+    seen.append("DAX:" in body)
+    if "DAX:" in body:
+        return {"choices": [{"message": {"content": "Revenue per direct labour hour, using a 365.25 day year.", "role": "assistant"}, "finish_reason": "stop"}]}
+    return {"choices": [{"message": {"content": "UNKNOWN"}}]}
+ai = AIDrafter("openai", api_key="K", post=dax_server, verbose=False, dax_for_unknown=True)
+ai.checker = Checker(); ai.checker.dax_ok = True
+r = ai.draft("People", calc="Built from X", page="Overview", dax="DIVIDE(SUM(T[Rev]), 365.25)")
+assert r and seen == [False, True] and ai.dax_sent_for == ["People"] and not ai.skipped, (r, seen, ai.skipped)    # 365.25 came from the DAX that was sent
+seen.clear()
+ai = AIDrafter("openai", api_key="K", post=dax_server, verbose=False)                                            # flag off: DAX never goes
+assert ai.draft("People", calc="Built from X", dax="DIVIDE(1,2)") is None and seen == [False] and ai.skipped[0][1] == "answered UNKNOWN"
+seen.clear()
+def ok_server(url, h, p, k):
+    seen.append("DAX:" in json.dumps(p))
+    return {"choices": [{"message": {"content": "The count of distinct employees in the period."}}]}
+ai = AIDrafter("openai", api_key="K", post=ok_server, verbose=False, dax_for_unknown=True)
+assert ai.draft("Headcount", calc="count", dax="COUNTROWS(T)") and seen == [False] and not ai.dax_sent_for    # answered at once: no DAX sent
+print("ok: DAX only for unknown terms")
+print("checks tests passed (2)")

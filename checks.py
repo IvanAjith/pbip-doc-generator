@@ -73,6 +73,57 @@ def initials_definitions(texts):
     return out
 
 
+# ------------------------------------------------------------------ time windows in names
+_UNIT = {"d": "day", "day": "day", "days": "day", "w": "week", "wk": "week", "wks": "week", "week": "week", "weeks": "week",
+         "m": "month", "mo": "month", "mos": "month", "month": "month", "months": "month", "y": "year", "yr": "year",
+         "yrs": "year", "year": "year", "years": "year", "q": "quarter", "qtr": "quarter", "qtrs": "quarter",
+         "quarter": "quarter", "quarters": "quarter"}
+_TO_DATE = {"mtd": "month to date", "ytd": "year to date", "qtd": "quarter to date", "wtd": "week to date",
+            "ltm": "last twelve months", "ttm": "last twelve months"}
+_NUMUNIT = r"(\d+)\s*[- ]?\s*(days?|d|weeks?|wks?|w|months?|mos?|mo|m|years?|yrs?|y|quarters?|qtrs?|q)"
+_LEAD = re.compile(r"^\s*(?:(?:rolling|trailing|last|past|prior|previous|latest)\s+)?(?:" + _NUMUNIT +
+                   r"|(mtd|ytd|qtd|wtd|ltm|ttm)|(daily|weekly|monthly|quarterly|yearly|annual))\b[\s:\-\u2013]*", re.I)
+_TRAIL = re.compile(r"[\s:\-\u2013]+(?:" + _NUMUNIT + r"|(mtd|ytd|qtd|wtd|ltm|ttm)|(?:by|per)\s+(day|week|month|quarter|year))\s*$", re.I)
+_PAREN = re.compile(r"^\s*(?:" + _NUMUNIT + r"|(mtd|ytd|qtd|wtd|ltm|ttm))\s*$", re.I)
+
+
+def _phrase(n, unit, todate, word=None, by=None):
+    if todate:
+        return _TO_DATE[todate.lower()]
+    if word:
+        return word.lower()
+    if by:
+        return "by " + by.lower()
+    u = _UNIT[unit.lower()]
+    return f"{int(n)} {u}{'' if int(n) == 1 else 's'}"
+
+
+def split_period(name):
+    """'6 months TRIR' -> ('TRIR', '6 months'); 'NPS By Quarter' -> ('NPS', 'by quarter'); 'Shipped Sales MTD' ->
+    ('Shipped Sales', 'month to date'). The base is what the indicator is; the phrase is the time window around it.
+    No window in the name -> (name, '')."""
+    t = (name or "").replace("%", " ")
+    period = ""
+    for inner in re.findall(r"\(([^)]*)\)", t):
+        m = _PAREN.match(inner)
+        if m:
+            period = _phrase(m.group(1), m.group(2), m.group(3))
+    t = re.sub(r"\([^)]*\)", " ", t)
+    m = _LEAD.match(t)
+    if m:
+        period = _phrase(m.group(1), m.group(2), m.group(3), m.group(4))
+        t = t[m.end():]
+    else:
+        m = _TRAIL.search(t)
+        if m:
+            period = _phrase(m.group(1), m.group(2), m.group(3), None, m.group(4))
+            t = t[:m.start()]
+    base = re.sub(r"\s+", " ", t).strip(" -:\u2013")
+    if not period or not base:
+        return (name or "").strip(), ""
+    return base, period
+
+
 # ------------------------------------------------------------------ context file
 class Context:
     def __init__(self, path=None):
@@ -204,14 +255,17 @@ class Checker:
         self.guessed = set()                  # abbreviations an AI draft had to guess
         self.flagged = []                     # [(term, soft reasons)]
 
-    def validate(self, term, text, facts, register=True):
+    dax_ok = False                            # True when the DAX was allowed to reach the AI (its words and numbers are then 'supplied')
+
+    def validate(self, term, text, facts, register=True, extra=""):
         res = Result(clean_text(text))
         t, low = res.text, res.text.lower()
         f = facts or ""
         # 1. numbers that were never supplied
-        extra = _numbers(t) - _numbers(f)
-        if extra:
-            res.hard.append("number(s) not in the report: " + ", ".join(sorted(extra)))
+        fx = f + " " + (extra or "")          # numbers and words may also come from DAX that was sent on purpose
+        unseen = _numbers(t) - _numbers(fx)
+        if unseen:
+            res.hard.append("number(s) not in the report: " + ", ".join(sorted(unseen)))
         # 2. an abbreviation spelled out by the AI that nobody defined
         for tok in sorted(set(re.findall(r"\b[A-Z]{2,5}\b", (term or "") + " " + f))):
             if self.context.known(tok):
@@ -230,7 +284,7 @@ class Checker:
                 res.hard.append(f"almost the same sentence as '{who}'")
                 break
         # 5. (soft) several content words that appear nowhere in what was sent
-        known = _stems(f) | {s for s in _GENERIC}
+        known = _stems(fx) | {s for s in _GENERIC}
         ctx_words = _stems(" ".join(self.context.prompt_lines()))
         odd = []
         for w in re.findall(r"[a-z]{5,}", low):

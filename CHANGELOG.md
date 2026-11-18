@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.6.0 - 18/11/2026
+- New: a time window in a name no longer hides a standard term. "6 months TRIR", "NPS By Quarter", "YTD Revenue",
+  "Turnover % (12M)" are looked up in the built-in glossary as TRIR / NPS / Revenue / Turnover, and the definition ends with
+  "(Period shown: 6 months.)". The AI is also told which part of a name is the time window.
+- New: --ai-dax-for-unknown. A measure's DAX is sent to the AI only when the AI answered UNKNOWN without it, and the run
+  summary lists exactly which measures had their DAX sent. Off by default; check your client allows it first.
+  (--ai-send-dax, which sends the DAX for every measure, still exists.)
+- Words and numbers that come from DAX you chose to send are no longer counted as 'not in the report' by the checks.
+
 ## 1.5.1 - 13/11/2026
 - New: the run summary now says why the AI gave no usable answer for a term: answered UNKNOWN, empty reply (with the service's
   stop reason, e.g. MAX_TOKENS), reply too short (shows the text), request failed (HTTP code), or cut off at the token limit.

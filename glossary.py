@@ -22,6 +22,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from seed_glossary import SEED
+from checks import split_period
 from formula_draft import formula_draft, ORIGIN as ORIGIN_DRAFT
 
 _UNIT_TOKENS = {"pct", "percent", "percentage", "ratio"}
@@ -111,12 +112,20 @@ class Glossary:
                 s = self._seed[k]
                 return Definition(s["definition"], "seed", "built-in glossary",
                                   category=s.get("category", ""), better=s.get("better"))
+        for n in names:                                   # 2b. a seed term with a time window around it: '6 months TRIR'
+            base, period = split_period(n or "")
+            bk = normalize(base) if period else ""
+            if bk and bk in self._seed:
+                sd = self._seed[bk]
+                return Definition(sd["definition"] + f" (Period shown: {period}.)", "seed", "built-in glossary",
+                                  category=sd.get("category", ""), better=sd.get("better"))
         for k in keys:                                    # 3. learned earlier
             e = self.entries.get(k)
             if e and e.get("definition"):
                 if e.get("source") == "ai" and self.checker is not None and ai_context is not None:
                     import checks            # an AI draft saved by an earlier run must pass today's checks too
-                    res = self.checker.validate(names[0], e["definition"], checks.facts_text(names[0], **ai_context))
+                    res = self.checker.validate(names[0], e["definition"], checks.facts_text(names[0], **ai_context),
+                                                extra=(ai_context.get("dax") or "") if self.checker.dax_ok else "")
                     if not res.ok:
                         self.entries[k] = {"term": names[0], "definition": "", "source": "unresolved"}
                         self.dirty = True
