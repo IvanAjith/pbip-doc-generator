@@ -18,7 +18,7 @@ not borrow the definition of "Net Revenue".
 import csv
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from seed_glossary import SEED
@@ -75,6 +75,7 @@ class Glossary:
         self.entries = {}                  # normalised key -> dict
         self.generated = {}                # key -> the "What it means" text written into the glossary document last time
         self.word_edits = 0
+        self.context = None                # checks.Context: the company's own abbreviations
         self.dirty = False
         self.unresolved = []
         if self.path.exists():
@@ -133,6 +134,10 @@ class Glossary:
     # -------------------------------------------------------------- lookup
     def lookup(self, *names, **kw):
         d = self._lookup(*names, **kw)
+        if d is not None and d.source in ("draft", "ai") and self.context is not None:
+            note = self.context.note_for(names)                 # "Here, CB means comeback." -- only the user's own explanations
+            if note and note not in d.text:
+                d = replace(d, text=d.text.rstrip() + " " + note)
         keys = [normalize(n or "") for n in names if normalize(n or "")]
         if keys and keys[0] in self.used:
             self.used[keys[0]]["def"] = d

@@ -1,22 +1,24 @@
-"""Run:  python tests/test_clarification.py -- the clarification loop: run -> file lists what is missing -> type answers ->
-run again -> answers kept in the glossary, documents rebuilt, file says nothing is needed."""
-import sys, csv, re, json, subprocess, tempfile
+"""Run:  python tests/test_clarification.py -- the clarification loop: run -> the file asks what is missing (abbreviations and KPI meanings)
+-> type answers -> run again -> answers kept (context.txt and the glossary file), documents rebuilt without yellow, file says nothing is needed."""
+import sys, re, json, subprocess, tempfile
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 import clarify
+from docx import Document
 
 t = Path(tempfile.mkdtemp())
 subprocess.run([sys.executable, str(ROOT / "tests" / "make_synthetic_projects.py"), str(t / "syn")], check=True, capture_output=True)
 tm = next((t / "syn" / "hr").glob("*.SemanticModel/definition/tables/_Measures.tmdl"))
 s = tm.read_text(encoding="utf-8")
-s2 = re.sub(r"DIVIDE\(\[Leavers\][^\n]*", '"PENDING" & ""', s).replace("Attrition %", "Zorp %")
+s2 = re.sub(r"DIVIDE\(\[Leavers\][^\n]*", '"PENDING" & ""', s)          # a measure nobody can define from its formula
+s2 = s2.replace("Attrition %", "Zorp CB %").replace("Headcount", "WO Headcount")
 assert s2 != s
 tm.write_text(s2, encoding="utf-8")
 for f in (t / "syn" / "hr").rglob("*.json"):
     x = f.read_text(encoding="utf-8")
-    if "Attrition %" in x:
-        f.write_text(x.replace("Attrition %", "Zorp %"), encoding="utf-8")
+    if "Attrition %" in x or "Headcount" in x:
+        f.write_text(x.replace("Attrition %", "Zorp CB %").replace("Headcount", "WO Headcount"), encoding="utf-8")
 
 def run(*extra):
     r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--no-prompt", "--offline", "--source", str(t / "syn" / "hr"),
@@ -25,39 +27,55 @@ def run(*extra):
     assert r.returncode == 0, r.stderr[-800:]
     return r.stdout
 
+def glossary_text():
+    d = Document(str(next((t / "out").glob("*KPI_Glossary.docx"))))
+    return "\n".join(c.text for tb in d.tables for r in tb.rows for c in r.cells)
+
+def yellow(path):
+    x = Document(str(path)).element.xml
+    return len(re.findall(r'w:fill="(?:FFE699|FFF2CC)"', x))
+
 out1 = run()
-assert "CLARIFICATION NEEDED for 1 indicator(s): Zorp %" in out1, out1[-1500:]
+assert "CLARIFICATION NEEDED" in out1 and "abbreviation(s)" in out1 and "Zorp CB %" in out1, out1[-1500:]
 f = t / "out" / clarify.NAME
-rows = list(csv.reader(open(f, encoding="utf-8-sig", newline="")))
-assert rows[0] == clarify.COLS and rows[1][0] == "Zorp %" and rows[1][5] == "", rows
+body = f.read_text(encoding="utf-8")
+assert "PART 1" in body and "[A1] CB" in body and "[A2] WO" in body and "[K1] Zorp CB %" in body, body
+assert yellow(next((t / "out").glob("*KPI_Glossary.docx"))) >= 1                 # the unanswered KPI is flagged
 assert len(list((t / "out").glob("*.docx"))) == 2 and list((t / "out").glob("*.html"))
 
-# the person types the meaning; the same command is run again
-rows[1][5] = "The share of staff the business is waiting to place."
-csv.writer(open(f, "w", encoding="utf-8-sig", newline="")).writerows(rows)
+# the person answers; the same command is run again
+body = body.replace("[A1] CB\n     seen in: Zorp CB %\n>>> ", "[A1] CB\n     seen in: Zorp CB %\n>>> comeback, a job sent back by the customer")
+body = re.sub(r"(\[A2\] WO\n.*\n>>> )", r"\1work order", body)
+body = body.replace("No definition was found for this one.\n>>> ", "No definition was found for this one.\n>>> The share of jobs that came back as claims.\n")
+f.write_text(body, encoding="utf-8")
 out2 = run()
-assert "picked up 1 definition(s)" in out2 and "No clarification needed" in out2, out2[-1500:]
-assert "CLARIFICATION NEEDED" not in out2
-rows2 = list(csv.reader(open(f, encoding="utf-8-sig", newline="")))
-assert rows2[1][0] == clarify.NONE_TEXT and len(rows2) == 2
+assert "picked up from" in out2 and "No clarification needed" in out2 and "CLARIFICATION NEEDED" not in out2, out2[-1500:]
+assert "NO CLARIFICATION NEEDED" in f.read_text(encoding="utf-8") and "[K1]" not in f.read_text(encoding="utf-8")
+ctx = (t / "gl" / "context.txt").read_text(encoding="utf-8")
+assert "CB = comeback, a job sent back by the customer" in ctx and "WO = work order" in ctx, ctx
 saved = json.loads((t / "gl" / "glossary.json").read_text(encoding="utf-8"))["terms"]
-assert any(v.get("definition") == "The share of staff the business is waiting to place." and v["source"] == "manual" for v in saved.values())
-from docx import Document
-txt = "\n".join(c.text for tb in Document(str(next((t / "out").glob("*KPI_Glossary.docx")))).tables for r in tb.rows for c in r.cells)
-assert "waiting to place" in txt
-man = "\n".join(p.text for p in Document(str(next((t / "out").glob("*User_Manual.docx")))).paragraphs)
-# a third run keeps it without asking again
-out3 = run()
-assert "No clarification needed" in out3
+assert any(v.get("definition") == "The share of jobs that came back as claims." and v["source"] == "manual" for v in saved.values())
+txt = glossary_text()
+assert "The share of jobs that came back as claims." in txt
+assert "Here, WO means work order." in txt                                        # drafts that use an explained abbreviation say so
+assert yellow(next((t / "out").glob("*KPI_Glossary.docx"))) == 0 and yellow(next((t / "out").glob("*User_Manual.docx"))) == 0, "yellow left over"
+assert "No clarification needed" in run()                                         # stays quiet on the next run
 
-# --clarify-drafts lists the drafts too, and 'ok' accepts one
-out4 = run("--clarify-drafts")
-rows4 = list(csv.reader(open(f, encoding="utf-8-sig", newline="")))
-assert len(rows4) > 1 and rows4[1][2].startswith("Draft") and rows4[1][4], rows4[:2]
-rows4[1][5] = "ok"
-accepted = rows4[1][4]; term = rows4[1][0]
-csv.writer(open(f, "w", encoding="utf-8-sig", newline="")).writerows(rows4)
+# --clarify-drafts lists the drafts too, and OK keeps one
+run("--clarify-drafts")
+body = f.read_text(encoding="utf-8")
+assert "draft:" in body and "[K1]" in body, body
+m = re.search(r"\[K1\] (.+)\n.*\n.*\n     draft: (.+)\n", body)
+term, draft = m.group(1), m.group(2)
+f.write_text(body.replace("Type OK to keep this draft, or write your own wording.\n>>> ", "Type OK to keep this draft, or write your own wording.\n>>> OK\n", 1), encoding="utf-8")
 run("--clarify-drafts")
 saved = json.loads((t / "gl" / "glossary.json").read_text(encoding="utf-8"))["terms"]
-assert any(v.get("definition") == accepted and v["source"] == "manual" for v in saved.values()), term
+assert any(v.get("definition") == draft and v["source"] == "manual" for v in saved.values()), (term, draft)
 print("clarification loop tests passed")
+# an older 1.9 csv with typed answers is still read
+import csv
+d = Path(tempfile.mkdtemp())
+with open(d / clarify.LEGACY_CSV, "w", newline="", encoding="utf-8-sig") as fh:
+    w = csv.writer(fh); w.writerow(["Term", "Your definition (type here)"]); w.writerow(["Old KPI", "Typed in version 1.9."])
+assert clarify.read(d / clarify.NAME) == ({}, [("Old KPI", "Typed in version 1.9.")])
+print("legacy csv ok")

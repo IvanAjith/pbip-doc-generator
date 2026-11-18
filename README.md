@@ -58,19 +58,23 @@ run again: the AI then receives your meanings and the refused terms are redrafte
 ## Logo and glossary layout
 The company logo (`assets/logo.png`) is on the cover and the top right of every page of the User Manual and the KPI Glossary, and in the header of the
 HTML reference. Use `--logo other.png` for a different one, or `--logo none` to leave it out. The glossary table has three columns: **KPI**,
-**What it means**, **How it is calculated** (pale yellow = draft, strong yellow = needs a definition).
+**What it means**, **How it is calculated** (yellow = still needs a definition).
 
 ## The clarification loop (offline and AI mode work the same way)
-Every run writes the three documents **and** `Needs_Your_Clarification.csv` in the output folder. It lists the indicators nobody could define
-(the yellow cells in the glossary), with the page and the report's formula for reference.
-1. Run `python run.py` (offline or AI).
-2. Open `Needs_Your_Clarification.csv` in Excel, type each meaning in the last column, save and close it.
-3. Run the same command again. Your answers are stored in the glossary file (`glossary\glossary.json`) and used from then on, the three
-   documents are rebuilt with them, and the file comes back empty. The terminal says **No clarification needed** and the three documents
-   can go to the client.
+Every run writes the three documents **and** `Needs_Your_Clarification.txt` in the output folder. It asks, in plain words, for what only you can supply:
+* **Part 1 - abbreviations** in KPI names the tool cannot explain (for example CB, EOL, WO): "what does CB stand for?"
+* **Part 2 - KPIs without a definition**, with their page and formula: "what does this KPI mean?"
 
-Add `--clarify-drafts` to also list every formula/AI/web draft: type `ok` to accept a draft, or write your own wording.
-(You can still type over the yellow cells in the glossary Word file instead; both ways are read.)
+1. Run `python run.py` (offline or AI).
+2. Open `Needs_Your_Clarification.txt` in Notepad. Type each answer on the line that starts with `>>>` (plain, everyday words; leave a question blank to skip it). Save.
+3. Run the same command again. Abbreviations are stored in `glossary\context.txt`, KPI meanings in the glossary file (`glossary\glossary.json`, so your
+   glossary grows and can be shared with `--export-shared`). The three documents are rebuilt with your answers: a KPI's "What it means" takes your
+   wording, and a draft that uses an abbreviation you explained ends with "Here, CB means comeback." The text file then says **No clarification
+   needed**, the terminal says so too, and the three documents can go to the client.
+
+Yellow in the documents appears only on KPIs that are still waiting for a definition. After you answer, nothing is yellow.
+Add `--clarify-drafts` to also have every formula/AI/web draft listed for you: type `OK` to keep a draft, or write your own wording.
+(You can still type over a cell in the glossary Word file instead, and an older `Needs_Your_Clarification.csv` from version 1.9 is still read.)
 
 ## Comparing offline and AI mode
 Run the same report twice into separate folders, then compare. `--offline` keeps the web out of both runs, so the only difference is the AI.

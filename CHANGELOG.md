@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.11.0 - 18/11/2026
+- The clarification file is now a plain text file, `Needs_Your_Clarification.txt` (you type after `>>>`). It asks two kinds of questions:
+  what an abbreviation in a KPI name stands for (CB, EOL, WO ...), and what a KPI means when no definition exists.
+- Abbreviation answers are written to `context.txt` (used by the AI, the checks, and shown in the definition: "Here, CB means comeback.").
+  KPI answers are stored in the glossary file, so the glossary grows. Both survive every later run.
+- No more pale yellow for drafts. Yellow now means one thing: a KPI still waiting for a definition. When everything is answered, the
+  documents have no yellow and the terminal says "No clarification needed".
+- The tool no longer creates context.txt on its own when the AI guessed an abbreviation; it asks in the clarification file instead.
+- Older `Needs_Your_Clarification.csv` files (1.9) are still read.
+
 ## 1.10.1 - 18/11/2026
 - Fix: a people measure called "Turnover %" was given the fund definition ("how much of a portfolio is bought and sold"), because a banking
   entry carried the alias "Turnover Ratio" and the 1.8.0 %/ratio rule preferred it. The rule is now: a name written exactly like a %/ratio

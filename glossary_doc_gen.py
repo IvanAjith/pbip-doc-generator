@@ -95,9 +95,8 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
                      "Each entry shows what the KPI means and how the report calculates it (taken from the "
                      "report\u2019s own formulas).", size=10.5)
     H.bullets(document, [
-        "Pale yellow \u2014 a draft built from the report\u2019s formula, or written by the optional AI or web steps. Please check it.",
-        "Strong yellow \u2014 no definition could be built or found: type one over the text.",
-        "No shading \u2014 a standard definition, or one you wrote yourself.",
+        "Yellow \u2014 no definition could be built or found yet. Explain it in Needs_Your_Clarification.txt (or type over the text) and run the tool again.",
+        "No shading \u2014 the KPI has a definition.",
     ])
     H.para(document, "To correct or add a definition: type directly over the text in the \u201cWhat it means\u201d column and save "
                      "this file. For this glossary that is all you need to do. Run the tool again only if you also want "
@@ -122,7 +121,7 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
     missing = [i for i in flat if not i.get("definition") and not i.get("also_shows") and not i.get("label_logic")
                and i["kind"] != "status"]
     if missing:
-        H.para(document, f"{len(missing)} of the {len(flat)} KPIs below are shaded strong yellow because no definition "
+        H.para(document, f"{len(missing)} of the {len(flat)} KPIs below are shaded yellow because no definition "
                          "could be built or found. Their calculation, where known, is still taken from the report.",
                size=10.5, italic=True)
 
@@ -137,8 +136,7 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
             if glossary is not None:
                 glossary.record_generated(normalize(it["display"]) or it["display"].lower(), Glossary._clean(meaning))
             rows.append([it["display"], meaning, calc])
-        fills = {(ri, 1): DRAFT_FILL for ri, (key, e) in enumerate(sorted(entries.items(), key=lambda kv: kv[1]["item"]["display"].lower()))
-                 if e["item"].get("definition") and e["item"]["definition"].source in ("draft", "ai", "web")}
+        fills = None
         H.data_table(document, ["KPI", "What it means", "How it is calculated"], rows, fills=fills)
         document.add_paragraph()
 
@@ -156,9 +154,7 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
             if glossary is not None:
                 glossary.record_generated(normalize(e["display"]) or e["display"].lower(), Glossary._clean(meaning))
             rows.append([e["display"], meaning, e.get("calc") or "—"])
-        ordered_x = sorted(extras, key=lambda e: e["display"].lower())
-        fills = {(ri, 1): DRAFT_FILL for ri, e in enumerate(ordered_x)
-                 if e.get("definition") and e["definition"].source in ("draft", "ai", "web")}
+        fills = None
         H.data_table(document, ["KPI", "What it means", "How it is calculated"], rows, fills=fills)
     document.save(str(output_path))
 

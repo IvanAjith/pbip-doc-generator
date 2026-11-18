@@ -19,6 +19,7 @@ glossary/glossary.json (yours), a small built-in seed list, and -- unless
 --offline -- the web, saved back to glossary.json for you to review.
 """
 import argparse
+import re
 import urllib.parse
 import sys
 import zipfile
@@ -243,6 +244,10 @@ def main():
     import checks
     context = checks.Context(args.context or (Path(args.glossary).parent / checks.CONTEXT_NAME))
     context.learn_from_report(m.get("expression") or "" for m in analysis["measuresByName"].values())
+    import clarify
+    clar_path = output / clarify.NAME
+    abbr_ans, def_ans = clarify.read(clar_path)          # what you typed in Needs_Your_Clarification.txt
+    n_abbr = context.set_meanings(abbr_ans)              # abbreviations -> context.txt, before the AI or the checks are used
     checker = checks.Checker(context)
 
     web = None
@@ -292,11 +297,11 @@ def main():
         n_edits = 0
     if n_edits:
         print(f"  picked up {n_edits} definition(s) you edited in the previous glossary document")
-    import clarify
-    clar_path = output / clarify.NAME
-    n_ans = glossary.absorb_answers(clarify.read(clar_path))
-    if n_ans:
-        print(f"  picked up {n_ans} definition(s) you typed in {clarify.NAME}; they are kept in {Path(args.glossary).name}")
+    glossary.context = context
+    n_ans = glossary.absorb_answers(def_ans)
+    if n_ans or n_abbr:
+        print(f"  picked up from {clarify.NAME}: {n_ans} definition(s) (kept in {Path(args.glossary).name}) and "
+              f"{n_abbr} abbreviation(s) (kept in {Path(context.path).name if context.path else 'context'})")
     print("Building page content" + (" (web lookups on)" if web else " (offline)") + " ...")
     page_items = kpis.build_all_items(analysis, glossary, primary)
     page_items["_extra"] = kpis.build_extra_items(analysis, glossary, primary, page_items)
@@ -357,11 +362,19 @@ def main():
             d = it.get("definition")
             if it["kind"] in ("card", "value") and d and d.source in ("draft", "ai", "web") and it["display"] not in seen_d:
                 seen_d.add(it["display"]); draft_rows.append(_row(it, pages_of.get(it["display"], ""), d.text))
+    from seed_glossary import SEED as _SEED
+    known_words = {t.upper() for e in _SEED for t in e["terms"] if " " not in t and len(t) <= 6}
+    names_all = [i["display"] for i in all_items]
+    unknown_abbr = context.unknown_in(names_all, known_words)
+    for tok in sorted(checker.guessed):                  # the AI had to guess these: ask instead
+        if not context.known(tok):
+            unknown_abbr.setdefault(tok, [n for n in names_all if re.search(r"(?<![A-Za-z0-9])" + re.escape(tok) + r"(?![A-Za-z0-9])", n)])
+    abbr_rows = sorted(unknown_abbr.items())
     try:
-        n_clar = clarify.write(clar_path, needed_rows, draft_rows)
+        n_clar = clarify.write(clar_path, project_name, abbr_rows, needed_rows, draft_rows)
     except PermissionError:
         n_clar = None
-        print(f"  could NOT write {clarify.NAME} -- it is open in Excel. Close it and run again.")
+        print(f"  could NOT write {clarify.NAME} -- it is open in another program. Close it and run again.")
     from collections import Counter
     src = Counter(i["definition"].source for i in all_items if i.get("definition"))
     n_rows = len(glossary.used)
@@ -414,20 +427,17 @@ def main():
     if checker.flagged:
         print(f"* {len(checker.flagged)} AI draft(s) contain words that are not in the report; the Source column says "
               "'Check:' with the words: " + ", ".join(t for t, _ in checker.flagged[:6]) + (" ..." if len(checker.flagged) > 6 else ""))
-    if checker.guessed:
-        made = context.write_template(checker.guessed)
-        undefined = sorted(checker.guessed)
-        print(f"* The AI had to guess what these abbreviations mean, so its drafts were refused: {', '.join(undefined)}.")
-        if made:
-            print(f"  I created {context.path} with them listed. Type each meaning after the = sign (for example "
-                  "CB = chargeback), save, and run again.")
-        else:
-            print(f"  Add their meanings to {context.path} (one line each, like CB = chargeback) and run again.")
     if n_clar:
-        print(f"* CLARIFICATION NEEDED for {n_clar} indicator(s): " + ", ".join(r["term"] for r in (needed_rows + draft_rows)[:12]) +
-              (" ..." if n_clar > 12 else ""))
-        print(f"  Open {clar_path}, type each meaning in the last column (type ok to accept a shown draft), save, and run the")
-        print("  same command again: your answers are stored in the glossary and all three documents are rebuilt with them.")
+        parts = []
+        if abbr_rows:
+            parts.append(f"{len(abbr_rows)} abbreviation(s): " + ", ".join(t for t, _ in abbr_rows[:8]) + (" ..." if len(abbr_rows) > 8 else ""))
+        if needed_rows:
+            parts.append(f"{len(needed_rows)} KPI(s) without a definition: " + ", ".join(r["term"] for r in needed_rows[:8]) + (" ..." if len(needed_rows) > 8 else ""))
+        if draft_rows:
+            parts.append(f"{len(draft_rows)} draft(s) to confirm")
+        print("* CLARIFICATION NEEDED -- " + "; ".join(parts) + ".")
+        print(f"  Open {clar_path}, type your answers after the >>> marks, save, and run the same command again.")
+        print("  Your answers are kept (definitions in the glossary file, abbreviations in context.txt) and all three documents are rebuilt.")
     for n in notes:
         print("* " + n)
     if n_clar == 0:

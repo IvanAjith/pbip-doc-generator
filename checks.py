@@ -167,6 +167,72 @@ class Context:
             lines.append("Abbreviations used in this report: " + "; ".join(f"{k} = {v}" for k, v in sorted(known.items())))
         return lines
 
+    # ---- abbreviations asked for in Needs_Your_Clarification.txt
+    def set_meanings(self, meanings):
+        """Store answers ('CB' -> 'comeback') in memory and in the context file (a blank 'CB = ' line is filled in, other
+        lines are never touched). -> number stored."""
+        meanings = {k.upper(): v.strip() for k, v in meanings.items() if v and v.strip()}
+        if not meanings:
+            return 0
+        self.abbr.update(meanings)
+        if not self.path:
+            return len(meanings)
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            lines = self.path.read_text(encoding="utf-8-sig").splitlines() if self.path.exists() else [
+                "# What your company's abbreviations mean. One line each:   CB = comeback",
+                "# Filled in for you from Needs_Your_Clarification.txt; you can also edit it by hand. Lines starting with # are ignored.",
+                "", "Domain: ", ""]
+            done = set()
+            for i, line in enumerate(lines):
+                m = re.match(r"^\s*([A-Za-z][A-Za-z0-9&/]{0,7})\s*(=|:|-)\s*(.*)$", line)
+                if m and m.group(1).upper() in meanings and not line.lstrip().startswith("#"):
+                    lines[i] = f"{m.group(1).upper()} = {meanings[m.group(1).upper()]}"
+                    done.add(m.group(1).upper())
+            for k in sorted(set(meanings) - done):
+                lines.append(f"{k} = {meanings[k]}")
+            self.path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        except OSError:
+            pass
+        return len(meanings)
+
+    def note_for(self, names):
+        """'Here, CB means comeback.' for the abbreviations in these names that the user explained, else ''."""
+        found = []
+        for n in names:
+            for tok in re.findall(r"[A-Za-z0-9&/]+", n or ""):
+                t = tok.upper()
+                if tok == t and t in self.abbr and t not in found:
+                    found.append(t)
+        if not found:
+            return ""
+        parts = [f"{t} means {self.abbr[t].rstrip('.')}" for t in found]
+        return "Here, " + (parts[0] if len(parts) == 1 else ", ".join(parts[:-1]) + " and " + parts[-1]) + "."
+
+    def unknown_in(self, names, known_words=()):
+        """Abbreviations in KPI names that nothing explains: {token: [names it was seen in]}.
+        known_words: upper-case terms the built-in glossary already knows (TRIR, OT, EBIT ...)."""
+        lower_words = set()
+        for n in names:                                   # words that also appear in normal case are words, not abbreviations
+            for tok in re.findall(r"[A-Za-z]+", n or ""):
+                if not tok.isupper():
+                    lower_words.add(tok.lower())
+        out = {}
+        for n in names:
+            toks = re.findall(r"[A-Za-z0-9&/]+", n or "")
+            shouting = all(t.isupper() for t in toks if len(t) > 3 and t.isalpha()) and sum(len(t) > 3 and t.isalpha() for t in toks) >= 1
+            for t in toks:
+                if not (t.isupper() and 2 <= len(t) <= (3 if shouting else 5)) or not re.search(r"[A-Z]{2}", t):
+                    continue
+                if self.known(t) or t in known_words or t.lower() in lower_words:
+                    continue
+                if t in out:
+                    if n not in out[t]:
+                        out[t].append(n)
+                else:
+                    out[t] = [n]
+        return out
+
     def write_template(self, tokens):
         """Create context.txt listing the abbreviations the AI had to guess, or add the missing ones to the existing
         file (never touching what is already there). -> True when the file was created or extended."""
