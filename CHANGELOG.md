@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.1 - 18/11/2026
+- KPI Glossary document: the "About This Glossary" section (yellow legend, how-to-edit text, missing count) is replaced by a short
+  "What This Glossary Contains" paragraph: how many KPIs, how they are grouped, and what the two columns give.
+
 ## 1.12.0 - 18/11/2026
 - Offline mode now reads the KPI name before falling back to the formula: abbreviations that are explained are spelled out
   ("Admin FTE" -> "Admin full-time equivalent (FTE): ...") and negative words are put in plain English

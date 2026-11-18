@@ -90,19 +90,6 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
     H.build_cover(document, project_name, "KPI Glossary")
     H.build_doc_control(document, project_name, meta, title_suffix="KPI Glossary")
 
-    H.h1(document, "About This Glossary", log=False)
-    H.para(document, f"This glossary explains the KPIs used in the {project_name} report in plain language. "
-                     "Each entry shows what the KPI means and how the report calculates it (taken from the "
-                     "report\u2019s own formulas).", size=10.5)
-    H.bullets(document, [
-        "Yellow \u2014 no definition could be built or found yet. Explain it in Needs_Your_Clarification.txt (or type over the text) and run the tool again.",
-        "No shading \u2014 the KPI has a definition.",
-    ])
-    H.para(document, "To correct or add a definition: type directly over the text in the \u201cWhat it means\u201d column and save "
-                     "this file. For this glossary that is all you need to do. Run the tool again only if you also want "
-                     "your wording in the user manual and the HTML reference; that run also stores it so every later run "
-                     "keeps it. Keep this file in the output folder until then.", size=10.5, bold=True)
-
     groups = OrderedDict()                      # page name -> {key: entry}
     seen = {}
     for p in ordered:
@@ -118,12 +105,14 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
             groups.setdefault(_pname(p), OrderedDict())[key] = entry
 
     flat = [e["item"] for g in groups.values() for e in g.values()]
-    missing = [i for i in flat if not i.get("definition") and not i.get("also_shows") and not i.get("label_logic")
-               and i["kind"] != "status"]
-    if missing:
-        H.para(document, f"{len(missing)} of the {len(flat)} KPIs below are shaded yellow because no definition "
-                         "could be built or found. Their calculation, where known, is still taken from the report.",
-               size=10.5, italic=True)
+    extras = [e for e in (page_items.get("_extra") or []) if normalize(e["display"]) not in seen]
+    total = len(flat) + len(extras)
+    H.h1(document, "What This Glossary Contains", log=False)
+    H.para(document, f"This glossary lists the {total} KPIs used in the {project_name} report, grouped by the report page "
+                     f"where they appear ({len(groups)} page{'' if len(groups) == 1 else 's'}"
+                     + (", plus the KPIs shown only in tables and charts" if extras else "") + "). "
+                     "For each KPI it gives two things: what it means, in plain language, and how the report calculates it, "
+                     "taken from the report\u2019s own formulas.", size=10.5)
 
     for page_name, entries in groups.items():
         H.h1(document, f"{page_name}", log=False)
@@ -141,13 +130,9 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
         document.add_paragraph()
 
     # measures that are displayed only in tables / charts (each also has a row in my_definitions.csv)
-    extras = page_items.get("_extra") or []
-    extras = [e for e in extras if normalize(e["display"]) not in seen]
     if extras:
         H.h1(document, "Other KPIs Shown in Tables and Charts", log=False)
-        H.para(document, "These KPIs are shown as table columns or chart values. Yellow cells are waiting for a definition: "
-                         "type it over the text, or in Needs_Your_Clarification.csv.",
-               size=10.5)
+        H.para(document, "These KPIs are shown as table columns or chart values rather than as headline figures.", size=10.5)
         rows = []
         for e in sorted(extras, key=lambda e: e["display"].lower()):
             meaning = _meaning(e)
