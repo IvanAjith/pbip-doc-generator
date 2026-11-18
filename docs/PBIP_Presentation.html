@@ -2,10 +2,10 @@
 <title>PBIP Documentation Generator</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="author" content="Ajith Khan, Systech, Employee ID IN1661">
-<!-- Created by Ajith Khan (Employee ID IN1661), Systech. PBIP Documentation Generator presentation. -->
+<!-- Created by Ajith Khan (Employee ID IN1661), Systech. PBIP Documentation Generator presentation, version 1.14.3. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: sticky Systech header with progress bar; three slides (any project, impact, setup and security) swapped with a directional slide-in.
+/* Layout: sticky Systech header with progress bar; six slides (overview, how it works, clarification and glossary, developers, impact, security and limits) swapped with a directional slide-in.
    Motion: floating background glows, staged reveals, count-ups, typed terminal, spinning engine ring, confetti on run finish. */
 :root {
   --bg: #F3F8FE;
@@ -76,7 +76,7 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacin
 .nav { display: flex; gap: 6px; align-items: center; }
 .nav button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); font-size: 1.05rem; }
 .nav button:hover { background: var(--surface-2); }
-.prog { position: absolute; left: 0; bottom: -1px; height: 3px; width: 33.33%; background: linear-gradient(90deg, var(--blue), var(--amber)); transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.prog { position: absolute; left: 0; bottom: -1px; height: 3px; width: 16.66%; background: linear-gradient(90deg, var(--blue), var(--amber)); transition: width .5s cubic-bezier(.2,.8,.2,1); }
 @media (max-width: 760px) { .brand small { display: none; } .tab { padding: 6px 10px; font-size: .8rem; } }
 
 .slide { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding-block: 30px 60px;
@@ -344,6 +344,42 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 
 .term { max-width: 100%; }
 .rs-d, .rs-list, .cmd, .cmdbox { min-width: 0; max-width: 100%; }
+
+/* ---------- v1.14 additions: how it works, clarification loop, developer guide ---------- */
+.lad { display: grid; gap: 8px; margin-top: 14px; counter-reset: lad; }
+.lstep { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; background: var(--surface-2); border: 1px solid transparent; border-radius: 12px; padding: 10px 14px; transition: transform .25s, border-color .25s, background .25s, box-shadow .25s; }
+.lstep::before { counter-increment: lad; content: counter(lad); width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); font-family: var(--font-mono); font-size: .85rem; grid-row: 1 / span 2; }
+.lstep b { font-family: var(--font-display); }
+.lstep p { grid-column: 2 / -1; font-size: .86rem; color: var(--muted); }
+.lstep.on { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 24%, var(--surface)); box-shadow: inset 5px 0 0 var(--amber); }
+.lstep.on::before { background: var(--amber); color: var(--amber-ink); }
+.lstep.dim { opacity: .5; }
+.tryout { margin-top: 14px; display: grid; gap: 10px; }
+.result { background: var(--code-bg); color: var(--code-fg); border-radius: 12px; padding: 12px 16px; font-size: .94rem; display: grid; gap: 6px; }
+.result .k { font-family: var(--font-mono); font-size: .78rem; color: #FFB81C; }
+.result .s { font-family: var(--font-mono); font-size: .82rem; color: #8FA6C9; }
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+@media (max-width: 760px) { .rules { grid-template-columns: minmax(0, 1fr); } }
+.rule { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; align-content: start; }
+.rule i { font-style: normal; font-family: var(--font-mono); font-size: .76rem; color: var(--blue-text); letter-spacing: .06em; text-transform: uppercase; }
+.rule b { font-family: var(--font-display); } .rule p { font-size: .88rem; color: var(--muted); }
+.cnt3 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .cnt3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.filebox { background: var(--code-bg); color: var(--code-fg); border-radius: 14px; padding: 14px 16px; font-family: var(--font-mono); font-size: .8rem; line-height: 1.6; white-space: pre; overflow-x: auto; max-width: 100%; min-height: 250px; }
+.filebox .h { color: #FFB81C; } .filebox .d { color: #8FA6C9; } .filebox .a { color: #4EE0AE; } .filebox .q { color: #FF9C8A; }
+.filebox .cur { display: inline-block; width: .55em; height: 1em; background: #DCE9FA; vertical-align: -2px; animation: blink 1s steps(2) infinite; }
+.stack3 { display: grid; gap: 10px; margin-top: 14px; }
+.layer { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; border-radius: 14px; padding: 12px 16px; border: 1px solid var(--line); background: var(--surface); }
+.layer b { font-family: var(--font-display); } .layer p { grid-column: 1 / -1; font-size: .88rem; color: var(--muted); }
+.layer.l1 { border-left: 6px solid var(--amber); } .layer.l2 { border-left: 6px solid var(--blue); } .layer.l3 { border-left: 6px solid var(--mint); }
+.pipe { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin-top: 14px; }
+.pipe .hop b { font-size: .8rem; }
+.cmdline { font-family: var(--font-mono); font-size: .8rem; background: var(--surface-2); border-radius: 8px; padding: 3px 8px; overflow-wrap: anywhere; }
+.pairs { display: grid; gap: 4px; margin-top: 6px; font-size: .85rem; }
+.pairs .bad { color: var(--coral); text-decoration: line-through; font-family: var(--font-mono); }
+.pairs .good { color: var(--mint); font-family: var(--font-mono); font-weight: 500; }
+.score { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.nav-hint { font-size: .78rem; color: var(--muted); }
 </style>
 
 <div class="glow a"></div><div class="glow b"></div>
@@ -355,8 +391,11 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     <div class="brand">PBIP Documentation Generator<small>Power BI documentation, automated</small></div>
     <div class="tabs" role="tablist" aria-label="Slides">
       <button class="tab" role="tab" id="tab-any" data-go="any" aria-selected="true">1 · Overview</button>
-      <button class="tab" role="tab" id="tab-impact" data-go="impact" aria-selected="false">2 · Impact</button>
-      <button class="tab" role="tab" id="tab-security" data-go="security" aria-selected="false">3 · Security &amp; limitations</button>
+      <button class="tab" role="tab" id="tab-how" data-go="how" aria-selected="false">2 · How it works</button>
+      <button class="tab" role="tab" id="tab-loop" data-go="loop" aria-selected="false">3 · Clarify &amp; glossary</button>
+      <button class="tab" role="tab" id="tab-dev" data-go="dev" aria-selected="false">4 · For developers</button>
+      <button class="tab" role="tab" id="tab-impact" data-go="impact" aria-selected="false">5 · Impact</button>
+      <button class="tab" role="tab" id="tab-security" data-go="security" aria-selected="false">6 · Security &amp; limits</button>
     </div>
     <div class="nav"><button id="prev" aria-label="Previous slide">←</button><button id="next" aria-label="Next slide">→</button></div>
   </div>
@@ -368,13 +407,13 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 <section class="slide" id="s-any" aria-labelledby="t1">
   <div class="notice rv" style="--i:0" role="note">
     <span class="ni" aria-hidden="true">!</span>
-    <p><b>Early version, not 100% working yet.</b> It needs more PBIP files to learn from: different report types, structures, pages and visuals. Review every output and don't use it blindly.</p>
+    <p><b>Still learning, not 100% working yet.</b> It has been run on real Standex, Timex and Sales reports and gets better with every new PBIP. Review every output and don't use it blindly.</p>
     <button class="btn ghost" data-go="security">Security and limitations →</button>
   </div>
   <div class="head">
     <div class="kicker rv" style="--i:0">Works on every Power BI project</div>
     <h1 class="title rv" style="--i:1" id="t1">Drop in <mark>any</mark> PBIP. Get the docs.</h1>
-    <p class="lede rv" style="--i:2">The tool reads whatever it finds in the project files. No page name, table name or KPI is written into the code, so the same single command works on a safety report, a sales report or an HR report. It asks one question, whether you have an AI key, and writes all three files either way.</p>
+    <p class="lede rv" style="--i:2">The tool reads whatever it finds in the project files. No page name, table name or KPI is written into the code, so the same single command works on a safety report, a sales report or an HR report. It asks one question, whether you have an AI key, writes all three files either way, and keeps a short list of the few questions only you can answer.</p>
   </div>
 
   <div class="flow rv" style="--i:3" aria-label="How the tool flows">
@@ -390,21 +429,23 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     </div>
     <div class="conn"><i></i></div>
     <div class="fcol">
-      <div class="lbl">Three files out</div>
+      <div class="lbl">Three documents + one question file</div>
       <div class="doc" data-doc="0"><em>.docx</em><b>User Manual</b><span>For people using the report</span></div>
       <div class="doc" data-doc="1"><em>.docx</em><b>KPI Glossary</b><span>Every term in plain English</span></div>
       <div class="doc" data-doc="2"><em>.html</em><b>KPI Documentation</b><span>Searchable, with DAX</span></div>
+      <div class="doc" data-doc="3"><em>.txt</em><b>Needs_Your_Clarification</b><span>Answer once, it remembers</span></div>
     </div>
   </div>
 
   <div class="row two">
     <div class="panel rv" style="--i:4">
       <div class="runhead">
-        <div><h2 style="font-size:1.25rem">Watch it run</h2><p class="note">The console messages from run.py. Name and counts fill in from your project.</p></div>
+        <div><h2 style="font-size:1.25rem">Watch it run</h2><p class="note">The console messages from run.py, shortened. Name and counts fill in from your project. The third tab shows the run after you answer the clarification file.</p></div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
           <div class="seg" role="tablist" aria-label="Mode">
             <button role="tab" id="r-off" aria-selected="true" data-r="off">Offline mode</button>
             <button role="tab" id="r-ai" aria-selected="false" data-r="ai">AI mode</button>
+            <button role="tab" id="r-again" aria-selected="false" data-r="again">Run again after answering</button>
           </div>
           <button class="btn" id="run">▶ Run it</button>
         </div>
@@ -414,10 +455,10 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     <div class="panel why rv" style="--i:5">
       <h2 style="font-size:1.25rem">Why it travels to any project</h2>
       <div class="w"><div class="ic">{ }</div><div><b>Nothing hardcoded</b><p>Pages, tables, measures and filters are discovered from the PBIP files themselves.</p></div></div>
-      <div class="w"><div class="ic">177</div><div><b>Standard vocabulary built in</b><p>177 business terms (finance, sales, HR, safety, inventory, gaming, insurance and more) ship with the tool and work with no internet connection.</p></div></div>
-      <div class="w"><div class="ic">2</div><div><b>Offline or AI, same three files</b><p>No key: definitions are drafted from each measure's own formula. With a key from IT: an AI writes them. Either way you get the same documents.</p></div></div>
+      <div class="w"><div class="ic">1k</div><div><b>A ready-made glossary dump</b><p>1,052 standard business terms in 15 domains (finance, sales, HR, safety, quality, supply chain, insurance, banking, SaaS and more) ship with the tool and work with no internet connection.</p></div></div>
+      <div class="w"><div class="ic">2</div><div><b>Offline or AI, same loop</b><p>No key: definitions come from the glossary dump, the KPI name and the formula. With a key from IT: an AI fills the gaps and the tool checks its sentence against the offline wording.</p></div></div>
       <div class="w"><div class="ic">RO</div><div><b>Read-only and local</b><p>It reads definition files only. It never connects to your data or your warehouse.</p></div></div>
-      <div class="w"><div class="ic">?</div><div><b>Honest about unknowns</b><p>A term it can't look up is drafted from its own formula, shaded yellow and marked "please verify". Nothing is passed off as final.</p></div></div>
+      <div class="w"><div class="ic">?</div><div><b>Honest about unknowns</b><p>What it cannot define goes into Needs_Your_Clarification.txt. You answer once and the tool remembers. Drafts are marked "please verify". Nothing is passed off as final.</p></div></div>
     </div>
   </div>
 
@@ -433,7 +474,159 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   </div>
 </section>
 
-<!-- ================= SLIDE 3 ================= -->
+<!-- ================= SLIDE 2: HOW IT WORKS ================= -->
+<section class="slide" id="s-how" aria-labelledby="t2" hidden>
+  <div class="head">
+    <div class="kicker rv" style="--i:0">The flow, step by step</div>
+    <h1 class="title rv" style="--i:1" id="t2">Read. Translate. Define. <mark>Ask</mark> once.</h1>
+    <p class="lede rv" style="--i:2">One command runs six stages. Click a stage to see what it does, what it uses and what it never does. The fourth stage, finding a definition, follows a fixed order that you can see and test below.</p>
+  </div>
+
+  <div class="panel rv" style="--i:3">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <h2 style="font-size:1.25rem">The six stages of one run</h2>
+      <span class="dir nn">python run.py</span>
+    </div>
+    <div class="xp">
+      <div class="xp-list" id="stlist" role="tablist" aria-label="Stages of a run"></div>
+      <div class="xp-d" id="std" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="row two">
+    <div class="panel rv" style="--i:4">
+      <h2 style="font-size:1.25rem">Where a definition comes from</h2>
+      <p class="note">The tool tries these in order and stops at the first one that has an answer. Steps 4 and 5 run only in AI mode.</p>
+      <div class="lad" id="lad"></div>
+    </div>
+    <div class="panel rv" style="--i:5">
+      <h2 style="font-size:1.25rem">Try it: which step answers?</h2>
+      <p class="note">Pick a KPI name. These sentences are what the tool writes for each name (offline mode, nothing sent anywhere).</p>
+      <div class="chips" id="tryc" role="tablist" aria-label="Example KPI names" style="margin-top:12px"></div>
+      <div class="tryout">
+        <div class="result" id="tryres" aria-live="polite"></div>
+        <p class="note" id="trywhy"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel rv" style="--i:6">
+    <h2 style="font-size:1.25rem">AI mode checks itself against offline mode</h2>
+    <p class="note">An AI that sees only a name and a formula sometimes invents words. So in AI mode the tool also writes the offline wording and compares the two. The rules run in this order.</p>
+    <div class="rules">
+      <div class="rule"><i>Rule 1</i><b>The name already says it</b><p>If offline can read a plain meaning from the KPI name (&ldquo;% Unscheduled Jobs&rdquo;), that wording is used.</p></div>
+      <div class="rule"><i>Rule 2</i><b>The AI stayed inside the report</b><p>If every word in the AI sentence comes from the name, the formula, the page or an abbreviation you explained, the AI sentence is kept.</p></div>
+      <div class="rule"><i>Rule 3</i><b>The AI added words the report never said</b><p>If it brought in words such as &ldquo;barcode&rdquo; or &ldquo;customer&rdquo; and an offline formula wording exists, the formula wording is used.</p></div>
+      <div class="rule"><i>Rule 4</i><b>No offline wording to fall back on</b><p>The AI sentence is kept but marked &ldquo;Check:&rdquo; with the unsupported words, and the KPI is listed in the clarification file for you to confirm.</p></div>
+    </div>
+    <p class="note" style="margin-top:12px">Before these rules, any AI sentence with a number, target or percentage that is not in the report, an abbreviation the AI spelled out by itself, or a sentence copied from another KPI is refused outright.</p>
+  </div>
+</section>
+
+<!-- ================= SLIDE 3: CLARIFY AND GLOSSARY DUMP ================= -->
+<section class="slide" id="s-loop" aria-labelledby="t3b" hidden>
+  <div class="head">
+    <div class="kicker rv" style="--i:0">Clarification file and the glossary dump</div>
+    <h1 class="title rv" style="--i:1" id="t3b">Answer once. The tool <mark>remembers</mark>.</h1>
+    <p class="lede rv" style="--i:2">Whatever you type into the clarification file is stored automatically in the glossary folder on your computer and reused by every later run, in both modes. Behind it sits a ready-made glossary dump of standard terms that works offline, across 15 domains.</p>
+  </div>
+
+  <div class="cnt3 rv" style="--i:3">
+    <div class="cn"><b data-to="1052">1,052</b><span>standard terms built in</span></div>
+    <div class="cn"><b data-to="15">15</b><span>domains, at least 50 terms each</span></div>
+    <div class="cn"><b data-to="2">2</b><span>modes, one identical loop</span></div>
+    <div class="cn"><b data-to="0">0</b><span>answers you type twice</span></div>
+  </div>
+
+  <div class="row two">
+    <div class="panel rv" style="--i:4">
+      <div class="runhead">
+        <div><h2 style="font-size:1.25rem">The clarification loop</h2><p class="note">Press the buttons in order. The file is an illustration of Needs_Your_Clarification.txt.</p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="lp-fill">1 · Type answers</button>
+          <button class="btn amber" id="lp-run" disabled>2 · Run again</button>
+        </div>
+      </div>
+      <div class="filebox" id="lp-file" aria-live="polite"></div>
+    </div>
+    <div class="panel rv" style="--i:5">
+      <h2 style="font-size:1.25rem">What happens on the second run</h2>
+      <div class="term" id="lp-term" aria-live="polite" style="min-height:250px"></div>
+      <p class="note" style="margin-top:10px">Console wording is shortened. When the file says &ldquo;No clarification needed&rdquo;, the three documents are ready to share and the next run asks the mode again.</p>
+    </div>
+  </div>
+
+  <div class="row two">
+    <div class="panel rv" style="--i:6">
+      <h2 style="font-size:1.25rem">Where your answers go</h2>
+      <p class="note">Nothing to export or copy. The tool files each answer itself.</p>
+      <div class="stack3">
+        <div class="layer l1"><b>Your answers: abbreviations</b><span class="st amber">Automatic</span><p><span class="cmdline">glossary\context.txt</span> keeps meanings such as CB = comeback. Every KPI that uses the abbreviation is redrafted, and a draft ends with &ldquo;Here, CB means comeback.&rdquo;</p></div>
+        <div class="layer l1"><b>Your answers: KPI meanings</b><span class="st amber">Automatic</span><p><span class="cmdline">glossary\glossary.json</span> is your glossary dump. A meaning you type is stored as your own wording and always wins. <span class="cmdline">my_definitions.csv</span> is the same list as an Excel-friendly table.</p></div>
+        <div class="layer l2"><b>Shared glossary (team)</b><span class="st blue">Reviewed by a person</span><p><span class="cmdline">shared_glossary.csv</span> works offline for everyone. Your definitions reach it only after a reviewer approves them, so client names stay out.</p></div>
+        <div class="layer l3"><b>Built-in glossary</b><span class="st mint">Ships with the tool</span><p>1,052 standard terms in 15 CSV files. Offline mode looks here before it writes its own wording, so a known KPI is defined instantly with no internet.</p></div>
+      </div>
+    </div>
+    <div class="panel rv" style="--i:7">
+      <h2 style="font-size:1.25rem">The built-in dump, by domain</h2>
+      <p class="note">Click a domain. Offline mode matches your KPI names against these terms, including their alternative names.</p>
+      <div class="bars" id="dombars"></div>
+      <p class="barnote" id="domnote" aria-live="polite">Click a domain to see example terms.</p>
+    </div>
+  </div>
+
+  <div class="panel rv" style="--i:8">
+    <h2 style="font-size:1.25rem">How the dump grows for the whole team</h2>
+    <p class="note">Your own answers are saved at once, on your computer. Sharing them is a deliberate, reviewed step.</p>
+    <div class="pipe">
+      <div class="hop"><b>Answer</b><span>clarification file</span></div><div class="arr"><i></i></div>
+      <div class="hop"><b>glossary.json</b><span>saved by the tool</span></div><div class="arr"><i></i></div>
+      <div class="hop"><b>--export-shared</b><span>candidate list</span></div><div class="arr"><i></i></div>
+      <div class="hop"><b>Reviewer</b><span>marks Y on generic rows</span></div><div class="arr"><i></i></div>
+      <div class="hop"><b>--merge-shared</b><span>into shared_glossary.csv</span></div><div class="arr"><i></i></div>
+      <div class="hop"><b>git push</b><span>everyone, offline too</span></div>
+    </div>
+    <p class="note" style="margin-top:12px">It is never filled automatically. A web or AI sentence is a draft, and a client's own measure names should not travel to every colleague. Definitions for one report stay in that report's glossary folder; use a separate folder (<span class="cmdline">--glossary</span>) per report.</p>
+  </div>
+</section>
+
+<!-- ================= SLIDE 4: FOR DEVELOPERS ================= -->
+<section class="slide" id="s-dev" aria-labelledby="t4b" hidden>
+  <div class="head">
+    <div class="kicker rv" style="--i:0">For report developers</div>
+    <h1 class="title rv" style="--i:1" id="t4b">Build the report so it <mark>documents</mark> itself.</h1>
+    <p class="lede rv" style="--i:2">The tool reads what you write. Clear names, a tidy page structure and a clean model mean better definitions, fewer questions and less review. These tips come from the patterns the tool actually reads, and from what went wrong on real reports.</p>
+  </div>
+
+  <div class="panel rv" style="--i:3">
+    <div class="seg" role="tablist" aria-label="Developer tips">
+      <button role="tab" id="d-names" aria-selected="true" data-d="names">Naming</button>
+      <button role="tab" id="d-struct" aria-selected="false" data-d="struct">Report structure</button>
+      <button role="tab" id="d-model" aria-selected="false" data-d="model">Model and DAX</button>
+      <button role="tab" id="d-feed" aria-selected="false" data-d="feed">Helping the tool improve</button>
+    </div>
+    <div class="grid" id="dgrid"></div>
+  </div>
+
+  <div class="row two">
+    <div class="panel rv" style="--i:4">
+      <h2 style="font-size:1.25rem">A good name, in one picture</h2>
+      <p class="note">Same measure, three ways of naming it. The sentences are what the tool writes without an AI.</p>
+      <div class="reqs" id="namelab"></div>
+    </div>
+    <div class="panel rv" style="--i:5">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="font-size:1.25rem">Documentation-ready checklist</h2>
+        <span class="dir nn" id="dkcount">0 of 10 done</span>
+      </div>
+      <div class="pbar"><i id="dkfill"></i></div>
+      <div id="dchk"></div>
+      <p class="note" id="dkmsg"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 5: IMPACT ================= -->
 <section class="slide" id="s-impact" aria-labelledby="t3" hidden>
   <div class="head">
     <div class="kicker rv" style="--i:0">What changes for the people using the report</div>
@@ -486,7 +679,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   </div>
 </section>
 
-<!-- ================= SLIDE 4 ================= -->
+<!-- ================= SLIDE 6: SECURITY ================= -->
 <section class="slide" id="s-security" aria-labelledby="t4" hidden>
   <div class="head">
     <div class="kicker rv" style="--i:0">Requirements, security, limitations and governance</div>
@@ -499,7 +692,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
       <div class="head" style="gap:8px">
         <div class="kicker" style="color:var(--coral)">Disclaimer</div>
         <h2 style="font-size:1.5rem">Not 100% working yet. Use the output as a first draft.</h2>
-        <p>The tool has been tested on the Standex report and on made-up inventory, streaming, HR and gaming reports. Reports differ a lot, and every new PBIP can show a pattern it does not handle yet. It follows fixed pattern rules, a built-in glossary of 177 terms and, if you choose, an AI, so it gets better as it is tested on more files. AI mode has been tested with simulated replies and still needs a live check with a company-issued key. Until then, a person must review every output before anyone relies on it.</p>
+        <p>The tool has been run on real Standex, Timex and Sales reports and on made-up inventory, streaming, HR and gaming reports. Reports differ a lot, and every new PBIP can show a pattern it does not handle yet. It follows fixed pattern rules, a built-in glossary of 1,052 terms and, if you choose, an AI, so it gets better as it is tested on more files. Automated tests cover the logic, but they use simulated AI and web replies, and Windows and macOS are used in practice rather than tested automatically. Until coverage grows, a person must review every output before anyone relies on it.</p>
       </div>
       <div>
         <p class="note" style="margin-bottom:8px">More PBIP files would teach it about</p>
@@ -567,7 +760,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     <div class="panel rv" style="--i:7">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
         <h2 style="font-size:1.25rem">Safe-use checklist</h2>
-        <span class="dir nn" id="ckcount">0 of 12 done</span>
+        <span class="dir nn" id="ckcount">0 of 14 done</span>
       </div>
       <div class="pbar"><i id="ckfill"></i></div>
       <div id="chk"></div>
@@ -582,6 +775,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
         <li><b>Where the tool lives.</b> The code sits in a private repository on a personal GitHub account today. Agree whether it moves to a company repository, and who gets access.</li>
         <li><b>Where outputs live.</b> Where the files are stored and who can open them.</li>
         <li><b>Sign-off.</b> Who reviews the documents before they reach a client.</li>
+        <li><b>The shared glossary.</b> Who reviews candidate definitions and merges them into the team glossary, and how client-specific wording is kept out.</li>
         <li><b>More test files.</b> How extra PBIP files are collected for testing, with the owner's permission, so coverage grows safely.</li>
       </ul>
       <p class="note" style="margin-top:14px">Sources:
@@ -640,7 +834,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   function playCounters(scope) { if (REDUCED) return; $$("[data-to]", scope).forEach(function (b) { countUp(b, +b.dataset.to, 1300); }); }
 
   /* ---------- slides ---------- */
-  var order = ["any", "impact", "security"], cur = null;
+  var order = ["any", "how", "loop", "dev", "impact", "security"], cur = null;
   function show(id, fromHash) {
     if (order.indexOf(id) < 0) id = "any";
     var dir = cur === null ? "" : (order.indexOf(id) >= order.indexOf(cur) ? "from-right" : "from-left");
@@ -655,6 +849,8 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     if (!fromHash) { try { history.replaceState(null, "", "#" + id); } catch (e) { location.hash = id; } }
     window.scrollTo(0, 0);
     if (id === "impact") startChat(persona);
+    if (id === "loop") { playCounters($("#s-loop")); growBars(); }
+    if (id === "how") tryPick(tryCur);
   }
   $$("[data-go]").forEach(function (b) { b.addEventListener("click", function () { show(b.dataset.go); }); });
   $("#prev").addEventListener("click", function () { show(order[Math.max(0, order.indexOf(cur) - 1)]); });
@@ -662,7 +858,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   document.addEventListener("keydown", function (e) {
     if (e.target && e.target.tagName === "INPUT") return;
     if (e.key === "ArrowRight") $("#next").click(); else if (e.key === "ArrowLeft") $("#prev").click();
-    else if (e.key === "1") show("any"); else if (e.key === "2") show("impact"); else if (e.key === "3") show("security");
+    else if (e.key >= "1" && e.key <= "6") show(order[+e.key - 1]);
   });
   addEventListener("hashchange", function () { var h = location.hash.slice(1); if (h !== cur) show(h, true); });
 
@@ -672,7 +868,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     ["", ""],
     ["", "Do you have an AI API key?"],
     ["d", "  1. Yes - AI mode (paste the key)"],
-    ["d", "  2. No  - Offline mode (drafts from the formulas)"]
+    ["d", "  2. No  - Offline mode (glossary, KPI names, formulas)"]
   ];
   var BUILD = [
     ["", "Reading Name.Report + Name.SemanticModel ..."],
@@ -682,10 +878,31 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     ["ok", "  wrote Name_User_Manual.docx"],
     ["ok", "  wrote Name_KPI_Glossary.docx"],
     ["ok", "  wrote Name_KPI_Documentation.html"],
+    ["ok", "  wrote Needs_Your_Clarification.txt"],
     ["", ""],
     ["", "Coverage: N measures have a row in my_definitions.csv"],
     ["", "Review notes"],
-    ["d", "* N drafts to verify (formula N, AI N, web N)"]
+    ["d", "* N drafts to verify (formula N, AI N, web N)"],
+    ["", "* CLARIFICATION NEEDED -- N abbreviation(s) to explain; N KPI(s) without a definition."],
+    ["d", "  Open output\\Needs_Your_Clarification.txt, type your answers after the >>> marks,"],
+    ["d", "  save, and run the same command again."]
+  ];
+  var AGAIN = [
+    ["p", "$ python run.py"],
+    ["", ""],
+    ["", "Your last run was in OFFLINE mode and N clarification question(s) were waiting."],
+    ["d", "  Carrying on in offline mode. (To choose the mode again: python run.py --ask-mode)"],
+    ["", "Reading Name.Report + Name.SemanticModel ..."],
+    ["d", "  N pages (N in the main navigation), N measures, N tables"],
+    ["ok", "  picked up from Needs_Your_Clarification.txt: N definition(s) (kept in glossary.json) and N abbreviation(s) (kept in context.txt)"],
+    ["", "Building page content (offline) ..."],
+    ["ok", "  wrote Name_User_Manual.docx"],
+    ["ok", "  wrote Name_KPI_Glossary.docx"],
+    ["ok", "  wrote Name_KPI_Documentation.html"],
+    ["ok", "  wrote Needs_Your_Clarification.txt"],
+    ["", ""],
+    ["ok", "* No clarification needed. All three documents are complete; Needs_Your_Clarification.txt is empty."],
+    ["d", "  (next time you run python run.py you will be asked the mode again)"]
   ];
   function mk(tail, mode) { return tail.map(function (l) { return [l[0], l[1].replace("MODE", mode)]; }); }
   var RUNS = {
@@ -701,7 +918,8 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
       ["", "Save this key on this computer? (y/n): n"],
       ["d", "Not saved. Used for this run only."],
       ["d", "  AI mode on (gemini): names and formula wording only."]],
-      mk(BUILD, "web lookups on"))
+      mk(BUILD, "web lookups on")),
+    again: AGAIN
   };
   var runMode = "off", LINES = RUNS.off;
   // which line starts each stage / finishes each file (found by text, so the demo cannot drift out of step)
@@ -731,6 +949,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
       if (i === at("  wrote Name_User")) { var d0 = $('[data-doc="0"]'); d0.classList.remove("wait"); d0.classList.add("pop"); }
       if (i === at("  wrote Name_KPI_Glossary")) { var d1 = $('[data-doc="1"]'); d1.classList.remove("wait"); d1.classList.add("pop"); }
       if (i === at("  wrote Name_KPI_Doc")) { var d2 = $('[data-doc="2"]'); d2.classList.remove("wait"); d2.classList.add("pop"); }
+      if (i === at("  wrote Needs_")) { var d3 = $('[data-doc="3"]'); d3.classList.remove("wait"); d3.classList.add("pop"); }
       await wait(REDUCED ? 0 : (LINES[i - 1][1] === "" ? 120 : 300));
       if (tk !== termToken) return;
     }
@@ -740,11 +959,11 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 
   /* ---------- slide 3: personas ---------- */
   var PERSONS = [
-    { n: "Plant manager", q: "What does the TRIR card on the Safety page actually tell me?", a: "It shows how often work injuries needing medical treatment are happening, adjusted for hours worked so sites compare fairly. Lower is better.", w: "User Manual › Safety page" },
-    { n: "New team member", q: "I just joined. What is OTIF, and why is the card amber?", a: "OTIF is the share of orders delivered on time and in full. The manual's conventions section lists the status words and colors used across the report.", w: "KPI Glossary + Manual › Display conventions" },
+    { n: "Plant manager", q: "What does the TRIR card on the Safety page actually tell me?", a: "It shows how often work injuries needing medical treatment are happening, adjusted for hours worked so sites compare fairly. Lower is better.", w: "User Manual \u203A Safety page" },
+    { n: "New team member", q: "I just joined. What is OTIF, and why is the card amber?", a: "OTIF is the share of orders delivered on time and in full. The manual's conventions section lists the status words and colors used across the report.", w: "KPI Glossary + Manual \u203A Display conventions" },
     { n: "Report developer", q: "Which tables feed the On time Delivery measure, and what's the DAX?", a: "Search the measure by name. You get the full formula, an auto-written summary, the tables and columns it touches, and the relationships between them.", w: "KPI Documentation (HTML)" },
-    { n: "Report owner", q: "A definition in the glossary is wrong. How do I fix it?", a: "Type the right wording over the \u201cWhat it means\u201d cell in the glossary Word file and save. That is all the glossary needs. Run the tool again only if you also want the wording in the manual and the HTML; that run also stores it for later runs.", w: "KPI Glossary (Word) › What it means column" },
-    { n: "Leadership", q: "Which pages are the real report, and can I trust the definitions?", a: "The manual's report structure lists the main pages and how many test or duplicate pages were left out. In the glossary every definition shows its source, and anything drafted from a formula or by an AI is shaded and marked \u201cplease verify\u201d until a person confirms it.", w: "Manual › Report structure + KPI Glossary › Source column" }
+    { n: "Report owner", q: "A definition in the glossary is wrong, or an abbreviation is unexplained. How do I fix it?", a: "Type the answer after the >>> mark in Needs_Your_Clarification.txt and run python run.py again. The tool stores it in the glossary folder, rebuilds all three documents and never asks again. You can also type over the \u201cWhat it means\u201d cell in the glossary Word file.", w: "Needs_Your_Clarification.txt, then KPI Glossary \u203A What it means" },
+    { n: "Leadership", q: "Which pages are the real report, and can I trust the definitions?", a: "The manual's report structure lists the main pages and how many test or duplicate pages were left out. In the glossary every definition shows its source, and anything drafted from a formula, the web or an AI is marked \u201cplease verify\u201d until a person confirms it.", w: "Manual \u203A Report structure + KPI Glossary \u203A Source column" }
   ];
   var persona = 0, chatTok = 0, pEl = $("#persons");
   PERSONS.forEach(function (p, i) {
@@ -768,17 +987,23 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     ["Nothing is invented", "Every formula, page and filter comes from the source. Drafted text is shaded and labelled \u201cplease verify\u201d."],
     ["Three readers, one run", "A manual for users, a glossary for everyone, a technical reference for developers. Re-run after every change and all three follow the report."],
     ["Your choice of privacy", "Offline mode makes no internet calls. AI mode sends only indicator names and formula wording, never report data."],
-    ["Fix a definition in Word", "Edit the \u201cWhat it means\u201d cell in the glossary Word file and save. A re-run reads it back, updates the other documents and keeps it."],
+    ["AI checks itself", "In AI mode every AI sentence is compared with the offline wording, so a sentence with invented words is replaced or flagged."],
+    ["Fix a definition in Word or in the question file", "Edit the \u201cWhat it means\u201d cell in the glossary Word file, or answer in Needs_Your_Clarification.txt. A re-run updates the other documents and keeps it."],
+    ["Learns from your answers", "Abbreviations and meanings you type are stored in the glossary folder and reused by every later run, in both modes, so nothing is asked twice."],
+    ["A glossary dump built in", "1,052 standard terms in 15 domains answer known KPIs instantly and offline, and the team's reviewed shared glossary adds to them."],
     ["Real page numbers", "The Word contents page shows measured page numbers, not a placeholder to refresh."],
     ["Keeps the manual clean", "Test, copy, drill-down, detail and tooltip pages stay out of the manual and in the HTML."],
     ["Searchable DAX reference", "Filter by area, search any measure, and see its formula, tables and relationships."]
   ];
   var LIM = [
-    ["Early version, still learning", "It has been tested on the Standex report and on made-up inventory, streaming, HR and gaming reports. Other structures and visuals may not be handled yet, and AI mode is still to be checked live with a company key.", "Treat the output as a first draft and review it. More PBIP files for testing will widen coverage."],
+    ["Still learning", "It has been run on real Standex, Timex and Sales reports and on made-up inventory, streaming, HR and gaming reports. Other structures, visuals, DAX and naming styles may not be handled yet.", "Treat the output as a first draft and review it. More PBIP files for testing will widen coverage."],
     ["No business-purpose text", "It describes what is on a page, not why the page exists.", "The report owner adds the why on top of the generated skeleton."],
     ["No targets or RAG thresholds", "It can't know the real targets behind a status color.", "It states colors and thresholds only where the report itself defines them, for the owner to confirm."],
     ["No data-quality checks", "It never queries the data, so it can't spot bad joins or messy values.", "Keep data checks in your existing QA process."],
-    ["Drafted definitions need a person", "Company jargon is drafted from its own formula, or by an AI if you choose. A draft can be too literal or simply wrong.", "Drafts are shaded yellow and marked \u201cplease verify\u201d. Correct them in the Word file and save. One re-run carries the wording into the other documents and remembers it."],
+    ["Drafted definitions need a person", "Company jargon is drafted from its name and formula, or by an AI if you choose. A draft can be too literal or simply wrong.", "Drafts are marked \u201cplease verify\u201d. Answer in the clarification file or correct the Word file; one re-run carries the wording into the other documents and remembers it."],
+    ["Offline wording is plain", "Without an AI, a KPI that is not in the glossary is described by rewording its formula. It is correct but plain, for example \u201cQuarter3 Budget divided by lowest Divisor\u201d.", "Answer the clarification file, or use AI mode for smoother wording. The tool checks the AI sentence against the formula."],
+    ["Web and AI can be wrong", "A web page can describe a look-alike term, and an AI can add words the report never said.", "Report-specific names are never searched, matches must be whole words, the AI sentence is cross-checked, and every such definition is marked please verify."],
+    ["The shared glossary is reviewed, not automatic", "Your answers stay on your computer. They reach colleagues only when a reviewer approves them with --export-shared and --merge-shared.", "This keeps client-specific names out of the shared list."],
     ["Summaries are pattern-matched", "Complex DAX gets a general description.", "The full DAX always sits next to the summary in the HTML."],
     ["One project, PBIP format", "It needs an unzipped PBIP project and handles one per run.", "Save the report as a PBIP project and run each in turn."],
     ["Contents page needs Word or LibreOffice", "Without either, the manual uses a standard Word contents field.", "Press F9 in Word, or install LibreOffice for automatic numbers."],
@@ -812,25 +1037,27 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     { t: "Get the tool from GitHub (first time only)", p: "The tool lives in a private GitHub repository. Once you have access, copy it to your computer with git, or use Code, then Download ZIP, on the repository page and unzip it.",
       cmds: [["Copy it to your computer", "git clone https://github.com/IvanAjith/pbip-doc-generator.git"], ["Move into the folder", "cd pbip-doc-generator"]],
       tip: "To pick up later fixes, run git pull in the same folder. Check your version with python run.py --version-info.", hl: "root" },
-    { t: "Install the packages (first time only)", p: "The tool needs four Python packages. This is the only step that always needs the internet, and only once per computer. Python 3.10 or newer must already be installed.",
+    { t: "Install the packages (first time only)", p: "The tool needs five Python packages (python-docx, pypdf, openpyxl, ddgs, docx2pdf). This is the only step that always needs the internet, and only once per computer. Python 3.10 or newer must already be installed.",
       cmds: [["Install once", "pip install -r requirements.txt"]], tip: "", hl: "req" },
     { t: "Put the project in source/", p: "Copy the Name.Report and Name.SemanticModel folders into the source folder, or drop in their .zip files. One project at a time.",
       cmds: [], tip: "Leave out the .pbi folder inside the semantic model. It can hold cached data, and the tool does not need it.", hl: "source" },
     { t: "Run it and answer one question", p: "It asks whether you have an AI API key. Type 2 for offline mode. Type 1 to paste your key (it stays hidden and is recognised and tested automatically). If the key fails you can continue offline or stop and try another key.",
       cmds: [["Run", "python run.py"], ["Optional: fill in the manual's cover page", 'python run.py --author "Your Name" --owner "Systech" --version 1.0']],
       tip: "On Windows, py run.py also works if python is not recognised. A key you choose to save is stored in your own user folder or Windows Credential Manager, never in the tool's folder.", hl: "run" },
-    { t: "Collect the three files from output/", p: "The manual, the glossary and the HTML reference appear in the output folder. Review them, then delete the copies in source/ and output/ when you are done.",
-      cmds: [], tip: "", hl: "output" },
-    { t: "Correct definitions in Word (no re-run needed)", p: "In the glossary, pale-yellow rows are drafts to check and strong-yellow rows need your definition. Type over the \u201cWhat it means\u201d cell and save. The glossary is then finished as you saved it.",
-      cmds: [["Only if you also want the manual and HTML to show your wording", "python run.py"]], tip: "That re-run also stores your wording, so later runs keep it. Keep the glossary file in output/ until you have re-run at least once, because the tool reads your edits from that file. Close it in Word before re-running.", hl: "gloss" }
+    { t: "Collect the files from output/", p: "The manual, the glossary and the HTML reference appear in the output folder, together with Needs_Your_Clarification.txt. Review the documents, and read the question file.",
+      cmds: [], tip: "Delete the copies in source/ and output/ when you are completely done.", hl: "output" },
+    { t: "Answer the questions, then run the same command again", p: "Open Needs_Your_Clarification.txt in Notepad and type each answer after the >>> mark (plain words, blank to skip). Save. Run python run.py again: it carries on in the same mode, stores your answers in the glossary folder, and rebuilds all three documents. Repeat until the file says No clarification needed.",
+      cmds: [["Run it again", "python run.py"]], tip: "Your answers are kept for every later run, so you never type one twice. You can still fix a single definition by typing over the What it means cell in the glossary Word file. Close Word files before re-running, and keep one glossary folder per report (--glossary).", hl: "clar" }
   ];
   function treeHtml(hl) {
     var L = [["pbip-doc-generator/", "root"], ["  run.py", "run"], ["  requirements.txt", "req"], ["  source/        <- project folders go here", "source"]];
     if (hl === "source") L.push(["    Name.Report/", "source"], ["    Name.SemanticModel/", "source"]);
-    L.push(["  output/        <- the three files appear here", "output"]);
-    if (hl === "output" || hl === "gloss") L.push(["    Name_User_Manual.docx", "output"], ["    Name_KPI_Glossary.docx" + (hl === "gloss" ? "   <- edit here" : ""), "output"], ["    Name_KPI_Documentation.html", "output"]);
-    L.push(["  glossary/      <- your definitions are remembered here", "gloss"]);
-    return L.map(function (l) { return (l[1] === hl || (hl === "gloss" && l[1] === "output" && l[0].indexOf("Glossary") > 0)) ? '<span class="hl">' + esc(l[0]) + "</span>" : esc(l[0]); }).join("\n");
+    L.push(["  output/        <- the files appear here", "output"]);
+    if (hl === "output" || hl === "clar") L.push(["    Name_User_Manual.docx", "output"], ["    Name_KPI_Glossary.docx", "output"], ["    Name_KPI_Documentation.html", "output"], ["    Needs_Your_Clarification.txt" + (hl === "clar" ? "   <- answer here" : ""), "clar"]);
+    L.push(["  glossary/      <- your answers are remembered here", "gloss"]);
+    if (hl === "clar") L.push(["    glossary.json     (the glossary dump: your definitions)", "clar"], ["    context.txt       (your abbreviations)", "clar"], ["    my_definitions.csv", "clar"]);
+    L.push(["  builtin_glossary/  <- 1,052 standard terms, 15 domains", "root2"]);
+    return L.map(function (l) { return (l[1] === hl || (hl === "output" && l[1] === "clar" && false)) ? '<span class="hl">' + esc(l[0]) + "</span>" : esc(l[0]); }).join("\n");
   }
   function copyText(txt, btn) {
     var ok = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy"; }, 1400); };
@@ -859,9 +1086,9 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   /* ---------- slide 4: where your data goes ---------- */
   var WG = {
     off: { cloud: '<b>\u2715</b><span>Internet: no calls while the tool runs</span>', cls: "", note: "Checked in the code and in a test run",
-      li: ["With all network access blocked, offline mode still produced all three files.", "It reads the project as text. It never runs the DAX or Power Query inside it.", "The only other program it can start is Word or LibreOffice, on this computer, to measure page numbers.", "Temporary files for that step go in a temp folder that is removed automatically.", "The HTML reference is one self-contained file with no external links.", "The included .gitignore keeps source/, output/ and glossary/ out of Git."] },
+      li: ["With all network access blocked, offline mode still produced all three files.", "It reads the project as text. It never runs the DAX or Power Query inside it.", "The only other program it can start is Word or LibreOffice, on this computer, to measure page numbers.", "Temporary files for that step go in a temp folder that is removed automatically.", "The HTML reference is one self-contained file with no external links.", "The included .gitignore keeps source/, output/ and glossary/ out of Git, so your answers and learned definitions are never committed by accident."] },
     ai: { cloud: '<b style="color:var(--amber)">\u2192</b><span>Only indicator names and formula wording go to the AI service you chose, and indicator names to Wikipedia and web search</span>', cls: "ai", note: "What AI mode sends, and how the key is kept",
-      li: ["Sent: the indicator name, its formula described in plain words, the page name, and the report name with its main page names.", "Not sent: report data, rows, server names or credentials. DAX text is sent only with --ai-send-dax.", "Standard definitions are first looked up on Wikipedia and web search by indicator name (up to 80 per run, cached). Offline mode switches this off.", "The key is typed hidden and tested with one small request. It is kept outside the tool's folder, in Windows Credential Manager if available or otherwise a private file in your user folder, and is never printed or written to a document.", "A test scans the code for key-like text, so a key cannot be committed to GitHub by accident.", "Free or personal keys may let the provider keep what you send. Use a company-issued key and check its terms."] }
+      li: ["Sent: the indicator name, its formula described in plain words, the page name, and the report name with its main page names.", "Not sent: report data, rows, server names or credentials. DAX text is sent only with --ai-send-dax.", "Standard definitions are first looked up on Wikipedia and web search by indicator name (up to 80 per run, cached). A name such as Quarter1 sales is never searched. Offline mode switches this off.", "The key is typed hidden and tested with one small request. It is kept outside the tool's folder, in Windows Credential Manager if available or otherwise a private file in your user folder, and is never printed or written to a document.", "A test scans the code for key-like text, so a key cannot be committed to GitHub by accident.", "Free or personal keys may let the provider keep what you send. Use a company-issued key and check its terms."] }
   };
   function drawWG(k) {
     var w = WG[k], c = $("#cloud"); c.innerHTML = w.cloud; c.style.borderColor = k === "ai" ? "var(--amber)" : ""; c.style.borderStyle = k === "ai" ? "solid" : "";
@@ -873,7 +1100,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 
   /* ---------- slide 4: requirements, explorer, checklist ---------- */
   var REQ = {
-    setup: [["Internet", "Yes, once", "amber", "pip downloads four Python packages (python-docx, pypdf, ddgs, docx2pdf). Git or a ZIP download gets the tool itself from GitHub."],
+    setup: [["Internet", "Yes, once", "amber", "pip downloads five Python packages (python-docx, pypdf, openpyxl, ddgs, docx2pdf). Git or a ZIP download gets the tool itself from GitHub."],
             ["Python 3", "Required", "blue", "Version 3.10 or newer, installed on the computer that runs the tool."],
             ["Access to the repository", "Required", "blue", "The code is in a private GitHub repository, so each person needs to be given access."],
             ["AI API key", "Optional", "", "Only for AI mode. Issued by IT and typed in once, hidden. It is stored outside the project folder, and you can decline to save it."],
@@ -905,6 +1132,9 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     { k: "Your AI API key", risk: "High if shared", inp: "No. It is not part of any PBIP. IT issues it, and you type it in once on the computer that runs the tool.",
       read: "Only to call the AI service you chose. The tool shows at most the last four characters.", out: "Never written to a document, a log or the tool's folder.",
       act: "Never paste it into chat, e-mail or a file in the tool's folder. If one is exposed, ask IT to revoke it and issue a new one. Remove a saved key with python run.py --forget-ai-key." },
+    { k: "Your glossary folder (answers and learned definitions)", risk: "Medium", inp: "No. It is created by the tool from your answers, and from AI or web drafts you accepted.",
+      read: "Yes, on every run, to reuse your answers.", out: "Your wording appears in all three documents. Nothing in the folder is sent anywhere except the names and formula wording in AI mode.",
+      act: "It can hold client KPI names and wording. It stays out of Git. Before --export-shared, remove client names and keep only generic definitions, and let a reviewer approve each row." },
     { k: "Credentials", risk: "Low", inp: "Not by design. People sign in with their own credentials after opening a project.", read: "No.", out: "Not included.",
       act: "Make sure nobody typed a password or key into a query or parameter. The tool does not scan for these." }
   ];
@@ -928,8 +1158,8 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 
   var CHK = [
     ["Before you run", ["I am authorised to access this project and to document it.", "The project comes from a trusted source.", "I copied only the .Report and .SemanticModel folders, without the .pbi folder.", "I am running it on a company-managed computer.", "If I use AI mode, my key was issued by IT and my client allows indicator names to be sent to that AI service."]],
-    ["Before you share", ["I searched the HTML for server addresses, emails, keys and passwords.", "I chose the audience. The manual and glossary show no DAX. The HTML shows all of it.", "I applied the right classification label myself. The tool does not add labels.", "A person reviewed the auto-written text and every shaded draft definition in the glossary."]],
-    ["When you are done", ["I deleted the copies in source/ and output/.", "On a shared computer I removed my saved key (python run.py --forget-ai-key).", "Any project shared to improve the tool had the owner's permission."]]
+    ["Before you share", ["I searched the HTML for server addresses, emails, keys and passwords.", "I chose the audience. The manual and glossary show no DAX. The HTML shows all of it.", "I applied the right classification label myself. The tool does not add labels.", "A person reviewed the auto-written text and every shaded draft definition in the glossary.", "The clarification file says No clarification needed, or I know why a question is still open."]],
+    ["When you are done", ["I deleted the copies in source/ and output/.", "On a shared computer I removed my saved key (python run.py --forget-ai-key).", "Any project shared to improve the tool had the owner's permission.", "Before sharing definitions with the team, I removed client names and a reviewer approved them."]]
   ];
   var ckN = 0, ckHtml = "";
   CHK.forEach(function (g) {
@@ -947,6 +1177,189 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   $$("#chk input").forEach(function (c) { c.addEventListener("change", function () { ckUpdate(true); }); });
   ckUpdate(false);
 
+  /* ---------- v1.14: generic explorer (list on the left, rows on the right) ---------- */
+  function explorer(listEl, detEl, data, rowsOf, extra) {
+    data.forEach(function (x, i) {
+      var b = document.createElement("button"); b.className = "xb"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", i === 0 ? "true" : "false");
+      b.innerHTML = "<span>" + esc(x.k) + "</span>"; b.addEventListener("click", function () { go(i); }); listEl.appendChild(b);
+    });
+    function go(i) {
+      $$(".xb", listEl).forEach(function (b, j) { b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+      var x = data[i]; detEl.style.animation = "none"; void detEl.offsetWidth; detEl.style.animation = "";
+      detEl.innerHTML = "<h3>" + esc(x.k) + "</h3>" + rowsOf(x) + (x.act ? '<div class="act"><b>' + esc(x.actT || "What to do") + "</b>" + esc(x.act) + "</div>" : "");
+      if (extra) extra(i);
+    }
+    go(0);
+  }
+  function dr(label, text) { return '<div class="dr"><b>' + esc(label) + "</b><span>" + esc(text) + "</span></div>"; }
+
+  /* ---------- slide 2: stages, ladder, try-it ---------- */
+  var STAGES = [
+    { k: "1 · Read the project", a: "Opens Name.Report and Name.SemanticModel (as folders or .zip files) and reads them as text: pages, visuals, filters, bookmarks, tables, measures, DAX, relationships and roles.", b: "Only the PBIP definition files.", c: "Connect to your data or warehouse, run DAX or Power Query, or open the cached data file (.pbi/cache.abf)." },
+    { k: "2 · Pick the real pages", a: "Finds the main pages from the navigation buttons between pages. Hidden, tooltip, drill-through and unlinked pages are left out of the manual but stay in the HTML reference. With no navigation buttons it falls back to page names such as test, copy or draft.", b: "Page names, navigation buttons and the visual definitions.", c: "Guess from data. The console lists every page it left out, so you can check." },
+    { k: "3 · Translate the formulas", a: "Reads each DAX measure and writes it in plain words, for example “(Sales − Sales LY) ÷ Sales LY” becomes “(Sales minus Sales LY) as a percentage of Sales LY”. A measure that only points at another follows the chain down to the named base measures.", b: "The DAX text and the format strings.", c: "Invent logic. A very complex formula gets a general description, and the full DAX sits next to it in the HTML." },
+    { k: "4 · Find a definition", a: "For each KPI the tool walks down the order shown below: your own words, the built-in glossary, earlier answers, the web and AI (AI mode only), then offline wording read from the KPI name or formula.", b: "Built-in glossary, your answers, the KPI name, the formula and, in AI mode, a one-sentence AI draft.", c: "Present a draft as final. Anything not taken from your own words or the built-in glossary is labelled “please verify”." },
+    { k: "5 · Write the files", a: "Builds the User Manual (Word), the KPI Glossary (Word), the KPI Documentation (HTML, with the full DAX) and Needs_Your_Clarification.txt. The glossary shows each definition’s source. Yellow marks only the KPIs that still wait for a definition.", b: "The facts from stages 1 to 4.", c: "Put DAX in the Word files or report data anywhere." },
+    { k: "6 · Ask what is missing", a: "Part 1 asks what abbreviations stand for. Part 2 asks what KPIs mean when nothing could be built, and in AI mode lists AI sentences it was unsure of, with a check line. You answer once and run the same command again.", b: "Plain-text answers after the >>> marks.", c: "Ask the same question twice. Answers are kept in the glossary folder for every later run." }
+  ];
+  explorer($("#stlist"), $("#std"), STAGES, function (x) { return dr("What happens", x.a) + dr("Uses", x.b) + dr("Never does", x.c); }, function (i) { if (i === 3) tryPick(tryCur); });
+
+  var LAD = [
+    ["Your own words", "Both modes", "mint", "Typed over the Word glossary, in my_definitions.csv or in the clarification file. Always wins."],
+    ["Built-in glossary", "Both modes", "mint", "1,052 standard terms in 15 domains, plus the team’s reviewed shared glossary. Works with no internet."],
+    ["Learned earlier", "Both modes", "mint", "Definitions saved in glossary.json by earlier runs. Saved AI sentences are checked again every run."],
+    ["Web lookup", "AI mode only", "amber", "Wikipedia and web search by KPI name, whole-word matches only. A report-specific name such as “Quarter1 sales” is never searched. Marked “found online, please verify”."],
+    ["AI draft", "AI mode only", "amber", "One sentence from the name, the formula wording and the page, then compared with the offline wording (the four rules below)."],
+    ["Offline wording", "Both modes", "mint", "Read from the KPI name, from a known term plus a small change, or the formula reworded. Marked “draft, please verify”."],
+    ["Ask you", "Both modes", "coral", "Still nothing? The KPI is shaded yellow and listed in Needs_Your_Clarification.txt."]
+  ];
+  $("#lad").innerHTML = LAD.map(function (l, i) { return '<div class="lstep" id="lad-' + i + '"><b>' + esc(l[0]) + '</b><span class="st ' + l[2] + '">' + esc(l[1]) + "</span><p>" + esc(l[3]) + "</p></div>"; }).join("");
+  var TRY = [
+    { n: "Total Recordable Incident Rate (TRIR)", s: [1], t: "How often work-related injuries serious enough to need medical treatment are happening, adjusted so plants or teams of different sizes can be compared fairly.", why: "A standard term: the built-in glossary answers at once, with no internet and no AI." },
+    { n: "Rate (USD/QTY)", s: [1], t: "An amount measured against a unit of time or volume, such as per hour or per thousand. Measured in US dollars per quantity.", why: "A built-in term plus the unit written in brackets in the name." },
+    { n: "% Unscheduled Jobs", s: [5], t: "The percentage of jobs that are not scheduled. Unscheduled Jobs as a percentage of Total Jobs.", why: "Not in the glossary. The tool reads the negative word in the name and puts it in plain English, then adds the formula wording." },
+    { n: "Previous year_actual", s: [5], t: "The actual figure for the previous year. Actual: the figure that really happened in the period, as opposed to the budget, target or forecast.", why: "A known term (Actual) with a time shift. The tool combines the built-in meaning with “previous year”. A name with any other word in it is left to the formula." },
+    { n: "CY vs LY Quarter1 sales", s: [5], t: "(Quarter1 sales minus Quarter1 Sales LY) as a percentage of Quarter1 Sales LY.", why: "Report-specific name: the web is not searched, so no look-alike definition can slip in. The wording comes from the formula. CY and LY are asked about in Part 1." },
+    { n: "WO Headcount", s: [5, 6], t: "Open Orders divided by Staff.", why: "The formula wording is used for now. “WO” is listed in Part 1 of the clarification file; once you answer, every KPI that uses it ends with “Here, WO means …”." }
+  ];
+  var tryCur = 0;
+  function tryPick(i) {
+    tryCur = i; var x = TRY[i];
+    $$(".chip", $("#tryc")).forEach(function (c, j) { c.setAttribute("aria-selected", j === i ? "true" : "false"); });
+    $$(".lstep").forEach(function (el, j) { el.classList.toggle("on", x.s.indexOf(j) >= 0); el.classList.toggle("dim", x.s.indexOf(j) < 0); });
+    $("#tryres").innerHTML = '<span class="k">' + esc(x.n) + '</span><span>' + esc(x.t) + '</span><span class="s">Answered at step ' + x.s.map(function (n) { return n + 1; }).join(" and ") + ": " + x.s.map(function (n) { return LAD[n][0]; }).join(" and ") + "</span>";
+    $("#trywhy").textContent = x.why;
+  }
+  TRY.forEach(function (x, i) {
+    var b = document.createElement("button"); b.className = "chip"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", "false"); b.textContent = x.n;
+    b.addEventListener("click", function () { tryPick(i); }); $("#tryc").appendChild(b);
+  });
+  tryPick(0);
+
+  /* ---------- slide 3: clarification loop, domain bars ---------- */
+  var FILE_Q = [
+    ["h", "NEEDS YOUR CLARIFICATION  -  Name"], ["", ""],
+    ["d", "How this works:"], ["d", "  1. Type your answer on the line that starts with  >>>"], ["d", "  2. Save this file, then run the same command again."], ["", ""],
+    ["h", "======== PART 1: WHAT DO THESE ABBREVIATIONS STAND FOR? ========"], ["", "[A1] WO"], ["d", "     seen in: WO Headcount"], ["ans", ">>> ", "work order"], ["", ""],
+    ["h", "======== PART 2: WHAT DOES EACH KPI MEAN? ========"], ["", "[K1] Settlement Lag"], ["d", "     page: Operations"], ["d", "     formula: Settled Date − Order Date"], ["d", "     No definition was found for this one."],
+    ["ans", ">>> ", "How many days pass between an order and its payment."], ["", ""]
+  ];
+  var lpTok = 0, lpFile = $("#lp-file"), lpTerm = $("#lp-term");
+  function drawFile(done, partial) {            // done = answers fully typed; partial = text of the answer being typed
+    var idx = 0;
+    lpFile.innerHTML = FILE_Q.map(function (l) {
+      if (l[0] === "ans") {
+        var me = idx++, t = me < done ? l[2] : (me === done && partial != null ? partial : "");
+        return '<span class="a">&gt;&gt;&gt; </span><span class="a">' + esc(t) + "</span>" + (me === done && done < 2 ? '<span class="cur"></span>' : "");
+      }
+      return '<span class="' + l[0] + '">' + esc(l[1]) + "</span>";
+    }).join("\n");
+  }
+  function drawTerm(lines, cur) { lpTerm.innerHTML = lines.map(function (l) { return '<span class="' + l[0] + '">' + esc(l[1]) + "</span>"; }).join("\n") + (cur ? '<span class="cur"></span>' : ""); }
+  var T0 = [["d", "(nothing yet: type the answers first)"]];
+  var T1 = [["p", "$ python run.py"], ["", ""],
+    ["", "Your last run was in OFFLINE mode and 3 clarification question(s) were waiting."],
+    ["d", "  Carrying on in offline mode. (To choose the mode again: python run.py --ask-mode)"],
+    ["ok", "  picked up from Needs_Your_Clarification.txt: 1 definition(s) (kept in glossary.json) and 1 abbreviation(s) (kept in context.txt)"],
+    ["", "Building page content (offline) ..."],
+    ["ok", "  wrote Name_User_Manual.docx"], ["ok", "  wrote Name_KPI_Glossary.docx"], ["ok", "  wrote Name_KPI_Documentation.html"], ["", ""],
+    ["ok", "* No clarification needed. All three documents are complete; Needs_Your_Clarification.txt is empty."],
+    ["d", "  Next time you run python run.py you will be asked the mode again."]];
+  drawFile(0, null); drawTerm(T0, false);
+  $("#lp-fill").addEventListener("click", async function () {
+    var btn = this, tk = ++lpTok; btn.disabled = true; $("#lp-run").disabled = true; drawTerm(T0, false);
+    var answers = FILE_Q.filter(function (l) { return l[0] === "ans"; });
+    for (var a = 0; a < answers.length; a++) {
+      var full = answers[a][2];
+      for (var c = (REDUCED ? full.length : 1); c <= full.length; c++) { drawFile(a, full.slice(0, c)); await wait(REDUCED ? 0 : 26); if (tk !== lpTok) return; }
+    }
+    drawFile(answers.length, null); btn.disabled = false; btn.textContent = "Type answers again"; $("#lp-run").disabled = false;
+  });
+  $("#lp-run").addEventListener("click", async function () {
+    var btn = this, tk = ++lpTok; btn.disabled = true;
+    for (var i = 1; i <= T1.length; i++) { drawTerm(T1.slice(0, i), true); await wait(REDUCED ? 0 : 260); if (tk !== lpTok) return; }
+    drawTerm(T1, false); btn.disabled = false; btn.textContent = "2 · Run again, again"; confetti();
+  });
+
+  var DOM = [["Finance", 107, "EBIT, EBITDA, EBITA"], ["Banking & Investments", 87, "Assets Under Management, Portfolio Return, Volatility"], ["HR & People", 78, "FTE, Headcount, Turnover"],
+    ["Insurance", 73, "Written Premium, Earned Premium, Loss Ratio"], ["Gaming & Media", 69, "Theoretical Win, Actual Win, Win Variance"], ["General", 69, "KPI, Benchmark, Uptime"],
+    ["Safety", 68, "TRIR, LTIR, DART"], ["Supply Chain & Inventory", 68, "OTD, OTIF, Backlog"], ["Customer", 67, "NPS, CSAT, CES"], ["Operations", 66, "OEE, OOE, MTBF"],
+    ["Quality", 66, "FPY, DPMO, COPQ"], ["Procurement", 62, "Procurement Spend, Spend Under Management, Maverick Spend"], ["Marketing", 59, "Bounce Rate, CTR, CPC"],
+    ["Technology & SaaS", 59, "Annual Contract Value, Annual Recurring Revenue Growth, New ARR"], ["Sales", 54, "Orders, Units Sold, Average Order Value"]];
+  var dmax = 107;
+  $("#dombars").innerHTML = DOM.map(function (d, i) { return '<button class="brow" data-i="' + i + '" aria-pressed="false"><span>' + esc(d[0]) + '</span><span class="t"><span class="f" style="display:block"></span></span><span class="v">' + d[1] + "</span></button>"; }).join("");
+  function growBars() { $$("#dombars .brow").forEach(function (b, i) { var f = $(".f", b); f.style.width = "0"; setTimeout(function () { f.style.width = (DOM[i][1] / dmax * 100) + "%"; }, REDUCED ? 0 : 40 + i * 35); }); }
+  $$("#dombars .brow").forEach(function (b) { b.addEventListener("click", function () {
+    $$("#dombars .brow").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    var d = DOM[+b.dataset.i]; $("#domnote").textContent = d[0] + ": " + d[1] + " terms, for example " + d[2] + ".";
+  }); });
+
+  /* ---------- slide 4: developer tips, name lab, checklist ---------- */
+  var DEV = {
+    names: [
+      ["Spell out an abbreviation once", "Write “Work Order (WO) Headcount” and the tool reads the bracket as the meaning. An unexplained abbreviation is asked about in the clarification file.", "WO Headcount → Work Order (WO) Headcount"],
+      ["Use plain words for negatives", "Names with Un-, Non- or Not- words are rewritten in plain English. Abbreviated forms are not.", "% Unsched Jobs → % Unscheduled Jobs"],
+      ["Put % or Ratio in the name of a ratio", "The tool reads % and ratio to choose “X as a percentage of Y” and to avoid matching a plain term with its ratio version.", "Hold → Hold %"],
+      ["Name time windows the same way every time", "YTD, MTD, QTD, CY, LY and Previous month or year are recognised. Mixed styles (PY, Prv, LastYr, Yr-1) are not.", "Sales PrvYr → Sales Previous Year"],
+      ["Variants: known term, then a short label", "“Actual Value_yarn” or “Rate (USD/QTY)” is explained from the built-in term plus the label. A new word in the middle (“Actual Hours Lost”) is treated as a different KPI and described from its formula.", "Actual Value_yarn, Previous month_actual"],
+      ["Use the industry’s own name when it is the standard measure", "A name that matches the built-in glossary (OEE, TRIR, OTIF, NPS, Loss Ratio) is defined instantly and offline. Use it only when the measure really is that standard.", "Plant Safety Rate → Total Recordable Incident Rate (TRIR)"],
+      ["Keep furniture words for furniture", "Measures with header, title, banner, footer, legend or spacer in the name are treated as page decoration, not KPIs. HTML, Card and Pill are stripped from display names.", "Revenue Title → Revenue"]
+    ],
+    struct: [
+      ["Link pages with navigation buttons", "The main pages of the manual are found from the buttons that link pages. Without them the tool falls back to guessing from page names.", "Add a page-navigator and keep it on every main page"],
+      ["Name scratch pages clearly", "Pages called test, copy, duplicate or draft are treated as scratch when there is no navigation. Hide or delete them before documenting.", "Page 3 (copy) → delete, or hide it"],
+      ["Mark tooltip and drill-through pages", "Hidden, tooltip and drill-through pages stay out of the manual and remain in the HTML. Set the page type in Power BI so they are recognised.", "Tooltip - Sales Detail"],
+      ["One label per KPI card", "The glossary lists what a reader sees. A card title that matches its measure name gives one clean row instead of two names for the same KPI.", "Card title “OTIF %” on a measure named OTIF %"],
+      ["Group measures in display folders", "Display folders become the areas in the HTML reference, so the DAX reference is easy to browse.", "Safety \\ Incidents, Quality \\ Defects"],
+      ["Save a project, not just a report", "Use Save as Power BI project (PBIP) so the .Report and .SemanticModel folders sit side by side. A report that is only a live connection to a published model is not supported yet.", "Name.Report + Name.SemanticModel"]
+    ],
+    model: [
+      ["Small base measures, then ratios", "Build Total Sales, then Sales LY, then (Sales − Sales LY) ÷ Sales LY. The tool follows each measure down to the named base, so the explanation reads in business words. One giant formula is only summarised in general terms.", "Growth % = DIVIDE([Sales] - [Sales LY], [Sales LY])"],
+      ["Set a percent format on ratios", "A percentage format string is used as evidence that a figure is a percentage when the tool checks its own wording.", "Format: 0.0%"],
+      ["Write a description on important measures", "Good practice for the people who read the model. Today the tool does not use it to write glossary sentences, so do not rely on it for that.", "Description: Share of orders delivered on time and in full"],
+      ["Keep names readable in Power Query", "The tool reads the connector, database, schema and table or view name from the model and lists them. Clear names help the reader; the server address is not copied.", "FINANCE.VW_SALES_MONTHLY"],
+      ["No secrets in the model", "No passwords, keys or personal emails in queries, parameters or row-level security filters. Leave the .pbi cache out of source/ and out of Git.", "Check parameters and RLS filters before sharing"],
+      ["Avoid hard-coded one-off numbers", "A target typed straight into a measure cannot be told apart from a calculation. Put targets in a table or a named measure so the formula shows what it is.", "Target % = SELECTEDVALUE(Targets[Value])"]
+    ],
+    feed: [
+      ["Answer the clarification file fully", "Use plain words, as if for a new joiner. One abbreviation answer fixes every KPI that uses it, in every later run.", "CB = comeback"],
+      ["Pre-fill context.txt before the first run", "Put your company’s abbreviations in glossary\\context.txt, with a line such as Domain: manufacturing, and the first run already knows them.", "Domain: manufacturing"],
+      ["Contribute reviewed definitions", "python run.py --export-shared lists what is on your computer but not shared. A reviewer marks the correct, generic rows Y, and --merge-shared adds them to shared_glossary.csv. Remove client names first.", "--export-shared, then --merge-shared"],
+      ["Add or correct a built-in term", "Each domain is one CSV in builtin_glossary\\ (Term, Also known as, Better, Definition). Edit it in Excel, run the tests and push.", "builtin_glossary\\Finance.csv"],
+      ["Share tricky PBIPs, with permission", "A new report type, layout, visual or naming style teaches the tool something. Share test projects only with the report owner’s permission.", "Different storage modes, DAX styles, page layouts"],
+      ["Report a wrong definition with evidence", "Send the KPI name, the formula, the Source cell and glossary\\web_log.txt (why the web was or was not used). python run.py --compare-glossaries shows offline and AI wording side by side.", "python run.py --version-info"],
+      ["Run the tests before you push", "Twenty-five test files in tests\\ cover the glossary, name wording, the AI cross-check, the clarification loop and the documents. The same tests run on GitHub.", "python tests\\test_name_lead.py"]
+    ]
+  };
+  var devMode = "names";
+  function drawDev() {
+    $("#dgrid").innerHTML = DEV[devMode].map(function (x, i) {
+      return '<div class="item adv" style="--i:' + i + '"><b>' + esc(x[0]) + "</b><p>" + esc(x[1]) + '</p><div class="fix"><i>Example</i>' + esc(x[2]) + "</div></div>";
+    }).join("");
+  }
+  $$("[data-d]").forEach(function (b) { b.addEventListener("click", function () { devMode = b.dataset.d; $$("[data-d]").forEach(function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); }); drawDev(); }); });
+  drawDev();
+
+  var LAB = [
+    { h: "Total recordable incident rate", bad: ["Tot Rec Inc Rate", "Incidents divided by Hours."], good: ["Total Recordable Incident Rate (TRIR)", "How often work-related injuries serious enough to need medical treatment are happening, adjusted so plants or teams of different sizes can be compared fairly."] },
+    { h: "Last year’s actual", bad: ["PrvYr Act", "Shows Actual_value (plus 1 further condition)."], good: ["Previous year_actual", "The actual figure for the previous year. Actual: the figure that really happened in the period, as opposed to the budget, target or forecast."] },
+    { h: "Share of jobs not yet scheduled", bad: ["% Unsched Jobs", "Unscheduled Jobs as a percentage of Total Jobs."], good: ["% Unscheduled Jobs", "The percentage of jobs that are not scheduled. Unscheduled Jobs as a percentage of Total Jobs."] }
+  ];
+  $("#namelab").innerHTML = LAB.map(function (l, i) {
+    return '<div class="rq" style="--i:' + i + '"><b>' + esc(l.h) + '</b><span class="st">Name → sentence</span><div class="pairs" style="grid-column:1/-1"><span class="bad">' + esc(l.bad[0]) + '</span><span>' + esc(l.bad[1]) + '</span><span class="good">' + esc(l.good[0]) + '</span><span>' + esc(l.good[1]) + "</span></div></div>";
+  }).join("");
+
+  var DCHK = ["Measures use plain names, with abbreviations spelled out once or answered in the clarification file.", "Ratios have % or Ratio in the name and a percent format.", "Time variants follow one pattern (YTD, MTD, LY, Previous month).", "Pages are linked with navigation buttons, and scratch pages are deleted or hidden.", "Tooltip and drill-through pages are set up as such.", "Measures sit in display folders.", "Ratios are built from small named base measures.", "No passwords, keys or personal emails in queries, parameters or security filters.", "The .pbi cache folder is left out of source/ and out of Git.", "I pre-filled context.txt with my company’s abbreviations."];
+  $("#dchk").innerHTML = DCHK.map(function (x, i) { return '<label class="ck"><input type="checkbox" id="dk-' + i + '"><span>' + esc(x) + "</span></label>"; }).join("");
+  function dkUpdate(user) {
+    var n = $$("#dchk input:checked").length;
+    $("#dkcount").textContent = n + " of " + DCHK.length + " done"; $("#dkfill").style.width = (n / DCHK.length * 100) + "%";
+    $("#dkmsg").textContent = n === DCHK.length ? "Ready. The tool will have far less to ask you." : "";
+    if (n === DCHK.length && user) confetti();
+  }
+  $$("#dchk input").forEach(function (c) { c.addEventListener("change", function () { dkUpdate(true); }); });
+  dkUpdate(false);
+
   /* ---------- ownership marks ---------- */
   var WM = "Ajith Khan  ·  Emp ID IN1661  ·  Systech";
   function marks() {
@@ -961,7 +1374,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     $$(".slide").forEach(function (s) {
       if (!s.querySelector(".credit")) {
         var f = document.createElement("div"); f.className = "credit";
-        f.innerHTML = "<span>Created by <b>Ajith Khan</b>, Systech</span><span>Employee ID <b>IN1661</b></span><span>PBIP Documentation Generator \u00B7 v1.4.1</span>"; s.appendChild(f);
+        f.innerHTML = "<span>Created by <b>Ajith Khan</b>, Systech</span><span>Employee ID <b>IN1661</b></span><span>PBIP Documentation Generator \u00B7 v1.14.3</span>"; s.appendChild(f);
       }
     });
   }

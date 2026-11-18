@@ -35,6 +35,8 @@ _NOT_NEGATIVE = {"unit", "units", "union", "unions", "unique", "united", "unifie
 _NEEDS_FOR = {"accounted": "accounted for"}                 # "hours that are not accounted for"
 SHORT_FORMULA = 90                                          # a negative lead is followed by the formula when it is this short or shorter
 _NON_ADJ = re.compile(r".{3,}(ed|ing|able|ible)$", re.I)
+_UN_IRREGULAR = {"paid", "sold", "known", "made", "done", "seen", "given", "taken", "built", "sent", "kept", "lost", "held",
+                 "met", "shown", "worn", "won", "spent", "used", "fixed", "owned"}       # 'unpaid' = not paid; but 'unsched' is an abbreviation, not a word
 _TOKEN = re.compile(r"%|[A-Za-z0-9&/]+(?:-[A-Za-z0-9]+)*")
 
 
@@ -55,7 +57,8 @@ def _negative(tokens):
             if nouns:
                 return tokens[:i] + nouns, root
         if (t.startswith("un") and len(t) >= 6 and t.isalpha() and t not in _NOT_NEGATIVE
-                and not t.startswith("under") and i < len(tokens) - 1):
+                and not t.startswith("under") and i < len(tokens) - 1
+                and ((len(t) >= 8 and _NON_ADJ.match(t[2:])) or t[2:] in _UN_IRREGULAR)):
             return tokens[:i] + tokens[i + 1:], t[2:]
     return None
 

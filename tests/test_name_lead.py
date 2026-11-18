@@ -12,6 +12,8 @@ cases = [
     ("% UNSCHEDULED JOBS", M, None, "The percentage of jobs that are not scheduled."),
     ("Jobs Unscheduled %", M, None, None),                       # word order we do not rewrite: formula wording is used
     ("Unscheduled Jobs", M, None, "Jobs that are not scheduled."),
+    ("% Unsched Jobs", M, "percent", None),                         # an abbreviation, not a word: never "not sched"
+    ("Unpaid Hours", M, None, "Hours that are not paid."),
     ("Unaccounted Hours", M, None, "Hours that are not accounted for."),
     ("Unscheduled Jobs By Week", M, "percent", "The percentage of jobs that are not scheduled. (Period shown: by week.)"),
     ("Unplanned Downtime", M, None, "Downtime that is not planned."),

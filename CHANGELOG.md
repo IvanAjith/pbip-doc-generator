@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.14.3 - 18/11/2026
+- Fixed "% Unsched Jobs" being written as "The percentage of jobs that are not sched." A name that starts with Un- is only rewritten as "not ..." when the rest is a real
+  word (scheduled, accounted, billed, paid ...). An abbreviation such as "Unsched" now falls back to the formula wording.
+- New presentation `docs/PBIP_Presentation.html` (six slides): overview and run demo, how the flow works (six stages, the definition order, the AI cross-check), the
+  clarification file and the glossary dump (1,052 built-in terms in 15 domains, where answers are stored, how the shared glossary grows), a guide for report developers
+  (naming conventions, report structure, model hygiene, how to help the tool improve), impact, and security and limitations.
+
 ## 1.14.2 - 18/11/2026
 - Offline wording for names that are a known term plus a small change. On a Sales report, "Actual Value_yarn", "Budget_value" and
   "Previous month_actual_yarn" read "the logic is too involved to summarise" or "Shows Actual Value_yarn (plus 1 further condition)". They now get the built-in meaning of
