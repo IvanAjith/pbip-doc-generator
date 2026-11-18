@@ -24,6 +24,8 @@ jobs:
           python tests/test_shared_glossary.py
           python tests/test_builtin_glossary.py
           python tests/test_compare_modes.py
+          python tests/test_compare_end_to_end.py
+          python tests/test_name_lead.py
           python tests/test_clarification.py
           python tests/test_logo_layout.py
           python tests/test_glossary_csv_ai.py

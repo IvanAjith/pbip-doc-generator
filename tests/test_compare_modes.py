@@ -20,4 +20,12 @@ assert by["Hold"]["a_kind"] == "Draft from the formula" and by["Hold"]["b_kind"]
 assert by["Only A"]["b_kind"] == "(not in this run)" and by["Typed"]["b_kind"] == "Your own"
 path, n, changed = CM.write(t / "a", t / "b", str(t / "x.xlsx"))
 assert n == 4 and changed == 3 and Path(path).exists()
+paths, n2, ch2 = CM.write_all(t / "a", t / "b", str(t / "both"))
+assert n2 == 4 and ch2 == 3 and all(Path(x).exists() for x in paths) and paths[0].endswith(".docx")
+from docx import Document
+doc = Document(paths[0])
+text = "\n".join(c.text for tb in doc.tables for r in tb.rows for c in r.cells)
+assert "An AI sentence." in text and "From formula." in text and "Source: AI draft" in text and "Source: Draft from the formula" in text
+assert "Hold" in text and "Only A" in text and "(no definition)" in text
+assert any("differ" in p.text for p in doc.paragraphs) or any("differ" in h.text for h in doc.paragraphs)
 print("compare modes tests passed")

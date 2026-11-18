@@ -159,14 +159,17 @@ def main():
         import compare_modes as CM
         if len(args.compare_glossaries) not in (2, 3):
             sys.exit("Give two glossary folders, e.g.  --compare-glossaries gl_offline gl_ai")
-        folders, name = args.compare_glossaries[:2], (args.compare_glossaries[2] if len(args.compare_glossaries) == 3 else "Offline_vs_AI.xlsx")
-        path, n, changed = CM.write(folders[0], folders[1], name)
+        folders, name = args.compare_glossaries[:2], (args.compare_glossaries[2] if len(args.compare_glossaries) == 3 else "Offline_vs_AI")
+        paths, n, changed = CM.write_all(folders[0], folders[1], name)
         rows, ca, cb = CM.compare(folders[0], folders[1])
         print(f"Compared {n} terms: {n - changed} identical, {changed} different.\n")
         print(f"  {'Source of the definition':30}{'Run 1':>8}{'Run 2':>8}")
         for k in sorted(set(ca) | set(cb)):
             print(f"  {k:30}{ca.get(k, 0):>8}{cb.get(k, 0):>8}")
-        print(f"\nWrote {path}  (sheet 'Changed' shows only the terms whose definition differs)")
+        print("\nWrote:")
+        for pth in paths:
+            print(f"  {pth}")
+        print("Open the .docx first: it lists the KPIs that differ at the top, with what each run says.")
         return
 
     if args.export_glossary or args.export_shared or args.merge_shared:

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.12.0 - 18/11/2026
+- Offline mode now reads the KPI name before falling back to the formula: abbreviations that are explained are spelled out
+  ("Admin FTE" -> "Admin full-time equivalent (FTE): ...") and negative words are put in plain English
+  ("% Unscheduled Jobs" -> "The percentage of jobs that are not scheduled."). A name with an unexplained abbreviation is never guessed;
+  it uses the formula wording and is asked about in the clarification file. Same fallback when the AI's answer is refused.
+- `--compare-glossaries gl_offline gl_ai` now writes `Offline_vs_AI.docx`, a Word document for testing that shows, for every KPI,
+  what the offline run says and what the AI run says (differences first, with the report's formula), plus the spreadsheet.
+- "Here, CB means comeback." is not added when the definition already reads "comeback (CB)".
+
 ## 1.11.0 - 18/11/2026
 - The clarification file is now a plain text file, `Needs_Your_Clarification.txt` (you type after `>>>`). It asks two kinds of questions:
   what an abbreviation in a KPI name stands for (CB, EOL, WO ...), and what a KPI means when no definition exists.

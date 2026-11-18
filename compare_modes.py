@@ -2,10 +2,9 @@
 
   python run.py --compare-glossaries gl_offline gl_ai [FILE.xlsx]
 
-Each folder is the glossary folder of one run (it holds my_definitions.csv). The result is an Excel file with
-  Summary         how many definitions came from where in each run, and how many changed
-  Changed         only the terms whose definition differs, side by side
-  All terms       every term, side by side
+Each folder is the glossary folder of one run (it holds my_definitions.csv). Two files come out, both for testing only:
+  Offline_vs_AI.docx   a Word document: what each run says a KPI means, side by side, differences first
+  Offline_vs_AI.xlsx   the same as a spreadsheet with a filter (needs openpyxl; a .csv is written without it)
 """
 import csv
 from collections import Counter
@@ -22,6 +21,8 @@ def _kind(origin, text):
         return "Built-in glossary"
     if "formula" in o:
         return "Draft from the formula"
+    if "kpi name" in o:
+        return "Draft from the name"
     if o.startswith("web"):
         return "Web"
     if "ai" in o:
@@ -106,3 +107,101 @@ def write(a_folder, b_folder, path="Offline_vs_AI.xlsx", a_name="Offline", b_nam
         s.freeze_panes = "A2"; s.auto_filter.ref = s.dimensions
     wb.save(path)
     return path, len(rows), len(changed)
+
+
+# ---------------------------------------------------------------------------------------------- Word document
+def _shade(cell, hex_color):
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+    tc = cell._tc.get_or_add_tcPr()
+    shd = OxmlElement("w:shd")
+    shd.set(qn("w:val"), "clear"); shd.set(qn("w:color"), "auto"); shd.set(qn("w:fill"), hex_color)
+    tc.append(shd)
+
+
+def _cell(cell, text, bold=False, size=9, color=None, tag=None):
+    from docx.shared import Pt, RGBColor
+    cell.text = ""
+    p = cell.paragraphs[0]
+    r = p.add_run(text or "\u2014")
+    r.bold = bold; r.font.size = Pt(size)
+    if color:
+        r.font.color.rgb = RGBColor.from_string(color)
+    if tag:
+        q = cell.add_paragraph()
+        t = q.add_run(tag)
+        t.italic = True; t.font.size = Pt(7.5); t.font.color.rgb = RGBColor(0x7F, 0x7F, 0x7F)
+
+
+def write_docx(a_folder, b_folder, path="Offline_vs_AI.docx", a_name="Offline", b_name="AI"):
+    """Word document for testing: for every KPI what each run says it means. -> (path, n_terms, n_different)."""
+    from datetime import date
+    from docx import Document
+    from docx.enum.section import WD_ORIENT
+    from docx.shared import Inches, Pt
+    rows, ca, cb = compare(a_folder, b_folder, a_name, b_name)
+    changed = [r for r in rows if not r["same"]]
+    agree = [r for r in rows if r["same"]]
+    d = Document()
+    sec = d.sections[0]
+    sec.orientation = WD_ORIENT.LANDSCAPE
+    sec.page_width, sec.page_height = sec.page_height, sec.page_width
+    for side in ("left_margin", "right_margin", "top_margin", "bottom_margin"):
+        setattr(sec, side, Inches(0.7))
+    d.styles["Normal"].font.name = "Calibri"; d.styles["Normal"].font.size = Pt(10)
+    d.add_heading(f"{a_name} vs {b_name}: what each run says a KPI means", 0)
+    p = d.add_paragraph()
+    p.add_run("For testing only. ").bold = True
+    p.add_run(f"Created {date.today():%d/%m/%Y} from two runs of the tool: {a_name} (folder {Path(a_folder).name}) and "
+              f"{b_name} (folder {Path(b_folder).name}). Each run had its own Needs_Your_Clarification.txt and its own answers.")
+    d.add_paragraph(f"{len(rows)} KPIs compared: {len(agree)} read the same in both runs, {len(changed)} read differently. "
+                    "Definitions from the built-in glossary or typed by you are the same in both runs by design; the "
+                    "difference you are looking for is in the KPIs that had no built-in definition.")
+
+    d.add_heading("Where each definition came from", 1)
+    kinds = sorted(set(ca) | set(cb))
+    t = d.add_table(rows=1, cols=3); t.style = "Table Grid"
+    for c, h in zip(t.rows[0].cells, ("Source of the definition", a_name, b_name)):
+        _cell(c, h, bold=True, color="FFFFFF"); _shade(c, "1F4E79")
+    for k in kinds:
+        cells = t.add_row().cells
+        _cell(cells[0], k); _cell(cells[1], str(ca.get(k, 0))); _cell(cells[2], str(cb.get(k, 0)))
+
+    def table(title, data, same):
+        d.add_heading(title, 1)
+        if not data:
+            d.add_paragraph("None.")
+            return
+        heads = ("KPI", "Definition", "How it is calculated") if same else ("KPI", f"{a_name} says", f"{b_name} says", "How it is calculated")
+        t = d.add_table(rows=1, cols=len(heads)); t.style = "Table Grid"
+        for c, h in zip(t.rows[0].cells, heads):
+            _cell(c, h, bold=True, color="FFFFFF"); _shade(c, "1F4E79")
+        for r in data:
+            cells = t.add_row().cells
+            _cell(cells[0], r["term"], bold=True, tag=r["page"] or None)
+            if same:
+                _cell(cells[1], r["a_text"], tag="Source: " + r["a_kind"])
+                _cell(cells[2], r["formula"], size=8, color="595959")
+            else:
+                for cell, kind, text in ((cells[1], r["a_kind"], r["a_text"]), (cells[2], r["b_kind"], r["b_text"])):
+                    _cell(cell, text if text else "(no definition)", tag="Source: " + kind)
+                    if not text:
+                        _shade(cell, "FFE699")
+                _cell(cells[3], r["formula"], size=8, color="595959")
+        widths = (1.7, 3.6, 3.6, 2.4) if not same else (2.2, 5.6, 3.4)
+        for row in t.rows:
+            for c, w in zip(row.cells, widths):
+                c.width = Inches(w)
+
+    table(f"KPIs where {a_name} and {b_name} differ", changed, False)
+    table("KPIs that read the same in both runs", agree, True)
+    d.save(path)
+    return path, len(rows), len(changed)
+
+
+def write_all(a_folder, b_folder, base="Offline_vs_AI", a_name="Offline", b_name="AI"):
+    """The Word document plus the spreadsheet. -> ([paths], n_terms, n_different)."""
+    base = str(Path(base).with_suffix(""))
+    docx_path, n, changed = write_docx(a_folder, b_folder, base + ".docx", a_name, b_name)
+    sheet_path, _, _ = write(a_folder, b_folder, base + ".xlsx", a_name, b_name)
+    return [docx_path, sheet_path], n, changed

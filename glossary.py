@@ -24,6 +24,7 @@ from pathlib import Path
 from seed_glossary import SEED
 from checks import split_period
 from formula_draft import formula_draft, ORIGIN as ORIGIN_DRAFT
+from name_lead import name_lead, ORIGIN as ORIGIN_NAME
 
 _UNIT_TOKENS = {"pct", "percent", "percentage", "ratio"}
 WEB_VERSION = 2
@@ -135,7 +136,7 @@ class Glossary:
     def lookup(self, *names, **kw):
         d = self._lookup(*names, **kw)
         if d is not None and d.source in ("draft", "ai") and self.context is not None:
-            note = self.context.note_for(names)                 # "Here, CB means comeback." -- only the user's own explanations
+            note = self.context.note_for(names, d.text)         # "Here, CB means comeback." -- only the user's own explanations
             if note and note not in d.text:
                 d = replace(d, text=d.text.rstrip() + " " + note)
         keys = [normalize(n or "") for n in names if normalize(n or "")]
@@ -203,8 +204,13 @@ class Glossary:
                                    "note": r.get("note", "")}
                 self.dirty = True
                 return self._from_entry(self.entries[k])
-        if draft:                                         # 6. draft rephrased from the report's own formula (offline)
+        if draft:                                         # 6. offline draft: plain meaning from the name, else the report's formula
+            meanings = {**self.context.auto, **self.context.abbr} if self.context is not None else {}
             text = formula_draft(draft.get("calc"), draft.get("unit"), draft.get("inputs"))
+            for n in names:
+                lead = name_lead(n, meanings, draft.get("unit"), text) if n else None
+                if lead:
+                    return Definition(lead, "draft", ORIGIN_NAME)
             if text:
                 return Definition(text, "draft", ORIGIN_DRAFT)
         k = keys[0]                                       # 7. unresolved placeholder
@@ -298,7 +304,8 @@ class Glossary:
             mine = d.text if d and d.source == "manual" else ""
             sugg = d.text if d and d.source != "manual" else ""
             origin = {"web": "Web: " + (d.origin if d else ""), "ai": (d.origin if d else "AI draft"),
-                      "seed": "Built-in glossary", "draft": "Draft built from the formula"}.get(d.source if d else "", "")
+                      "seed": "Built-in glossary",
+                      "draft": (ORIGIN_NAME if d and d.origin == ORIGIN_NAME else "Draft built from the formula")}.get(d.source if d else "", "")
             rows.append([u["term"], mine, sugg, origin if sugg else "", u["page"], u.get("calc", "")])
             done.add(k)
         for k, u in self._csv_extra.items():              # keep what you typed for terms this report doesn't use

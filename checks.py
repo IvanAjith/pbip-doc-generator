@@ -196,13 +196,14 @@ class Context:
             pass
         return len(meanings)
 
-    def note_for(self, names):
-        """'Here, CB means comeback.' for the abbreviations in these names that the user explained, else ''."""
+    def note_for(self, names, text=""):
+        """'Here, CB means comeback.' for the abbreviations in these names that the user explained, else ''.
+        An abbreviation the text already spells out as 'comeback (CB)' is not repeated."""
         found = []
         for n in names:
             for tok in re.findall(r"[A-Za-z0-9&/]+", n or ""):
                 t = tok.upper()
-                if tok == t and t in self.abbr and t not in found:
+                if tok == t and t in self.abbr and t not in found and f"({t})" not in (text or ""):
                     found.append(t)
         if not found:
             return ""

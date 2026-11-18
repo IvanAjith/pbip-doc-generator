@@ -76,14 +76,25 @@ Yellow in the documents appears only on KPIs that are still waiting for a defini
 Add `--clarify-drafts` to also have every formula/AI/web draft listed for you: type `OK` to keep a draft, or write your own wording.
 (You can still type over a cell in the glossary Word file instead, and an older `Needs_Your_Clarification.csv` from version 1.9 is still read.)
 
-## Comparing offline and AI mode
-Run the same report twice into separate folders, then compare. `--offline` keeps the web out of both runs, so the only difference is the AI.
+## Comparing offline and AI mode (for testing only)
+Both modes follow the same process: each run writes its own `Needs_Your_Clarification.txt`, you answer it, and the next run keeps your answers.
+Use a separate glossary folder for each mode so each keeps its own answers. `--offline` keeps the web out of both runs, so the only difference is the AI.
 ```
 python run.py --no-prompt --offline --output out_offline --glossary gl_offline\glossary.json
 python run.py --ai --offline --output out_ai --glossary gl_ai\glossary.json
-python run.py --compare-glossaries gl_offline gl_ai Offline_vs_AI.xlsx
+python run.py --compare-glossaries gl_offline gl_ai Offline_vs_AI
 ```
-`Offline_vs_AI.xlsx` has a Summary (where each definition came from, in each run), a Changed sheet and an All terms sheet.
+This writes **Offline_vs_AI.docx**, a Word document for testing: a count of where each definition came from, then the KPIs where the two runs
+differ (what offline says, what AI says, the report's formula), then the KPIs that read the same. A KPI the AI could not define is shaded yellow.
+It also writes `Offline_vs_AI.xlsx` (a `.csv` if openpyxl is not installed) with the same rows and a filter.
+
+## What offline mode writes when the built-in glossary has no entry
+Offline mode does not just repeat the formula any more. It first reads the KPI name the way a person would:
+- an abbreviation is spelled out when it is explained (common ones like FTE, the ones the report spells out, and the ones you answered in
+  the clarification file): "Admin FTE" becomes "Admin full-time equivalent (FTE): staff time expressed as a number of full-time employees."
+- a negative word is put in plain English: "% Unscheduled Jobs" becomes "The percentage of jobs that are not scheduled."
+It never guesses. A name that still holds an abbreviation nobody explained (say "WO Headcount") gets the formula wording instead, and the
+abbreviation is asked about in the clarification file. The formula is always shown in the "How it is calculated" column.
 
 ## The glossary on paper, and how it grows
 
@@ -182,6 +193,8 @@ python tests/test_shared_glossary.py    # Excel export + shared glossary (export
 python tests/test_logo_layout.py       # logo on all three documents, glossary columns
 python tests/test_clarification.py     # the clarification loop (run -> answer -> run again)
 python tests/test_compare_modes.py      # offline vs AI comparison
+python tests/test_compare_end_to_end.py # two real runs -> the Word comparison document
+python tests/test_name_lead.py          # offline meaning from the KPI name
 python tests/test_builtin_glossary.py   # every domain has 50+ terms with definitions; no name used twice
 python tests/test_secrets.py            # key storage, masking, guided setup
 python tests/test_secret_scan.py        # no key-like text in files Git would publish
