@@ -27,6 +27,7 @@ jobs:
           python tests/test_compare_end_to_end.py
           python tests/test_name_lead.py
           python tests/test_cross_check.py
+          python tests/test_compare_test.py
           python tests/test_cross_check_run.py
           python tests/test_clarification.py
           python tests/test_logo_layout.py

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.1 - 18/11/2026
+- `python compare_test.py` (temporary, for testing): one command runs offline mode into `compare_test\\offline`, AI mode into
+  `compare_test\\ai`, and writes `compare_test\\Offline_vs_AI.docx`. Answers typed in either clarification file are used by both runs
+  on the next command (new `--answers FILE` option of run.py).
+
 ## 1.13.0 - 18/11/2026
 - AI mode now cross-checks itself. For every KPI the AI drafts, the tool also writes the offline wording and keeps the safer one:
   a plain reading of the KPI name wins; otherwise the AI sentence is kept only if every content word is supported by the report

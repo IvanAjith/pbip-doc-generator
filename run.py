@@ -151,6 +151,8 @@ def main():
     ap.add_argument("--clarify-drafts", action="store_true",
                     help="also list every formula / AI / web draft in Needs_Your_Clarification.csv for you to confirm "
                          "(type ok to accept a draft, or write your own wording)")
+    ap.add_argument("--answers", nargs="+", default=[], metavar="FILE",
+                    help="also read answers from other Needs_Your_Clarification.txt files (used by compare_test.py so one set of answers serves both runs)")
     ap.add_argument("--no-cross-check", action="store_true",
                     help="AI mode: use every AI sentence as written. By default the tool also writes the offline wording, checks the AI sentence "
                          "against the report and keeps the safer one")
@@ -253,6 +255,12 @@ def main():
     import clarify
     clar_path = output / clarify.NAME
     abbr_ans, def_ans = clarify.read(clar_path)          # what you typed in Needs_Your_Clarification.txt
+    for extra in args.answers:                           # answers typed in another run's file fill the gaps; this run's own file wins
+        ea, ed = clarify.read(Path(extra))
+        for k, v in ea.items():
+            abbr_ans.setdefault(k, v)
+        have = {t.lower() for t, _ in def_ans}
+        def_ans += [(t, x) for t, x in ed if t.lower() not in have]
     n_abbr = context.set_meanings(abbr_ans)              # abbreviations -> context.txt, before the AI or the checks are used
     checker = checks.Checker(context)
 

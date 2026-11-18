@@ -76,7 +76,15 @@ Yellow in the documents appears only on KPIs that are still waiting for a defini
 Add `--clarify-drafts` to also have every formula/AI/web draft listed for you: type `OK` to keep a draft, or write your own wording.
 (You can still type over a cell in the glossary Word file instead, and an older `Needs_Your_Clarification.csv` from version 1.9 is still read.)
 
-## Comparing offline and AI mode (for testing only)
+## One-command test: offline, AI and comparison together (temporary)
+```
+python compare_test.py
+```
+It runs offline mode into `compare_test\offline`, AI mode into `compare_test\ai`, and writes `compare_test\Offline_vs_AI.docx`.
+Each run writes its own `Needs_Your_Clarification.txt`. Answer in either file, save, and run the same command again: an answer typed in one
+file is used by both runs. When both say "No clarification needed", the three documents of each run are in their `output` folders.
+
+## Comparing offline and AI mode, step by step (for testing only)
 Both modes follow the same process: each run writes its own `Needs_Your_Clarification.txt`, you answer it, and the next run keeps your answers.
 Use a separate glossary folder for each mode so each keeps its own answers. `--offline` keeps the web out of both runs, so the only difference is the AI.
 ```
@@ -206,6 +214,7 @@ python tests/test_clarification.py     # the clarification loop (run -> answer -
 python tests/test_compare_modes.py      # offline vs AI comparison
 python tests/test_compare_end_to_end.py # two real runs -> the Word comparison document
 python tests/test_name_lead.py          # offline meaning from the KPI name
+python tests/test_compare_test.py       # compare_test.py: one command, both runs, shared answers
 python tests/test_cross_check.py        # AI sentence vs offline wording
 python tests/test_cross_check_run.py    # a whole AI run with a stand-in service
 python tests/test_builtin_glossary.py   # every domain has 50+ terms with definitions; no name used twice
