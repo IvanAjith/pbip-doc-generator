@@ -142,9 +142,25 @@ def main():
                     help="list the definitions learned on this computer that are not in the shared glossary yet (for review)")
     ap.add_argument("--merge-shared", metavar="FILE.csv",
                     help="add the rows a reviewer marked Y in --export-shared's file to shared_glossary.csv")
+    ap.add_argument("--compare-glossaries", nargs="+", metavar="FOLDER",
+                    help="compare two runs side by side: the two glossary folders (e.g. gl_offline gl_ai) and, optionally, the Excel file name")
     ap.add_argument("--skip-html", action="store_true"); ap.add_argument("--skip-docx", action="store_true")
     ap.add_argument("--skip-glossary", action="store_true")
     args = ap.parse_args()
+
+    if args.compare_glossaries:
+        import compare_modes as CM
+        if len(args.compare_glossaries) not in (2, 3):
+            sys.exit("Give two glossary folders, e.g.  --compare-glossaries gl_offline gl_ai")
+        folders, name = args.compare_glossaries[:2], (args.compare_glossaries[2] if len(args.compare_glossaries) == 3 else "Offline_vs_AI.xlsx")
+        path, n, changed = CM.write(folders[0], folders[1], name)
+        rows, ca, cb = CM.compare(folders[0], folders[1])
+        print(f"Compared {n} terms: {n - changed} identical, {changed} different.\n")
+        print(f"  {'Source of the definition':30}{'Run 1':>8}{'Run 2':>8}")
+        for k in sorted(set(ca) | set(cb)):
+            print(f"  {k:30}{ca.get(k, 0):>8}{cb.get(k, 0):>8}")
+        print(f"\nWrote {path}  (sheet 'Changed' shows only the terms whose definition differs)")
+        return
 
     if args.export_glossary or args.export_shared or args.merge_shared:
         import glossary_export as GE

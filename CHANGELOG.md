@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.8.1 - 18/11/2026
+- New: `python run.py --compare-glossaries gl_offline gl_ai [FILE.xlsx]` puts two runs side by side (Summary, Changed, All terms).
+
 ## 1.8.0 - 18/11/2026
 - The built-in glossary is now a real offline dictionary: 15 domains, at least 50 terms each (about 1,050 in total), every term with a
   plain-English definition and, where it makes sense, whether higher or lower is better. New domains: Procurement, Technology & SaaS.

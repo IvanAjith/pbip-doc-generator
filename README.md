@@ -55,6 +55,15 @@ A refused draft keeps the exact formula-based draft. Abbreviations the AI had to
 run again: the AI then receives your meanings and the refused terms are redrafted. Abbreviations the report spells out itself
 (for example "Direct Labour (DL)") need no entry. AI drafts saved by an older run are checked again on every run.
 
+## Comparing offline and AI mode
+Run the same report twice into separate folders, then compare. `--offline` keeps the web out of both runs, so the only difference is the AI.
+```
+python run.py --no-prompt --offline --output out_offline --glossary gl_offline\glossary.json
+python run.py --ai --offline --output out_ai --glossary gl_ai\glossary.json
+python run.py --compare-glossaries gl_offline gl_ai Offline_vs_AI.xlsx
+```
+`Offline_vs_AI.xlsx` has a Summary (where each definition came from, in each run), a Changed sheet and an All terms sheet.
+
 ## The glossary on paper, and how it grows
 
 `python run.py --export-glossary` writes **Built_in_KPI_Glossary.xlsx**: every built-in definition, by domain (Overview, All terms, one
@@ -149,6 +158,7 @@ python tests/test_menu.py               # the start-up question (AI / offline)
 python tests/test_custom_service.py     # key recognition, 'Other' services, web-address checks
 python tests/test_checks.py             # the checks on AI sentences + context.txt
 python tests/test_shared_glossary.py    # Excel export + shared glossary (export / review / merge)
+python tests/test_compare_modes.py      # offline vs AI comparison
 python tests/test_builtin_glossary.py   # every domain has 50+ terms with definitions; no name used twice
 python tests/test_secrets.py            # key storage, masking, guided setup
 python tests/test_secret_scan.py        # no key-like text in files Git would publish
