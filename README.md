@@ -55,6 +55,11 @@ A refused draft keeps the exact formula-based draft. Abbreviations the AI had to
 run again: the AI then receives your meanings and the refused terms are redrafted. Abbreviations the report spells out itself
 (for example "Direct Labour (DL)") need no entry. AI drafts saved by an older run are checked again on every run.
 
+## Logo and glossary layout
+The company logo (`assets/logo.png`) is on the cover and the top right of every page of the User Manual and the KPI Glossary, and in the header of the
+HTML reference. Use `--logo other.png` for a different one, or `--logo none` to leave it out. The glossary table has three columns: **KPI**,
+**What it means**, **How it is calculated** (pale yellow = draft, strong yellow = needs a definition).
+
 ## The clarification loop (offline and AI mode work the same way)
 Every run writes the three documents **and** `Needs_Your_Clarification.csv` in the output folder. It lists the indicators nobody could define
 (the yellow cells in the glossary), with the page and the report's formula for reference.
@@ -170,6 +175,7 @@ python tests/test_menu.py               # the start-up question (AI / offline)
 python tests/test_custom_service.py     # key recognition, 'Other' services, web-address checks
 python tests/test_checks.py             # the checks on AI sentences + context.txt
 python tests/test_shared_glossary.py    # Excel export + shared glossary (export / review / merge)
+python tests/test_logo_layout.py       # logo on all three documents, glossary columns
 python tests/test_clarification.py     # the clarification loop (run -> answer -> run again)
 python tests/test_compare_modes.py      # offline vs AI comparison
 python tests/test_builtin_glossary.py   # every domain has 50+ terms with definitions; no name used twice

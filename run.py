@@ -144,6 +144,9 @@ def main():
                     help="add the rows a reviewer marked Y in --export-shared's file to shared_glossary.csv")
     ap.add_argument("--compare-glossaries", nargs="+", metavar="FOLDER",
                     help="compare two runs side by side: the two glossary folders (e.g. gl_offline gl_ai) and, optionally, the Excel file name")
+    ap.add_argument("--logo", default=str(HERE / "assets" / "logo.png"),
+                    help="company logo shown on the cover and every page of the Word documents and in the HTML header "
+                         "(default: assets/logo.png; use --logo none to leave it out)")
     ap.add_argument("--clarify-drafts", action="store_true",
                     help="also list every formula / AI / web draft in Needs_Your_Clarification.csv for you to confirm "
                          "(type ok to accept a draft, or write your own wording)")
@@ -217,6 +220,12 @@ def main():
     report_dir, sm_dir = find_or_unzip_project(source)
 
     import app
+    import docx_helpers as _DH, html_gen as _HG
+    _logo = None if str(args.logo).lower() in ("none", "") else Path(args.logo)
+    if _logo is not None and not _logo.exists():
+        print(f"  (logo file not found: {_logo} -- continuing without a logo)")
+        _logo = None
+    _DH.set_logo(_logo); _HG.LOGO_PATH = _logo
     from glossary import Glossary
     from web_lookup import WebLookup
     import kpis, html_gen, manual_gen, glossary_doc_gen

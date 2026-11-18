@@ -80,6 +80,8 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
         r = fp.add_run(f"{project_name} – KPI Glossary   |   Page ")
         r.font.size = Pt(8)
         H.add_page_number_field(fp)
+    H.add_page_logo(document)
+    H.copy_footer_to_first_page(document, f"{project_name} – KPI Glossary   |   Page ")
 
     primary = [p for p in analysis["pages"] if p.get("mainNav")]
     landing = analysis.get("activePage")
@@ -89,18 +91,15 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
     H.build_doc_control(document, project_name, meta, title_suffix="KPI Glossary")
 
     H.h1(document, "About This Glossary", log=False)
-    H.para(document, f"This glossary explains the indicators used in the {project_name} report in plain language. "
-                     "Each entry shows what the indicator means, how the report calculates it (taken from the "
-                     "report’s own formulas), and where the definition came from.", size=10.5)
+    H.para(document, f"This glossary explains the KPIs used in the {project_name} report in plain language. "
+                     "Each entry shows what the KPI means and how the report calculates it (taken from the "
+                     "report\u2019s own formulas).", size=10.5)
     H.bullets(document, [
-        "Built-in glossary — a standard definition that ships with the tool (also: Shared glossary — added and reviewed by your team).",
-        "Your own definition — typed by you in this document (or in glossary\\my_definitions.csv) and kept on every later run.",
-        "Draft from the formula — built automatically from the report’s own formula (pale yellow). It says how the "
-        "figure is calculated; please check it also says what it means to the business.",
-        "AI draft / Found online — written or found by the optional AI or web steps (pale yellow); please verify.",
-        "Needs your definition (strong yellow) — nothing could be built or found.",
+        "Pale yellow \u2014 a draft built from the report\u2019s formula, or written by the optional AI or web steps. Please check it.",
+        "Strong yellow \u2014 no definition could be built or found: type one over the text.",
+        "No shading \u2014 a standard definition, or one you wrote yourself.",
     ])
-    H.para(document, "To correct or add a definition: type directly over the text in the “What it means” column and save "
+    H.para(document, "To correct or add a definition: type directly over the text in the \u201cWhat it means\u201d column and save "
                      "this file. For this glossary that is all you need to do. Run the tool again only if you also want "
                      "your wording in the user manual and the HTML reference; that run also stores it so every later run "
                      "keeps it. Keep this file in the output folder until then.", size=10.5, bold=True)
@@ -123,7 +122,7 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
     missing = [i for i in flat if not i.get("definition") and not i.get("also_shows") and not i.get("label_logic")
                and i["kind"] != "status"]
     if missing:
-        H.para(document, f"{len(missing)} of the {len(flat)} indicators below are shaded strong yellow because no definition "
+        H.para(document, f"{len(missing)} of the {len(flat)} KPIs below are shaded strong yellow because no definition "
                          "could be built or found. Their calculation, where known, is still taken from the report.",
                size=10.5, italic=True)
 
@@ -137,31 +136,30 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
             meaning = _meaning(it)
             if glossary is not None:
                 glossary.record_generated(normalize(it["display"]) or it["display"].lower(), Glossary._clean(meaning))
-            rows.append([it["display"], meaning, calc, _source_text(it) + (f"\nAlso shown on: {appears}" if appears else "")])
+            rows.append([it["display"], meaning, calc])
         fills = {(ri, 1): DRAFT_FILL for ri, (key, e) in enumerate(sorted(entries.items(), key=lambda kv: kv[1]["item"]["display"].lower()))
                  if e["item"].get("definition") and e["item"]["definition"].source in ("draft", "ai", "web")}
-        H.data_table(document, ["Indicator", "What it means", "How it is calculated", "Source"], rows, fills=fills)
+        H.data_table(document, ["KPI", "What it means", "How it is calculated"], rows, fills=fills)
         document.add_paragraph()
 
     # measures that are displayed only in tables / charts (each also has a row in my_definitions.csv)
     extras = page_items.get("_extra") or []
     extras = [e for e in extras if normalize(e["display"]) not in seen]
     if extras:
-        H.h1(document, "Other Measures Shown in Tables and Charts", log=False)
-        H.para(document, "These measures are shown as table columns or chart values. Definitions come from the same "
-                         "sources as above; yellow cells are waiting for a definition in glossary\\my_definitions.csv.",
+        H.h1(document, "Other KPIs Shown in Tables and Charts", log=False)
+        H.para(document, "These KPIs are shown as table columns or chart values. Yellow cells are waiting for a definition: "
+                         "type it over the text, or in Needs_Your_Clarification.csv.",
                size=10.5)
         rows = []
         for e in sorted(extras, key=lambda e: e["display"].lower()):
             meaning = _meaning(e)
             if glossary is not None:
                 glossary.record_generated(normalize(e["display"]) or e["display"].lower(), Glossary._clean(meaning))
-            rows.append([e["display"], meaning, e.get("calc") or "—",
-                         _source_text(e) + f"\nShown on: {e['page']}"])
+            rows.append([e["display"], meaning, e.get("calc") or "—"])
         ordered_x = sorted(extras, key=lambda e: e["display"].lower())
         fills = {(ri, 1): DRAFT_FILL for ri, e in enumerate(ordered_x)
                  if e.get("definition") and e["definition"].source in ("draft", "ai", "web")}
-        H.data_table(document, ["Measure", "What it means", "How it is calculated", "Source"], rows, fills=fills)
+        H.data_table(document, ["KPI", "What it means", "How it is calculated"], rows, fills=fills)
     document.save(str(output_path))
 
 

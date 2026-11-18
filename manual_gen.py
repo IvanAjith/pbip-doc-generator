@@ -536,6 +536,8 @@ def build_manual(project_name, analysis, page_items, output_path, meta,
         r = fp.add_run(f"{project_name} – User Manual   |   Page ")
         r.font.size = Pt(8)
         H.add_page_number_field(fp)
+    H.add_page_logo(document)
+    H.copy_footer_to_first_page(document, f"{project_name} – User Manual   |   Page ")
     primary = [p for p in analysis["pages"] if p.get("mainNav")]
     primary_ids = {p["id"] for p in primary}
 

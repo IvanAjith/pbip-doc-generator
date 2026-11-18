@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.10.0 - 18/11/2026
+- The company logo (assets/logo.png) is on the cover of both Word documents and at the top right of every other page, and in the header of
+  the HTML reference. `--logo FILE` changes it, `--logo none` removes it.
+- KPI Glossary: the table is now KPI / What it means / How it is calculated. The Source column is gone (including the "Also shown on" lines).
+  The shading stays: pale yellow = draft, strong yellow = needs a definition. Older glossary files (with "Indicator" in the first column)
+  are still read back correctly.
+
 ## 1.9.0 - 18/11/2026
 - New: `Needs_Your_Clarification.csv` is written next to the three documents on every run (offline or AI). It lists the indicators with no
   definition, with their page and formula. Type the meanings in the last column and run the same command again: the answers are stored in

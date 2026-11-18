@@ -264,17 +264,53 @@ def page_break(document):
 
 # ---------------------------------------------------------------- section builders
 
+LOGO = None          # path of the company logo (set by run.py); None keeps the dashed placeholder
+
+
+def set_logo(path):
+    global LOGO
+    LOGO = str(path) if path and Path(path).exists() else None
+
+
+def add_page_logo(document, height_in=0.42):
+    """The logo at the top right of every page except the cover (which carries it large)."""
+    if not LOGO:
+        return
+    for sec in document.sections:
+        sec.different_first_page_header_footer = True
+        sec.header_distance = Inches(0.3)
+        hp = sec.header.paragraphs[0]
+        hp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        hp.add_run().add_picture(LOGO, height=Inches(height_in))
+
+
+def copy_footer_to_first_page(document, text, size=8):
+    """Footer of the cover page (the first-page footer is separate once a different first page is switched on)."""
+    for sec in document.sections:
+        if sec.different_first_page_header_footer:
+            fp = sec.first_page_footer.paragraphs[0]
+            fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            r = fp.add_run(text)
+            r.font.size = Pt(size)
+            add_page_number_field(fp)
+
+
 def build_cover(document, project_name, subtitle="User Manual"):
     for _ in range(3):
         document.add_paragraph()
-    box = dashed_border_table(document, 60)
-    c = box.rows[0].cells[0]
-    c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r = c.paragraphs[0].add_run("[ COMPANY LOGO ]")
-    r.bold = True
-    r.font.size = Pt(10)
-    r.font.color.rgb = GREY
-    c.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+    if LOGO:
+        lp = document.add_paragraph()
+        lp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        lp.add_run().add_picture(LOGO, height=Inches(1.1))
+    else:
+        box = dashed_border_table(document, 60)
+        c = box.rows[0].cells[0]
+        c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = c.paragraphs[0].add_run("[ COMPANY LOGO ]")
+        r.bold = True
+        r.font.size = Pt(10)
+        r.font.color.rgb = GREY
+        c.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
 
     document.add_paragraph()
     p = document.add_paragraph()

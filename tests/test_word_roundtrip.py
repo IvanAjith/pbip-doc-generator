@@ -35,7 +35,7 @@ def main():
     d = Document(str(gl))
     target = None
     for t in d.tables:
-        if [c.text for c in t.rows[0].cells][:2] == ["Indicator", "What it means"]:
+        if [c.text for c in t.rows[0].cells][:2] == ["KPI", "What it means"]:
             for r in t.rows[1:]:
                 target = r
                 break

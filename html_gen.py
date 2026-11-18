@@ -6,6 +6,7 @@ generated per-project.
 """
 import json
 import re
+from pathlib import Path
 
 from app import (
     summarize_formula, detect_calc_type, detect_status, page_content_visuals,
@@ -587,6 +588,19 @@ def build_schema_data(real_tables, relationships, all_measures):
 DOMAIN_LABELS_FALLBACK = "(ungrouped)"
 
 
+LOGO_PATH = None       # set by run.py
+
+
+def _logo_html():
+    """The company logo on a white badge (the top bar is dark, the logo text is dark)."""
+    if not LOGO_PATH or not Path(LOGO_PATH).exists():
+        return ""
+    import base64
+    b = base64.b64encode(Path(LOGO_PATH).read_bytes()).decode("ascii")
+    return ('<div style="background:#fff;border-radius:6px;padding:4px 8px;margin-right:14px;display:flex;align-items:center">'
+            f'<img src="data:image/png;base64,{b}" alt="Company logo" style="height:42px"></div>')
+
+
 def build_html(project_name, analysis):
     pages = analysis["pages"]
     all_measures = analysis["allMeasures"]
@@ -616,6 +630,7 @@ def build_html(project_name, analysis):
 
     subtitle_bits = [f"{len(pages)} pages ({n_real_pages} flagged production)", f"{len(real_tables)} tables", f"{len(all_measures)} measures"]
     subtitle = " | ".join(subtitle_bits)
+    logo_html = _logo_html()
 
     data_block = f"""
 const DOMAIN_LABELS = {_js(domain_labels)};
@@ -639,10 +654,10 @@ const SCHEMA = {_js(schema_data, indent=0)};
 <body>
 <div id="shell">
 <div id="topbar">
-  <div>
+  <div style="display:flex;align-items:center">{logo_html}<div>
     <h1>\u2b21 {project_name.upper()} KPI DOCUMENTATION</h1>
     <div class="sub">{subtitle} &nbsp;|&nbsp; Auto-generated from PBIP source \u2014 Tier 1 (static analysis only, no fabricated business narrative)</div>
-  </div>
+  </div></div>
   <div style="text-align:right;font-size:10px;color:rgba(255,255,255,.45)">Generated {json.dumps(__import__('datetime').datetime.now().strftime('%d %b %Y'))[1:-1]}</div>
 </div>
 <div id="toolbar">

@@ -230,7 +230,7 @@ class Glossary:
         n = 0
         for t in doc.tables:
             head = [self._clean(c.text) for c in t.rows[0].cells] if t.rows else []
-            if len(head) < 2 or head[0] not in ("Indicator", "Measure") or head[1] != "What it means":
+            if len(head) < 2 or head[0] not in ("KPI", "Indicator", "Measure") or head[1] != "What it means":
                 continue
             for r in t.rows[1:]:
                 term = self._clean(r.cells[0].text)
