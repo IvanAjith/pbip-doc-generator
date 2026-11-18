@@ -19,12 +19,27 @@ pip install -r requirements.txt
 # put the Report + SemanticModel folders (or their .zip files) in source/
 python run.py
 ```
-`python run.py` asks one question, then produces all three documents:
+That one command is the whole tool. It asks one question, then writes the three documents to `output/` and a file to answer, if anything needs you.
 ```
 Do you have an AI API key?
   1. Yes - AI mode      (paste the key; the AI helps write the definitions)
-  2. No  - Offline mode (no key and no internet; definitions are drafted from each measure's DAX formula)
+  2. No  - Offline mode (no key and no internet; definitions come from the built-in glossary, the KPI names and each formula)
 ```
+
+### The loop (same in both modes)
+1. Run `python run.py` and choose the mode.
+2. The three documents are written to `output/`, together with `output\Needs_Your_Clarification.txt`.
+3. If that file lists questions, open it, type your answers after the `>>>` marks and save. Part 1 asks what abbreviations stand for, Part 2 asks what
+   a KPI means (in AI mode this includes AI sentences the tool was not sure about, with a `check:` line).
+4. Run `python run.py` again. **While questions were waiting it does not ask the mode again: it carries on in the same mode** (AI mode uses the saved
+   key) and rebuilds all three documents with your answers. Your answers are kept for good: abbreviations in `glossary\context.txt`, definitions in
+   `glossary\glossary.json`.
+5. Repeat until the file says **No clarification needed**. The next `python run.py` then asks the mode again. To choose the mode again earlier:
+   `python run.py --ask-mode`.
+
+In AI mode the tool also writes the offline wording behind the scenes and keeps the safer one (see "AI mode checks itself against offline mode" below).
+Use one `output/` and one `glossary/` folder for one report; to keep two reports apart use `--output` and `--glossary`.
+
 * **2** starts straight away.
 * **1** asks you to paste the key (hidden). The tool recognises the service from how the key starts (Anthropic `sk-ant-`, Gemini `AIza`, OpenAI `sk-`) and goes on by itself; if it does not recognise the key it shows a list that includes **Other**. It tests the key with one small request, offers to save it on this computer so you are never asked again, and generates the documents. If a key was saved before, press Enter to use it (it is tested again first).
 * **If the key is rejected** (wrong, expired, revoked, or the service cannot be reached) you see the reason and the question *"Would you like to continue in offline mode instead? (y/n)"*. **y** generates the three documents in offline mode. **n** stops with "Invalid API key - no documents were generated"; run `python run.py` again and enter a new key.
@@ -214,6 +229,7 @@ python tests/test_clarification.py     # the clarification loop (run -> answer -
 python tests/test_compare_modes.py      # offline vs AI comparison
 python tests/test_compare_end_to_end.py # two real runs -> the Word comparison document
 python tests/test_name_lead.py          # offline meaning from the KPI name
+python tests/test_last_run.py           # python run.py carries on in the last mode while questions are waiting
 python tests/test_compare_test.py       # compare_test.py: one command, both runs, shared answers
 python tests/test_cross_check.py        # AI sentence vs offline wording
 python tests/test_cross_check_run.py    # a whole AI run with a stand-in service

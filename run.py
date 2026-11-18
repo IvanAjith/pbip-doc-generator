@@ -151,6 +151,8 @@ def main():
     ap.add_argument("--clarify-drafts", action="store_true",
                     help="also list every formula / AI / web draft in Needs_Your_Clarification.csv for you to confirm "
                          "(type ok to accept a draft, or write your own wording)")
+    ap.add_argument("--ask-mode", action="store_true",
+                    help="always ask offline or AI, even when the last run left clarification questions waiting (normally it carries on in the same mode)")
     ap.add_argument("--answers", nargs="+", default=[], metavar="FILE",
                     help="also read answers from other Needs_Your_Clarification.txt files (used by compare_test.py so one set of answers serves both runs)")
     ap.add_argument("--no-cross-check", action="store_true",
@@ -211,18 +213,32 @@ def main():
         ai_setup.show_status()
         return
 
-    # Started with no mode option on a normal keyboard session: ask once which mode to use.
+    # Started with no mode option on a normal keyboard session: carry on in the last mode while questions are waiting, else ask once.
     session_key, session_cfg = None, {}
+    import last_run
+    last_path = last_run.path_for(args.glossary)
     if args.ai is None and not args.offline and not args.no_prompt and sys.stdin.isatty():
         import ai_setup
-        choice = ai_setup.choose_mode()
+        choice = None
+        again = None if args.ask_mode else last_run.resume(last_path)
+        if again:
+            print(f"\nYour last run ({again.get('when', '')}) was in {'AI' if again['mode'] == 'ai' else 'OFFLINE'} mode and "
+                  f"{again['pending']} clarification question(s) were waiting.")
+            if again["mode"] == "offline":
+                choice = {"mode": "offline"}
+                print("  Carrying on in offline mode. (To choose the mode again: python run.py --ask-mode)")
+            else:
+                print("  Carrying on in AI mode with the saved key. (To choose the mode again: python run.py --ask-mode)")
+                choice = ai_setup.resume_ai(again.get("provider"))
+        if choice is None:
+            choice = ai_setup.choose_mode()
         if choice["mode"] == "stop":
             sys.exit(1)
         if choice["mode"] == "ai":
             args.ai, session_key, session_cfg = choice["provider"], choice["key"], choice.get("settings", {})
         else:
             args.offline = True
-            print("  Offline mode: nothing is sent anywhere; definitions come from built-in terms and each measure's formula.")
+            print("  Offline mode: nothing is sent anywhere; definitions come from the built-in glossary, the KPI names and each formula.")
 
     source, output = Path(args.source), Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
@@ -466,11 +482,13 @@ def main():
         print("* CLARIFICATION NEEDED -- " + "; ".join(parts) + ".")
         print(f"  Open {clar_path}, type your answers after the >>> marks, save, and run the same command again.")
         print("  Your answers are kept (definitions in the glossary file, abbreviations in context.txt) and all three documents are rebuilt.")
+    last_run.write(last_path, "ai" if ai is not None else "offline", args.ai if ai is not None else "", n_clar or 0)
     for n in notes:
         print("* " + n)
     if n_clar == 0:
         print("* No clarification needed. All three documents are complete"
               + ("" if not notes else " (the notes above are for your information)") + f"; {clarify.NAME} is empty.")
+        print("  Your files are in: " + str(output.resolve()) + "   (next time you run python run.py you will be asked the mode again)")
 
 
 if __name__ == "__main__":

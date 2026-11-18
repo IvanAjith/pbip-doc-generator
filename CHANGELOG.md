@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.14.0 - 18/11/2026
+- The standard flow is now one command, `python run.py`, for both modes. It asks offline or AI once. If the last run left clarification
+  questions waiting, the next `python run.py` does not ask again: it carries on in the same mode (AI mode with the saved key) and rebuilds all three
+  documents with your answers. When the file says "No clarification needed" the next run asks the mode again. `--ask-mode` forces the question.
+- The mode of the last run is remembered in `glossary\last_run.json` (never a key). The end of a finished run prints where the files are.
+- The offline option in the start-up question now says what it really uses: the built-in glossary, the KPI names and each formula.
+
 ## 1.13.2 - 18/11/2026
 - The comparison now reads the KPI Glossary document of each run as well as the CSV, so status badges (Revenue Status, Quality Status ...)
   show the sentence the document really contains instead of "(no definition)". `compare_test.py` does this automatically.

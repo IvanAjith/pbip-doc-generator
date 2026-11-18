@@ -144,7 +144,7 @@ def choose_mode(ask=None, ask_secret=None, post=None, out=print):
     out("")
     out("Do you have an AI API key?")
     out("  1. Yes - AI mode      (paste the key; the AI helps write the definitions)")
-    out("  2. No  - Offline mode (no key and no internet; definitions are drafted from each measure's DAX formula)")
+    out("  2. No  - Offline mode (no key and no internet; definitions come from the built-in glossary, the KPI names and each formula)")
     while True:
         c = ask("Type 1 or 2: ").strip()
         if c in ("1", "2"):
@@ -174,6 +174,22 @@ def choose_mode(ask=None, ask_secret=None, post=None, out=print):
     else:
         out("Not saved. The key is used for this run only.")
     return {"mode": "ai", **res}
+
+
+def resume_ai(provider, post=None, out=print):
+    """Carry on in AI mode with the key saved on this computer (the one the previous run used). -> the same dict as
+    choose_mode() gives for AI, or None when no saved key can be used (the caller then asks the usual question)."""
+    saved = secrets_store.status()
+    if not saved:
+        out("  The key used last time was not saved on this computer, so I need to ask again.")
+        return None
+    prov = provider if any(r[0] == provider for r in saved) else (secrets_store.default_provider() or saved[0][0])
+    key, st = secrets_store.get_key(prov)[0], secrets_store.get_settings(prov)
+    sample, reason = _test(prov, key, st, post)
+    if sample is None:
+        out(f"  The saved {_label(prov)} key did not work ({reason}), so I need to ask again.")
+        return None
+    return {"mode": "ai", "provider": prov, "key": key, "settings": st}
 
 
 def show_status(out=print):
