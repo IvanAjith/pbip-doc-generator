@@ -24,6 +24,7 @@ from pathlib import Path
 from seed_glossary import SEED
 from checks import split_period
 from formula_draft import formula_draft, ORIGIN as ORIGIN_DRAFT
+from compose_lead import compose_lead, unit_in_name
 from name_lead import name_lead, ORIGIN as ORIGIN_NAME
 
 _UNIT_TOKENS = {"pct", "percent", "percentage", "ratio"}
@@ -169,7 +170,8 @@ class Glossary:
         for n in names:                                   # 2. seed
             s = self._seed_match(n)
             if s:
-                return Definition(s["definition"], "seed", s.get("origin", "built-in glossary"),
+                us = unit_in_name(n or "", self._meanings())   # 'Rate (USD/QTY)': the built-in meaning plus the unit the name states
+                return Definition(s["definition"] + (" " + us if us else ""), "seed", s.get("origin", "built-in glossary"),
                                   category=s.get("category", ""), better=s.get("better"))
         for n in names:                                   # 2b. a seed term with a time window around it: '6 months TRIR'
             base, period = split_period(n or "")
@@ -216,12 +218,16 @@ class Glossary:
                 alt = self._cross(names, r["text"], ai_context, draft, self._from_entry(self.entries[k]))
                 return alt or self._from_entry(self.entries[k])
         if draft:                                         # 6. offline draft: plain meaning from the name, else the report's formula
-            meanings = {**self.context.auto, **self.context.abbr} if self.context is not None else {}
+            meanings = self._meanings()
             text = formula_draft(draft.get("calc"), draft.get("unit"), draft.get("inputs"))
             for n in names:
                 lead = name_lead(n, meanings, draft.get("unit"), text) if n else None
                 if lead:
                     return Definition(lead, "draft", ORIGIN_NAME)
+            for n in names:
+                comp = compose_lead(n, self._seed_match, meanings) if n else None
+                if comp:
+                    return Definition(comp[0], "draft", ORIGIN_NAME)
             if text:
                 return Definition(text, "draft", ORIGIN_DRAFT)
         k = keys[0]                                       # 7. unresolved placeholder
@@ -233,16 +239,23 @@ class Glossary:
         return None
 
     # -------------------------------------------------------------- AI mode: AI sentence vs offline wording
+    def _meanings(self):
+        return {**self.context.auto, **self.context.abbr} if self.context is not None else {}
+
     def _offline_wording(self, names, draft):
         """What offline mode would write for this KPI -> (text, from_name) or (None, False). 'Built from X; too involved' is no wording."""
         if not draft:
             return None, False
-        meanings = {**self.context.auto, **self.context.abbr} if self.context is not None else {}
+        meanings = self._meanings()
         text = formula_draft(draft.get("calc"), draft.get("unit"), draft.get("inputs"))
         for n in names:
             lead = name_lead(n, meanings, draft.get("unit"), text) if n else None
             if lead:
                 return lead, True
+        for n in names:
+            comp = compose_lead(n, self._seed_match, meanings) if n else None
+            if comp:
+                return comp[0], True
         if text and not text.startswith("Built from"):
             return text, False
         return None, False

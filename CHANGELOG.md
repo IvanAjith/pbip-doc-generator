@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.2 - 18/11/2026
+- Offline wording for names that are a known term plus a small change. On a Sales report, "Actual Value_yarn", "Budget_value" and
+  "Previous month_actual_yarn" read "the logic is too involved to summarise" or "Shows Actual Value_yarn (plus 1 further condition)". They now get the built-in meaning of
+  Actual / Budget, with "for the previous month / year" and a "(Variant: yarn.)" label where the name says so. New module `compose_lead.py`.
+- A built-in term written with a unit in brackets gains that unit: "Rate (USD/QTY)" -> "...Measured in US dollars per quantity."; "Rate(Rs/Kg)" -> "Measured in rupees per kilogram."
+- It never over-reaches: a name with any other word in it ("Actual Hours Lost") is left to the formula wording, and a currency code as the label ("Rate_INR") is not treated as a variant.
+- Applies in AI mode as well, as part of the offline cross-check (the name wording wins over an AI sentence, as for the other name leads).
+
 ## 1.14.1 - 18/11/2026
 - Fixed wrong web definitions on report-specific names. On a Timex report, "CY vs LY Quarter1 sales" and "CY vs LY Quarter2 sales" received a
   comparable-store paragraph from a web page, while Quarter3 and Quarter4 did not. Cause: the web check looked for the first two words of the name as
