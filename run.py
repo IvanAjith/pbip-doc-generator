@@ -151,6 +151,9 @@ def main():
     ap.add_argument("--clarify-drafts", action="store_true",
                     help="also list every formula / AI / web draft in Needs_Your_Clarification.csv for you to confirm "
                          "(type ok to accept a draft, or write your own wording)")
+    ap.add_argument("--no-cross-check", action="store_true",
+                    help="AI mode: use every AI sentence as written. By default the tool also writes the offline wording, checks the AI sentence "
+                         "against the report and keeps the safer one")
     ap.add_argument("--skip-html", action="store_true"); ap.add_argument("--skip-docx", action="store_true")
     ap.add_argument("--skip-glossary", action="store_true")
     args = ap.parse_args()
@@ -301,6 +304,7 @@ def main():
     if n_edits:
         print(f"  picked up {n_edits} definition(s) you edited in the previous glossary document")
     glossary.context = context
+    glossary.cross_check = not args.no_cross_check
     n_ans = glossary.absorb_answers(def_ans)
     if n_ans or n_abbr:
         print(f"  picked up from {clarify.NAME}: {n_ans} definition(s) (kept in {Path(args.glossary).name}) and "
@@ -347,9 +351,9 @@ def main():
     all_items = [i for p in primary for i in page_items[p["id"]]] + page_items["_extra"]
     # ---- the clarification file: what only a person can supply
     from glossary import normalize as _norm
-    def _row(it, page, draft=""):
+    def _row(it, page, draft="", note=""):
         u = glossary.used.get(_norm(it["display"]), {})
-        return {"term": it["display"], "page": page or u.get("page", ""), "calc": u.get("calc", ""), "draft": draft}
+        return {"term": it["display"], "page": page or u.get("page", ""), "calc": u.get("calc", ""), "draft": draft, "note": note}
     pages_of = {}
     for p in primary:
         for it in page_items[p["id"]]:
@@ -360,11 +364,14 @@ def main():
         if r["term"] not in seen_needed:
             seen_needed.add(r["term"]); needed_rows.append(r)
     draft_rows, seen_d = [], set(seen_needed)
-    if args.clarify_drafts:
-        for it in all_items:
-            d = it.get("definition")
-            if it["kind"] in ("card", "value") and d and d.source in ("draft", "ai", "web") and it["display"] not in seen_d:
-                seen_d.add(it["display"]); draft_rows.append(_row(it, pages_of.get(it["display"], ""), d.text))
+    for it in all_items:
+        d = it.get("definition")
+        if it["kind"] not in ("card", "value") or not d or it["display"] in seen_d:
+            continue
+        doubtful = d.source == "ai" and d.note.startswith("The AI used words that are not in the report")
+        if args.clarify_drafts and d.source in ("draft", "ai", "web") or doubtful:
+            seen_d.add(it["display"])
+            draft_rows.append(_row(it, pages_of.get(it["display"], ""), d.text, d.note if doubtful else ""))
     from seed_glossary import SEED as _SEED
     known_words = {t.upper() for e in _SEED for t in e["terms"] if " " not in t and len(t) <= 6}
     names_all = [i["display"] for i in all_items]
@@ -395,6 +402,16 @@ def main():
     if drafts:
         print(f"* {drafts} definition(s) are drafts to verify (formula {src.get('draft', 0)}, AI {src.get('ai', 0)}, "
               f"web {src.get('web', 0)}) -- shaded pale yellow in the glossary.")
+    if glossary.cross_log:
+        from collections import Counter as _C
+        c = _C(v[0] for v in glossary.cross_log.values())
+        print(f"* Cross-check of the AI drafts against the offline wording ({len(glossary.cross_log)} KPIs): "
+              f"AI sentence kept {c.get('ai kept', 0)}; offline wording from the KPI name {c.get('offline name', 0)}; "
+              f"offline formula wording because the AI added words not in the report {c.get('offline formula', 0)}; "
+              f"AI sentence kept but needs your confirmation {c.get('confirm', 0)} (listed in {clarify.NAME}).")
+        for t, (kind, why) in glossary.cross_log.items():
+            if kind in ("offline formula", "confirm"):
+                print(f"    {t}: {'used the offline wording' if kind == 'offline formula' else 'please confirm'} -- AI words not in the report: {why}")
     if ai is not None:
         print(f"* AI drafts ({ai.provider}): {ai.drafted} written in {ai.calls} calls" + (f"; stopped: {ai.dead_reason}" if ai.dead else "")
               + ". Marked 'AI draft - please verify' in the documents.")

@@ -88,6 +88,17 @@ This writes **Offline_vs_AI.docx**, a Word document for testing: a count of wher
 differ (what offline says, what AI says, the report's formula), then the KPIs that read the same. A KPI the AI could not define is shaded yellow.
 It also writes `Offline_vs_AI.xlsx` (a `.csv` if openpyxl is not installed) with the same rows and a filter.
 
+## AI mode checks itself against offline mode
+In AI mode the tool also writes the offline wording for every KPI the AI drafted, and picks one. The rules, in this order:
+1. Built-in definitions and anything you typed are never touched.
+2. If the KPI name itself says it plainly ("% Unscheduled Jobs" -> "The percentage of jobs that are not scheduled.") that reading is used.
+3. If the AI sentence uses only words the report supplied (name, formula, page, abbreviations you explained) it is kept.
+4. If the AI added words the report never said (for example "barcode", "customer", "scheduled", "completed") the offline formula wording is
+   used instead, and `my_definitions.csv` says which words were the problem.
+5. If there is no offline wording either (the formula is too involved), the AI sentence is kept but listed in `Needs_Your_Clarification.txt`
+   with a "check:" line naming the doubtful words; type OK to keep it or write your own.
+The run prints how many KPIs went each way. `--no-cross-check` uses every AI sentence as written.
+
 ## What offline mode writes when the built-in glossary has no entry
 Offline mode does not just repeat the formula any more. It first reads the KPI name the way a person would:
 - an abbreviation is spelled out when it is explained (common ones like FTE, the ones the report spells out, and the ones you answered in
@@ -195,6 +206,8 @@ python tests/test_clarification.py     # the clarification loop (run -> answer -
 python tests/test_compare_modes.py      # offline vs AI comparison
 python tests/test_compare_end_to_end.py # two real runs -> the Word comparison document
 python tests/test_name_lead.py          # offline meaning from the KPI name
+python tests/test_cross_check.py        # AI sentence vs offline wording
+python tests/test_cross_check_run.py    # a whole AI run with a stand-in service
 python tests/test_builtin_glossary.py   # every domain has 50+ terms with definitions; no name used twice
 python tests/test_secrets.py            # key storage, masking, guided setup
 python tests/test_secret_scan.py        # no key-like text in files Git would publish

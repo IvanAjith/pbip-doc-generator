@@ -371,3 +371,35 @@ class Checker:
                 self.rejected.append((term, res.hard))
                 self.guessed.update(res.guessed)
         return res
+
+
+# ------------------------------------------------------------------ the cross-check (AI mode)
+# Words a definition may use without the report having said them: arithmetic and sentence glue only.
+# (Deliberately NOT 'scheduled', 'closed', 'completed', 'productivity', 'customer' ...: those make claims about the business.)
+_STRUCT = set("""total number count counts counted counting average percentage percent proportion ratio share divided dividing
+ divides division minus subtracting subtracted subtract subtracts difference plus adding added adds sum combined multiplied
+ multiplying times relative compared versus against calculated calculating calculation calculates measure measures measured
+ measuring show shows shown showing value values figure amount amounts entries rows records only excluding including excluded
+ included where whose with when that which each every whole given specific certain additional further condition conditions
+ criteria meeting matching equal greater less fewer higher lower above below status absolute highest lowest distinct rolling
+ trailing period window over days weeks months years day week month year quarter first last same other another more most
+ into from than then also both either neither number numbers named called labelled labeled column table field label type
+ taking takes count based using uses used based represents representing indicates indicating describes expressed
+ key keys whether exclusively originating considering derived determined generated specified designated classified within
+ begins starts beginning ending entry item items""".split())
+_NUMWORDS = set("one two three four five six seven eight nine ten eleven twelve thirty sixty ninety hundred".split())
+
+
+def unsupported_words(text, facts, meanings=None):
+    """Content words in a definition that nothing in what the AI was given supports: the strict form of check 5.
+    facts: name, formula wording, page, rules.  meanings: {'DL': 'direct labour'} -- an explanation counts only for an
+    abbreviation that really appears in the facts."""
+    present = set(re.findall(r"[A-Za-z0-9&/]+", facts or ""))
+    spelled = " ".join(v for k, v in (meanings or {}).items() if k.upper() in {x.upper() for x in present if x.isupper()})
+    support = _stems(" ".join([facts or "", spelled]))
+    out = []
+    for w in re.findall(r"[a-z]{4,}", (text or "").lower()):
+        if w in _STRUCT or w in _NUMWORDS or w in _STOP or w[:4] in support or w in out:
+            continue
+        out.append(w)
+    return out

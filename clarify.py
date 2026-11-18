@@ -53,7 +53,8 @@ def write(path, project, abbrs, needed, drafts=()):
         for r in drafts:
             j += 1
             L += [f"[K{j}] {r['term']}", f"     page: {r.get('page') or '-'}", f"     formula: {_one_line(r.get('calc')) or '-'}",
-                  f"     draft: {_one_line(r.get('draft'))}", "     Type OK to keep this draft, or write your own wording.", ">>> ", ""]
+                  f"     draft: {_one_line(r.get('draft'))}"] + ([f"     check: {_one_line(r['note'])}"] if r.get("note") else []) + [
+                  "     Type OK to keep this draft, or write your own wording.", ">>> ", ""]
     Path(path).write_text("\n".join(L), encoding="utf-8")
     return n
 

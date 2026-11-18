@@ -77,6 +77,8 @@ class Glossary:
         self.generated = {}                # key -> the "What it means" text written into the glossary document last time
         self.word_edits = 0
         self.context = None                # checks.Context: the company's own abbreviations
+        self.cross_check = True            # AI mode: compare each AI sentence with the offline wording and keep the safer one
+        self.cross_log = {}                # term -> (decision, detail), for the review notes
         self.dirty = False
         self.unresolved = []
         if self.path.exists():
@@ -182,6 +184,9 @@ class Glossary:
                         self.dirty = True
                         continue
                     e["note"] = "; ".join(res.soft)
+                    alt = self._cross(names, e["definition"], ai_context, draft, self._from_entry(e))
+                    if alt:
+                        return alt
                 return self._from_entry(e)
         if self.web is not None and web:                  # 4. web
             for n in (web_names if web_names is not None else names):
@@ -203,7 +208,8 @@ class Glossary:
                                    "origin": r["origin"], "url": "", "verified": False, "wv": WEB_VERSION,
                                    "note": r.get("note", "")}
                 self.dirty = True
-                return self._from_entry(self.entries[k])
+                alt = self._cross(names, r["text"], ai_context, draft, self._from_entry(self.entries[k]))
+                return alt or self._from_entry(self.entries[k])
         if draft:                                         # 6. offline draft: plain meaning from the name, else the report's formula
             meanings = {**self.context.auto, **self.context.abbr} if self.context is not None else {}
             text = formula_draft(draft.get("calc"), draft.get("unit"), draft.get("inputs"))
@@ -220,6 +226,50 @@ class Glossary:
         if names[0] not in self.unresolved:
             self.unresolved.append(names[0])
         return None
+
+    # -------------------------------------------------------------- AI mode: AI sentence vs offline wording
+    def _offline_wording(self, names, draft):
+        """What offline mode would write for this KPI -> (text, from_name) or (None, False). 'Built from X; too involved' is no wording."""
+        if not draft:
+            return None, False
+        meanings = {**self.context.auto, **self.context.abbr} if self.context is not None else {}
+        text = formula_draft(draft.get("calc"), draft.get("unit"), draft.get("inputs"))
+        for n in names:
+            lead = name_lead(n, meanings, draft.get("unit"), text) if n else None
+            if lead:
+                return lead, True
+        if text and not text.startswith("Built from"):
+            return text, False
+        return None, False
+
+    def _cross(self, names, ai_text, ai_context, draft, ai_def):
+        """The rules, in order. -> a Definition to use instead of the AI's, or None to keep the AI's.
+        1. Offline can read a plain meaning from the KPI name ('% Unscheduled Jobs') -> that one.
+        2. The AI sentence uses only words the report supplied (name, formula, page, explained abbreviations) -> the AI's.
+        3. The AI added words the report never said ('barcode', 'customer', 'scheduled') -> the offline formula wording.
+        4. ... and no offline wording exists -> keep the AI's, marked, and ask in the clarification file."""
+        if not self.cross_check or ai_context is None:
+            return None
+        import checks
+        from name_lead import SPELLED
+        term = names[0]
+        lead_or_formula, from_name = self._offline_wording(names, draft)
+        if from_name:
+            self.cross_log[term] = ("offline name", "")
+            return Definition(lead_or_formula, "draft", ORIGIN_NAME)
+        meanings = {**SPELLED, **(self.context.auto if self.context is not None else {}), **(self.context.abbr if self.context is not None else {})}
+        facts = checks.facts_text(term, **ai_context)
+        bad = checks.unsupported_words(ai_text, facts, meanings)
+        if not bad:
+            self.cross_log[term] = ("ai kept", "")
+            return None
+        why = ", ".join(bad[:4])
+        if lead_or_formula:
+            self.cross_log[term] = ("offline formula", why)
+            return Definition(lead_or_formula, "draft", ORIGIN_DRAFT + f" (the AI draft used words not in the report: {why})")
+        self.cross_log[term] = ("confirm", why)
+        return replace(ai_def, origin=(ai_def.origin or "AI draft - please verify") + f" (words not in the report: {why})",
+                       note=f"The AI used words that are not in the report: {why}. Please confirm.")
 
     # -------------------------------------------------------------- edits made in the glossary document
     @staticmethod
@@ -305,7 +355,7 @@ class Glossary:
             sugg = d.text if d and d.source != "manual" else ""
             origin = {"web": "Web: " + (d.origin if d else ""), "ai": (d.origin if d else "AI draft"),
                       "seed": "Built-in glossary",
-                      "draft": (ORIGIN_NAME if d and d.origin == ORIGIN_NAME else "Draft built from the formula")}.get(d.source if d else "", "")
+                      "draft": (d.origin if d and d.origin in (ORIGIN_NAME,) or (d and d.origin.startswith(ORIGIN_DRAFT)) else "Draft built from the formula")}.get(d.source if d else "", "")
             rows.append([u["term"], mine, sugg, origin if sugg else "", u["page"], u.get("calc", "")])
             done.add(k)
         for k, u in self._csv_extra.items():              # keep what you typed for terms this report doesn't use

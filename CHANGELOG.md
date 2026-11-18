@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.13.0 - 18/11/2026
+- AI mode now cross-checks itself. For every KPI the AI drafts, the tool also writes the offline wording and keeps the safer one:
+  a plain reading of the KPI name wins; otherwise the AI sentence is kept only if every content word is supported by the report
+  (name, formula, page, explained abbreviations); if the AI added words the report never said ("barcode", "customer", "scheduled",
+  "completed", "unique" ...) the offline formula wording is used and the reason is written to `my_definitions.csv`; if no offline wording
+  exists the AI sentence is kept and the KPI is listed in `Needs_Your_Clarification.txt` with a `check:` line.
+- Calibrated on the real Standex AI run: of 66 KPIs where the AI differed from offline, the check passes 27 and flags 39, including every
+  invented wording found by hand (barcode, customer complaints, scheduled, completed/closed, local, unique).
+- `--no-cross-check` turns it off. The run prints a summary and lists the KPIs where offline wording replaced the AI's.
+
 ## 1.12.2 - 18/11/2026
 - Found by comparing a real offline run with a real AI run on Standex:
   - A report that writes "InDirect Labour (IDL)" gave IDL the meaning "In Direct Labour" (and so "in direct labour"). It is now kept as written: "InDirect Labour".
