@@ -6,7 +6,7 @@ CPM,Cost Per Mille; Cost Per Thousand Impressions,lower,The cost of showing an a
 ROAS,Return on Ad Spend,higher,Revenue earned for each unit of money spent on advertising.
 Impressions,Ad Impressions,,"The number of times an advert or piece of content was shown, whether or not anyone looked at it or clicked."
 Reach,Unique Reach; Audience Reach,higher,"The number of different people who saw the content at least once. Unlike impressions, each person is counted only once."
-Frequency,Ad Frequency; Average Frequency,,The average number of times each person in the reach saw the advert. Too high a number can annoy the audience.
+Ad Frequency,Average Ad Frequency,,The average number of times each person in the reach saw the advert. Too high a number can annoy the audience.
 Clicks,Link Clicks; Total Clicks,higher,"The number of times people clicked on an advert, link or button."
 Cost per Lead,CPL; Lead Cost,lower,The marketing spend divided by the number of leads it produced.
 Cost per Acquisition,CPA; Cost per Action; Cost per Conversion,lower,"The marketing spend divided by the number of customers or actions it won, such as sign-ups or purchases."

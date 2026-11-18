@@ -6,7 +6,7 @@ Net Interest Income,NII,higher,The interest a bank earns on loans and investment
 Net Interest Margin,NIM,higher,The net interest income shown as a percentage of the bank's earning assets. It shows how profitable lending is.
 Interest Spread,Lending Spread; Yield Spread,higher,The difference between the average rate earned on loans and the average rate paid on deposits.
 Non-Interest Income,Fee Income; Other Income; Fees and Commission Income,higher,"Income a bank earns from fees, commissions and trading rather than from interest."
-Cost to Income Ratio,Efficiency Ratio; Cost-Income Ratio; CIR,lower,The bank's running costs shown as a percentage of its income. A lower figure means the bank is more efficient.
+Cost to Income Ratio,Cost-Income Ratio; CIR,lower,The bank's running costs shown as a percentage of its income. A lower figure means the bank is more efficient.
 Return on Assets Bank,Bank ROA; Return on Average Assets; ROAA,higher,The bank's profit shown as a percentage of its total assets.
 Return on Equity Bank,Bank ROE; Return on Average Equity; ROAE,higher,The bank's profit shown as a percentage of shareholders' funds.
 Loan Book,Gross Loans; Total Loans; Loans and Advances,,The total amount of loans a bank has lent out and not yet been repaid.
@@ -30,7 +30,7 @@ Exposure at Default,EAD,,The amount a lender expects to be owed at the time the 
 Capital Adequacy Ratio,CRAR; Total Capital Ratio,higher,The bank's capital shown as a percentage of its risk-weighted assets. Regulators set a minimum to make sure banks can absorb losses.
 Common Equity Tier 1 Ratio,CET1; CET1 Ratio; Tier 1 Ratio,higher,The bank's highest-quality capital shown as a percentage of its risk-weighted assets.
 Risk-Weighted Assets,RWA; Risk Weighted Assets,,"The bank's assets adjusted for how risky each one is, used to work out how much capital the bank must hold."
-Leverage Ratio,Bank Leverage Ratio,,"The bank's core capital shown as a percentage of its total exposure, without adjusting for risk."
+Bank Leverage Ratio,Tier 1 Leverage Ratio,,"The bank's core capital shown as a percentage of its total exposure, without adjusting for risk."
 Liquidity Coverage Ratio,LCR,higher,Whether the bank holds enough easy-to-sell assets to cover its cash needs for the next 30 days of stress.
 Net Stable Funding Ratio,NSFR,higher,Whether the bank's long-term funding is stable enough to support its long-term assets over a one-year period.
 Customer Acquisition Bank,New Accounts Opened; Account Openings; New Customers Banking,higher,The number of new customer accounts opened in a period.
@@ -60,8 +60,8 @@ Net Asset Value,NAV,,"The value of a fund's assets minus what it owes, usually s
 Net Asset Value per Unit,NAV per Unit; NAV per Share; Unit Price,,"The net asset value of a fund divided by the number of units, which is the price at which units are bought and sold."
 Assets Under Administration,AUA; Assets Under Custody; AUC,higher,"The value of the assets that a firm looks after for clients, without necessarily managing the investment decisions."
 Net Flows,Net Inflows; Net Sales Funds; Net New Money,higher,The money invested in a fund or platform minus the money withdrawn in a period.
-Gross Inflows,Gross Sales Funds; Subscriptions; Total Inflows,higher,The total money coming into a fund or platform before withdrawals are taken off.
-Redemptions,Outflows; Withdrawals; Fund Redemptions,lower,The money withdrawn by investors from a fund in a period.
+Gross Inflows,Gross Sales Funds; Total Inflows,higher,The total money coming into a fund or platform before withdrawals are taken off.
+Redemptions,Fund Redemptions,lower,The money withdrawn by investors from a fund in a period.
 Management Fee,Management Fee Income; Advisory Fee; Fee Revenue,higher,"The fee charged to investors for managing their money, usually a percentage of the assets managed."
 Fee Margin,Fee Rate; Average Fee Rate; Revenue Yield,higher,The fee income shown as a percentage of average assets under management.
 Expense Ratio Fund,Total Expense Ratio; TER; Ongoing Charges Figure; OCF,lower,The yearly cost of running a fund shown as a percentage of the fund's assets.
@@ -80,9 +80,9 @@ Annualised Return,Annualized Return; CAGR; Compound Annual Growth Rate,higher,Th
 Dividend Yield,Income Yield; Distribution Yield,higher,The yearly dividends paid per share shown as a percentage of the share price.
 Price to Earnings Ratio,PE Ratio; P/E; Earnings Multiple,,The share price divided by the earnings per share. It shows how much investors pay for each unit of profit.
 Earnings per Share,EPS; Basic EPS; Diluted EPS,higher,"The company's profit divided by the number of shares, showing the profit that belongs to each share."
-Asset Allocation,Portfolio Mix; Allocation; Asset Mix,,"The way a portfolio is split between asset types such as shares, bonds and cash."
+Asset Allocation,Portfolio Mix; Asset Mix,,"The way a portfolio is split between asset types such as shares, bonds and cash."
 Portfolio Concentration,Top Holdings Share; Concentration Risk; Top 10 Holdings,lower,How much of a portfolio is held in its largest few investments.
-Portfolio Turnover,Turnover Ratio; Fund Turnover; Trading Turnover,,"How much of a portfolio is bought and sold in a year, which affects trading costs."
-Duration,Modified Duration; Interest Rate Sensitivity; Bond Duration,,"How sensitive the price of a bond or bond portfolio is to a change in interest rates, shown in years."
+Portfolio Turnover,Fund Turnover,,"How much of a portfolio is bought and sold in a year, which affects trading costs."
+Bond Duration,Modified Duration; Interest Rate Sensitivity,,"How sensitive the price of a bond or bond portfolio is to a change in interest rates, shown in years."
 Credit Rating,Bond Rating,higher,"A grade given by a rating agency showing how likely a borrower is to repay, which helps judge the risk of a bond."
 Yield to Maturity,YTM; Bond Yield; Redemption Yield,,The total return expected on a bond if it is held until it matures and all payments are made as promised.

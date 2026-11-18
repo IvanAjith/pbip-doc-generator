@@ -16,7 +16,7 @@ Labour Efficiency,Labor Efficiency; Labour Utilization; Labor Utilization,higher
 Throughput,,higher,The amount of product or work completed in a given period of time.
 Output,,higher,The quantity of goods or work produced in a period.
 Capacity Utilization,Capacity Utilisation,higher,How much of the available production capacity is actually being used.
-Availability,Machine Availability; Equipment Availability,higher,The share of planned production time that a machine was actually ready to run. It is one of the three parts of OEE.
+Availability,Machine Availability; Equipment Availability,higher,"The share of planned time that a machine or system was ready to run. In OEE it is one of the three parts, with performance and quality."
 Performance Rate,Speed Efficiency; Performance Efficiency,higher,How fast a machine ran compared with its best possible speed while it was running. It is one of the three parts of OEE.
 Quality Rate,First Time Quality; Good Parts Rate,higher,The share of parts made that were good the first time. It is one of the three parts of OEE.
 Planned Downtime,Scheduled Downtime; Planned Stops,,"Time when a machine is stopped on purpose, for example for maintenance, changeovers or breaks."

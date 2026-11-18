@@ -13,7 +13,7 @@ Cost of Delivery,Cost of Revenue; Hosting Cost,lower,"The cost of running and su
 Cloud Spend,Cloud Cost; Cloud Bill; Infrastructure Spend,lower,"The money spent on cloud services such as servers, storage and databases."
 Cloud Cost per Customer,Infrastructure Cost per Customer; Hosting Cost per User; Cost per Active User,lower,The cloud cost divided by the number of customers or active users.
 Cloud Utilisation,Resource Utilisation; CPU Utilisation; Server Utilisation,,"The share of the available computing capacity, such as processor or memory, that is in use."
-System Availability,Service Availability; Availability Percentage; Service Uptime,higher,The share of time that a system or service is working and can be used.
+System Availability,Service Availability; Service Uptime,higher,The share of time that a system or service is working and can be used.
 Service Level Objective,SLO; SLO Attainment; SLO Compliance,higher,"An internal target for how well a service should perform, such as 99.9% availability, and how often it is met."
 Service Level Agreement Uptime,SLA Uptime; Contractual Uptime; SLA Compliance Uptime,higher,"The availability promised to customers in the service agreement, and whether it was achieved."
 Error Rate,Failure Rate; Request Error Rate; Error Percentage,lower,The share of requests or operations that ended in an error.

@@ -38,6 +38,13 @@ def normalize(term: str) -> str:
     return " ".join(words)
 
 
+def exact_key(name):
+    """The written form of a name, for exact matches: lower case, '%' and 'percentage' read as 'percent', ratio stays 'ratio'."""
+    t = (name or "").lower().replace("%", " percent ")
+    t = re.sub(r"\bpercentage\b", "percent", t)
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", t).split())
+
+
 def has_unit(name):
     """True when a name says it is a ratio or percentage: '%', 'pct', 'percent', 'percentage', 'ratio'."""
     return bool(re.search(r"%|\b(?:pct|percent|percentage|ratio)\b", name or "", re.I))
@@ -86,6 +93,7 @@ class Glossary:
         self._load_csv()
         self._seed = {}                    # normalised name -> entry
         self._seed_unit = {}               # the same, for terms written with "%" / "ratio" (see _seed_match)
+        self._seed_exact = {}              # terms with a unit, by their exact written form
         for e in SEED:
             self._index_seed(e)
         try:                                              # the team's shared list: fills gaps, never overrides a built-in term
@@ -97,18 +105,30 @@ class Glossary:
 
     def _index_seed(self, e, override=True):
         for t in e["terms"]:
-            table = self._seed_unit if has_unit(t) else self._seed
             k = normalize(t)
-            if override or k not in table:
-                table[k] = e
+            if has_unit(t):
+                self._seed_unit.setdefault(k, e) if not override else self._seed_unit.__setitem__(k, e)
+                x = exact_key(t)
+                if override or x not in self._seed_exact:
+                    self._seed_exact[x] = e
+            elif override or k not in self._seed:
+                self._seed[k] = e
 
     def _seed_match(self, name):
-        """Built-in entry for a measure name, or None. A term written with '%' or 'ratio' ('Expense Ratio') is only matched by
-        a name that also says so ('Expense %'): a plain 'Expense' is an amount, not that ratio."""
+        """Built-in entry for a measure name, or None.
+        1. A name written exactly like a term that carries '%' / 'ratio' ('Expense Ratio', 'Gross Margin %') gets that term.
+        2. Otherwise the plain term of that name ('Turnover %' is the people measure Turnover, not a fund's 'Turnover Ratio').
+        3. Last, a '%' / 'ratio' term whose name matches and has no plain twin ('Loan to Value %')."""
         k = normalize(name or "")
-        if has_unit(name) and k in self._seed_unit:      # 'Expense Ratio' / 'Expense %' -> the ratio, before the plain amount
+        if has_unit(name):
+            x = exact_key(name)
+            if x in self._seed_exact:
+                return self._seed_exact[x]
+        if k in self._seed:
+            return self._seed[k]
+        if has_unit(name) and k in self._seed_unit:
             return self._seed_unit[k]
-        return self._seed.get(k)
+        return None
 
     # -------------------------------------------------------------- lookup
     def lookup(self, *names, **kw):

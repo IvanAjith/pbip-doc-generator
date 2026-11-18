@@ -48,7 +48,7 @@ Selling Price Variance,Sales Price Variance; Rate Variance,,The part of a change
 Volume Variance,Quantity Variance; Usage Variance,,The part of a change in results that comes from selling or using more or fewer units than planned.
 Mix Variance,Product Mix Variance; Sales Mix Variance,,The part of a change in results that comes from selling a different blend of products than planned.
 Forecast Variance,Forecast vs Actual; Forecast Error Finance,,The difference between the forecast and the actual result.
-Budget Variance Percentage,Budget Variance Percent; Over Under Budget Percent,,The difference between actual and budget shown as a percentage of the budget.
+Budget Variance Percentage,Budget Variance Percent; Over Under Budget Percent; Budget Variance %,,The difference between actual and budget shown as a percentage of the budget.
 Depreciation,Depreciation Expense; Depreciation and Amortisation; D&A,,"The way the cost of a physical asset is spread over the years it is used, shown as a yearly charge in the accounts."
 Amortisation,Amortization; Amortisation Expense,,"The way the cost of an intangible asset, such as software or a licence, is spread over the years it is used."
 Interest Expense,Finance Cost; Interest Cost; Interest Paid,lower,"The cost of borrowing, such as interest paid on loans, in a period."
@@ -58,7 +58,7 @@ Profit After Tax,PAT; Post-Tax Profit,higher,The profit left after income tax ha
 Effective Tax Rate,Tax Rate; ETR,,The tax charge shown as a percentage of profit before tax.
 Tax Expense,Income Tax Expense; Tax Charge; Tax Provision,,The income tax charged against profit in a period.
 Dividend,Dividends Paid; Dividend Payout; Dividends,,The part of profit paid out to shareholders.
-Retained Earnings,Retained Profit; Accumulated Profit; Reserves,higher,The profits that have been kept in the business over time instead of paid out as dividends.
+Retained Earnings,Retained Profit; Accumulated Profit,higher,The profits that have been kept in the business over time instead of paid out as dividends.
 Balance Sheet,Statement of Financial Position; BS,,"A statement showing what the business owns, what it owes and the owners' stake at one point in time."
 Total Assets,Assets; Asset Base,,"Everything the business owns that has value, such as cash, stock, equipment and money owed by customers."
 Current Assets,Short-Term Assets; Liquid Assets,,"Assets expected to be turned into cash within a year, such as cash, receivables and stock."
@@ -67,7 +67,7 @@ Current Liabilities,Short-Term Liabilities; Short-Term Debts; Creditors Due With
 Total Liabilities,Liabilities; Total Debt and Obligations,,"Everything the business owes, such as loans, supplier bills and other obligations."
 Equity,Shareholders' Equity; Owners' Equity; Net Assets,,"The owners' stake in the business, which is its assets minus its liabilities."
 Net Debt,Net Borrowings; Net Debt Position,lower,"The total borrowings minus cash, showing how much debt would remain if cash were used to repay it."
-Debt to Equity,Debt Equity Ratio; Gearing Ratio; Leverage,lower,The borrowings shown against the owners' stake. A higher figure means the business relies more on borrowed money.
+Debt to Equity,Debt Equity Ratio; Gearing Ratio; Leverage Ratio; Leverage,lower,The borrowings shown against the owners' stake. A higher figure means the business relies more on borrowed money.
 Net Debt to EBITDA,Leverage Multiple; Debt to EBITDA,lower,How many years of EBITDA it would take to repay the net debt.
 Current Ratio,Working Capital Ratio; Liquidity Ratio,higher,"The current assets divided by the current liabilities, showing whether short-term bills can be paid."
 Quick Ratio,Acid Test; Acid Test Ratio; Liquid Ratio,higher,"The current assets, without stock, divided by the current liabilities. It is a stricter test of whether short-term bills can be paid."

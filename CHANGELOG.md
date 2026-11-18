@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.10.1 - 18/11/2026
+- Fix: a people measure called "Turnover %" was given the fund definition ("how much of a portfolio is bought and sold"), because a banking
+  entry carried the alias "Turnover Ratio" and the 1.8.0 %/ratio rule preferred it. The rule is now: a name written exactly like a %/ratio
+  term gets that term; otherwise the plain term of that name wins; a %/ratio-only term is the last resort.
+- Cleaned the built-in glossary of names that mean different things in different fields: removed generic aliases (Efficiency Ratio, Capital
+  Adequacy, Reserves, Attendance, Subscriptions, Outflows, Allocation, Deviations, Recoveries ...) and gave field-specific terms field-specific
+  names (Bond Duration, Insured Exposure, Ad Frequency, Bank Leverage Ratio, Reinsurance Retention Ratio, Insurance Operating Expense Ratio).
+- test_builtin_glossary.py now checks that the known look-alike names ("Turnover", "Efficiency %", "Expense Ratio", "Retention %", ...)
+  resolve to the right field.
+
 ## 1.10.0 - 18/11/2026
 - The company logo (assets/logo.png) is on the cover of both Word documents and at the top right of every other page, and in the header of
   the HTML reference. `--logo FILE` changes it, `--logo none` removes it.

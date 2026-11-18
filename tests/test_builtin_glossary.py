@@ -40,9 +40,31 @@ for name, expect in (("Net Interest Margin", "Banking & Investments"), ("Purchas
                      ("Claims Settlement Time", "Insurance"), ("Sales Cycle Length", "Sales")):
     d = g.lookup(name, web=False)
     assert d and d.text and d.origin == "built-in glossary", (name, d)
-# --- a term written with %/ratio only matches a measure that also says %/ratio
-d = g.lookup("Expense Ratio", web=False)
-assert d and d.category == "Insurance", d
-d = g.lookup("Expense", web=False)
-assert d and d.category == "Finance" and "premium" not in d.text.lower(), d     # plain 'Expense' is not the insurance ratio
+# --- names that exist in more than one field must resolve to the field a business user means
+TRAPS = {   # written name -> the domain it must resolve to
+    "Turnover": "HR & People", "Turnover %": "HR & People", "Turnover Ratio": "HR & People", "Turnover Rate": "HR & People",
+    "Portfolio Turnover": "Banking & Investments", "Fund Turnover": "Banking & Investments",
+    "Efficiency": "Operations", "Efficiency %": "Operations", "Efficiency Ratio": "Operations", "Cost to Income Ratio": "Banking & Investments",
+    "Expense %": "Finance", "Expenses": "Finance", "Expense Ratio": "Insurance",
+    "Gross Margin": "Finance", "Gross Margin %": "Finance", "Retention": "Customer", "Retention %": "Customer",
+    "Leverage": "Finance", "Leverage Ratio": "Finance", "Bank Leverage Ratio": "Banking & Investments",
+    "Operating Expense Ratio": "Finance", "Opex Ratio": "Finance", "Availability %": "Operations",
+    "Working Capital": "Finance", "Utilization": "Operations", "Yield": "Quality", "Attendance": None, "Frequency": None,
+    "Duration": None, "Exposure": None, "Allocation": None, "Reserves": None, "Subscriptions": None, "Outflows": None,
+}
+for name, dom in TRAPS.items():
+    d = g.lookup(name, web=False)
+    got = d.category if d and d.origin == "built-in glossary" else None
+    assert got == dom, f"'{name}' resolved to {got}, expected {dom}"
+# every name shared by two different domains must still resolve to the one that owns it when written exactly
+from collections import defaultdict
+owners = defaultdict(set)
+for e in entries:
+    for t in e["terms"]:
+        owners[normalize(t)].add((e["terms"][0], e["category"]))
+for k, o in owners.items():
+    cats = {c for _, c in o}
+    if len(cats) > 1:
+        for term, cat in o:
+            assert g.lookup(term, web=False).category == cat or has_unit(term) is False, (term, cat)
 print("ok: %d terms, %d domains, smallest domain has %d" % (len(entries), len(by_domain), min(len(v) for v in by_domain.values())))

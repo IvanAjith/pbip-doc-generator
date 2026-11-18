@@ -60,7 +60,7 @@ Right First Time Delivery,Delivery Right First Time; Perfect Delivery,higher,"Th
 Product Recall,Recalls; Recall Count; Recall Events,lower,The number of times products had to be taken back from customers because of a safety or quality problem.
 Customer Quality Rating,Customer Scorecard; Customer Quality Score,higher,"The score given to the business by a customer who rates its quality, delivery and service."
 Quality Escapes,Quality Escape Rate; Escapes,lower,The number of defective products that got past the checks and reached the next process or the customer.
-Concession Rate,Deviations; Waivers; Concessions,lower,"The share of products accepted even though they did not fully meet the specification, with approval to do so."
+Concession Rate,Waivers; Concessions,lower,"The share of products accepted even though they did not fully meet the specification, with approval to do so."
 First Pass Quality Rate,First Pass Rate; FPQ; First Time Through,higher,The share of units that pass all checks the first time they go through a process.
 Defects by Category,Defect Types; Defect Pareto; Defect Breakdown,,"A breakdown of defects by type, usually shown from the biggest to the smallest so the main causes stand out."
 Lot Acceptance Rate,Batch Acceptance Rate; Lot Pass Rate,higher,The share of lots or batches that were accepted after inspection.

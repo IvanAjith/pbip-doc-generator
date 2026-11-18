@@ -39,14 +39,14 @@ Revenue per Available Room,RevPAR,higher,"The room revenue divided by the number
 Revenue per Available Seat,RevPAS; Revenue per Seat,higher,"The revenue divided by the number of seats available, used for restaurants, venues and theatres."
 Seat Occupancy,Seat Utilisation; Capacity Fill,higher,The share of available seats that were filled at an event or screening.
 Average Ticket Price,Average Admission Price; Ticket Yield; Average Seat Price,higher,The average price paid for a ticket to an event or show.
-Tickets Sold,Ticket Sales; Admissions Sold; Attendance,higher,The number of tickets sold for events or screenings in a period.
+Tickets Sold,Ticket Sales; Admissions Sold,higher,The number of tickets sold for events or screenings in a period.
 Box Office Revenue,Box Office; Ticket Revenue; Gross Box Office,higher,"The money taken from ticket sales for films, shows or events."
 Food and Beverage Revenue,F&B Revenue; Concession Revenue; Food and Drink Sales,higher,The revenue from food and drink sales at a venue or property.
 Per Capita Spend,Spend per Head; Spend per Visitor; Per Cap,higher,"The average spending by each visitor, found by dividing total spending by the number of visitors."
 Daily Active Payers,DAP; Daily Paying Users,higher,The number of players who made a purchase in a day.
 Lifetime Value Player,Player LTV; Player Lifetime Value; Game LTV,higher,The total revenue that a player is expected to bring over the whole time they play.
 Player Churn Rate,Player Churn; Player Attrition; Lapsed Players,lower,The share of players who stopped playing in a period.
-Install Count,Downloads; App Installs; Game Downloads,higher,The number of times an app or game was installed in a period.
+Install Count,App Installs; Game Downloads,higher,The number of times an app or game was installed in a period.
 Cost per Install,CPI; Install Cost; Acquisition Cost per Install,lower,The marketing spend divided by the number of installs it produced.
 Average Session Count,Sessions per User; Sessions per Day; Session Frequency,higher,The average number of times each player starts the game in a day.
 Playtime,Time Played; Play Time per User; Engagement Time,higher,The total or average time that players spend in the game.

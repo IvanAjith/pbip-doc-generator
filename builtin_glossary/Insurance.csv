@@ -35,7 +35,7 @@ Open Claims,Outstanding Claims; Claims Backlog; Unsettled Claims,lower,The numbe
 Claims Closed,Settled Claims; Closed Claims; Claims Settled,higher,The number of claims finalised in a period.
 Large Claims,Large Loss; Major Claims; Large Loss Ratio,lower,"Claims above a set size, tracked separately because a few big claims can change the results."
 Pure Premium,Burning Cost; Loss Cost,,"The part of the premium needed to pay expected claims, without any allowance for costs or profit."
-Claims Settlement Ratio,Claim Settlement Ratio; Claims Paid Ratio; Settlement Rate,higher,The share of claims received that were settled and paid.
+Claims Settlement Ratio,Claim Settlement Ratio; Settlement Rate,higher,The share of claims received that were settled and paid.
 Claims Rejection Rate,Claim Repudiation Ratio; Claims Declined; Rejected Claims,lower,The share of claims that the insurer refused to pay.
 Claims Settlement Time,Claim Turnaround Time; Claims Cycle Time; Time to Settle,lower,The average time taken to settle a claim from when it was reported.
 Claims Acknowledgement Time,First Notice of Loss Response; FNOL Response Time; Claim Acknowledgement,lower,The time taken to reply to a customer after a claim was first reported.
@@ -44,25 +44,25 @@ Claims Reopen Rate,Reopened Claims; Claim Reopen Ratio,lower,The share of closed
 Claims Adjuster Productivity,Claims per Adjuster; Adjuster Caseload; Claims Handler Productivity,higher,The number of claims handled by each claims adjuster in a period.
 Claims Handling Cost,Claims Expense; Claims Adjustment Expense; Loss Adjustment Expense,lower,"The cost of investigating, handling and settling claims, excluding the amounts paid to customers."
 Loss Adjustment Expense Ratio,LAE Ratio; ULAE Ratio,lower,The cost of handling claims shown as a percentage of earned premium.
-Subrogation Recovery,Subrogation; Recoveries; Salvage and Subrogation,higher,"Money recovered by the insurer from another party who was responsible for the loss, after the insurer paid the customer."
+Subrogation Recovery,Subrogation; Salvage and Subrogation,higher,"Money recovered by the insurer from another party who was responsible for the loss, after the insurer paid the customer."
 Fraud Detection Rate,Fraud Rate; Fraudulent Claims; Suspected Fraud,,"The share of claims identified as fraudulent or suspicious, and the value saved by stopping them."
 Underwriting Profit,Underwriting Result; Underwriting Income; Underwriting Gain,higher,"The profit or loss from writing insurance, found by taking claims and costs away from earned premium, before any investment income."
 Underwriting Margin,Underwriting Profit Margin; Underwriting Result Margin,higher,The underwriting profit shown as a percentage of earned premium.
 Acquisition Cost Ratio,Acquisition Ratio; Commission Ratio; Acquisition Costs,lower,"The cost of winning new business, such as commission and marketing, shown as a percentage of premium."
 Commission Expense,Broker Commission; Agent Commission,lower,The money paid to agents and brokers for selling policies.
-Operating Expense Ratio,Administrative Expense Ratio; Management Expense Ratio; Opex Ratio,lower,"The running costs of the insurer, other than claims and commission, shown as a percentage of premium."
+Insurance Operating Expense Ratio,Administrative Expense Ratio; Management Expense Ratio,lower,"The running costs of the insurer, other than claims and commission, shown as a percentage of premium."
 Net Combined Ratio,Net Combined; Combined Ratio Net of Reinsurance,lower,The combined ratio worked out after reinsurance has been taken into account.
-Solvency Ratio,Solvency Margin; Solvency Coverage Ratio; Capital Adequacy,higher,"How far the insurer's capital exceeds what the regulator requires, showing whether it could meet its obligations in bad conditions."
+Solvency Ratio,Solvency Margin; Solvency Coverage Ratio,higher,"How far the insurer's capital exceeds what the regulator requires, showing whether it could meet its obligations in bad conditions."
 Reinsurance Ceded,Ceded Premium; Reinsurance Premium; Premium Ceded,,The premium passed to reinsurers in exchange for them taking on part of the risk.
 Reinsurance Recoveries,Reinsurance Recoverable; Reinsurance Recovered; Ceded Claims,,The part of claims that the reinsurers pay back to the insurer.
-Retention Ratio,Net Retention; Retention Rate Premium; Premium Retention,,The share of premium the insurer keeps for its own account after paying reinsurers.
+Reinsurance Retention Ratio,Net Retention; Retention Rate Premium; Premium Retention,,The share of premium the insurer keeps for its own account after paying reinsurers.
 Investment Income,Investment Yield; Investment Return Insurance; Portfolio Yield,higher,"The income earned on the money the insurer holds in investments, such as from premiums not yet paid out."
 Return on Equity Insurance,Insurance ROE; Operating ROE,higher,The profit of the insurer shown as a percentage of shareholders' funds.
 Embedded Value,EV; Value of In-Force; VIF,higher,"An estimate of the value of a life insurer's existing business, including future profits from policies already sold."
 Value of New Business,VNB; New Business Value,higher,The present value of the profits expected from policies sold in a period.
 New Business Margin,VNB Margin; NBV Margin; New Business Profit Margin,higher,The value of new business shown as a percentage of the annual premium on new sales.
 Sum Assured,Sum Insured; Total Sum Insured; Insured Amount,,"The amount that will be paid if the insured event happens, such as a death or a loss of property."
-Exposure,Total Insured Value; TIV; Risk Exposure,,"The total amount of risk the insurer has taken on, usually shown as the total of the amounts insured."
+Insured Exposure,Total Insured Value; TIV; Risk Exposure,,"The total amount of risk the insurer has taken on, usually shown as the total of the amounts insured."
 Loss Frequency,Frequency of Losses; Incidence Rate,lower,"How often claims happen, usually shown per hundred or thousand policies or per year of cover."
 Mortality Rate,Death Rate; Mortality Experience; Actual to Expected Mortality,,"The rate at which insured people die, compared with the expected rate, used to price and check life insurance."
 Morbidity Rate,Sickness Rate Insurance; Morbidity Experience; Incidence of Illness,,"The rate at which insured people fall ill or claim for sickness cover, compared with the expected rate."
