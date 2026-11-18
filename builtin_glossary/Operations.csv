@@ -1,0 +1,67 @@
+﻿Term,Also known as,Better,Definition
+OEE,Overall Equipment Effectiveness,higher,"A single score combining how available, how fast, and how defect-free a piece of equipment or line is running, compared to its full potential."
+OOE,Overall Operations Effectiveness,higher,"Similar to OEE but measured across a whole operation rather than one machine -- combining availability, speed, and quality into one score."
+MTBF,Mean Time Between Failures,higher,"On average, how long a piece of equipment runs between breakdowns. Higher means more reliable equipment."
+MTTR,Mean Time To Repair; Mean Time To Resolve,lower,"On average, how long it takes to fix something once it breaks or an issue is raised."
+Takt Time,,,"The pace production needs to run at to match customer demand -- if you make one unit every Takt Time, you exactly keep up with orders."
+Cycle Time,,lower,"How long it actually takes to complete one unit of work, start to finish."
+Downtime,,lower,Time equipment or a process was stopped and not producing.
+Utilization,,higher,The share of available time or capacity that was actually put to productive use.
+Kaizen,,,"A philosophy of making small, continuous improvements to a process over time."
+JIT,Just In Time,,"A production approach that aims to make or receive materials just as they're needed, rather than holding large amounts of inventory."
+WIP,Work In Progress; Work In Process,lower,Units that have started production but aren't finished yet.
+Productivity,,higher,"The amount of output produced for a given amount of input, such as units made per labour hour."
+Efficiency,,higher,How much useful output is achieved compared with the resources or time used.
+Labour Efficiency,Labor Efficiency; Labour Utilization; Labor Utilization,higher,The share of available working hours that produce useful output.
+Throughput,,higher,The amount of product or work completed in a given period of time.
+Output,,higher,The quantity of goods or work produced in a period.
+Capacity Utilization,Capacity Utilisation,higher,How much of the available production capacity is actually being used.
+Availability,Machine Availability; Equipment Availability,higher,The share of planned production time that a machine was actually ready to run. It is one of the three parts of OEE.
+Performance Rate,Speed Efficiency; Performance Efficiency,higher,How fast a machine ran compared with its best possible speed while it was running. It is one of the three parts of OEE.
+Quality Rate,First Time Quality; Good Parts Rate,higher,The share of parts made that were good the first time. It is one of the three parts of OEE.
+Planned Downtime,Scheduled Downtime; Planned Stops,,"Time when a machine is stopped on purpose, for example for maintenance, changeovers or breaks."
+Unplanned Downtime,Breakdown Time; Unscheduled Downtime; Unplanned Stops,lower,Time when a machine is stopped because of faults or other events nobody planned.
+Changeover Time,Setup Time; Changeover; Changeover Duration,lower,The time taken to switch a machine or line from making one product to making the next.
+Production Volume,Units Produced; Production Quantity; Production Output,higher,The number of units made in a period. It is the basic measure of how much a plant produced.
+Production Plan Adherence,Schedule Adherence; Plan Attainment; Schedule Attainment,higher,"How closely actual production matched the production plan, shown as a percentage of what was planned."
+Production Efficiency,Plant Efficiency; Line Efficiency,higher,How much was produced compared with what the equipment and people should have produced in the same time.
+Production Cost per Unit,Unit Cost; Cost per Unit; Manufacturing Cost per Unit,lower,The total cost of production divided by the number of units made.
+Labour Productivity,Output per Labour Hour; Units per Labour Hour,higher,The amount produced for each hour of labour used.
+Labour Cost per Unit,Labor Cost per Unit,lower,The labour cost divided by the number of units made.
+Machine Utilisation,Machine Utilization; Equipment Utilization,higher,The share of available machine time that was spent producing.
+Asset Utilisation,Asset Utilization; Asset Usage,higher,How much of the available capacity of equipment or other assets was actually used.
+Capacity,Installed Capacity; Rated Capacity; Maximum Capacity,,"The most output that a machine, line or plant can produce in a period under normal conditions."
+Available Capacity,Spare Capacity; Free Capacity,,"The capacity that has not yet been taken up by orders, so new work can be accepted."
+Bottleneck,Constraint; Bottleneck Station,,"The step in a process that limits how much the whole process can produce, because everything else has to wait for it."
+Line Balancing,Line Balance; Balance Efficiency,higher,"How evenly the work is shared between stations on a production line, so that none is idle while another is overloaded."
+Process Capability,Cpk; Process Capability Index,higher,A measure of how well a process keeps its output inside the allowed limits. A higher figure means fewer parts are out of tolerance.
+Process Cycle Efficiency,Value-Added Ratio; Flow Efficiency,higher,"The share of total lead time that is spent on work that adds value for the customer, with the rest being waiting and handling."
+Value-Added Time,VA Time; Touch Time,higher,The time spent on activities that change the product in a way the customer will pay for.
+Non-Value-Added Time,NVA Time; Waste Time,lower,"The time spent on activities that do not add value for the customer, such as waiting, moving or checking."
+Waste,Muda; Production Waste,lower,"Anything in a process that uses time, money or material but does not add value for the customer."
+Lean,Lean Manufacturing; Lean Production,,A way of working that aims to remove waste and keep only the steps that add value for the customer.
+Continuous Improvement,CI; Continuous Improvement Projects,,"The habit of making many small, regular improvements to how work is done, rather than waiting for big changes."
+Improvement Suggestions,Employee Suggestions; Suggestions Implemented; Ideas Submitted,higher,"The number of improvement ideas put forward by staff, often shown together with how many were put into practice."
+Preventive Maintenance Compliance,PM Compliance; Planned Maintenance Percentage; PPM,higher,The share of scheduled preventive maintenance jobs that were carried out on time.
+Corrective Maintenance,Breakdown Maintenance; Reactive Maintenance,lower,"Repair work done after something has broken, as opposed to work planned in advance."
+Maintenance Cost,Maintenance Spend; Cost of Maintenance,lower,"The money spent on keeping equipment working, including labour, spare parts and outside contractors."
+Work Orders Completed,Maintenance Work Orders Closed; Closed Work Orders,higher,The number of maintenance jobs that were finished in a period.
+Work Order Backlog,Maintenance Backlog; Open Work Orders,lower,The number of maintenance jobs that have been requested but are not yet finished.
+Mean Time to Failure,MTTF,higher,"The average time a part or machine runs before it fails, used for items that are replaced rather than repaired."
+Spare Parts Availability,Spares Availability; Parts Availability,higher,The share of spare part requests that could be met straight from stock.
+Energy Consumption,Energy Use; Power Consumption; Electricity Consumption,lower,"The amount of energy used in a period, for example in kilowatt hours."
+Energy per Unit,Energy Intensity; Energy Consumption per Unit,lower,The energy used for each unit produced. It allows fair comparison between busy and quiet periods.
+Water Consumption,Water Use,lower,The amount of water used in a period. It is tracked to find ways to save water and cost.
+Waste Generated,Waste to Landfill; Waste Volume,lower,"The amount of waste produced by operations in a period, often split into recycled and landfilled."
+Recycling Rate,Waste Recycled; Waste Diversion Rate,higher,The share of waste that was recycled or reused rather than thrown away.
+Carbon Emissions,CO2 Emissions; Carbon Footprint; Greenhouse Gas Emissions,lower,"The amount of carbon dioxide, or its equivalent in other greenhouse gases, released by the business's activities."
+Overall Labour Effectiveness,OLE,higher,"A measure of how well labour is used, combining how available people are, how fast they work and how good their output is."
+Total Effective Equipment Performance,TEEP,higher,"How well equipment is used over all the hours in a period, whether or not they were planned for production."
+Planned vs Actual Output,Plan vs Actual; Output vs Plan,,A comparison of what was planned to be produced with what was actually produced.
+Order Fulfilment Cycle Time,Order Cycle Time; Order to Delivery Time,lower,The time from when a customer places an order to when it is delivered.
+Schedule Variance,Schedule Slippage; Schedule Delay,lower,"The difference between the planned and the actual completion of work, shown in time or as a percentage."
+Project On-Time Delivery,On-Time Project Delivery; Projects Delivered On Time,higher,The share of projects that were finished on or before their planned date.
+Service Request Volume,Requests Received; Work Requests,,The number of requests for work or service received by an operations team in a period.
+Process Compliance,Process Adherence; Compliance Rate,higher,The share of cases where the agreed process was followed from start to finish.
+Rework Hours,Rework Time; Hours on Rework,lower,The hours of labour spent fixing work that was not right the first time.
+Idle Time,Waiting Time; Idle Hours,lower,Time when people or machines are paid for or available but doing nothing because there is no work or something is holding them up.

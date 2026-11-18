@@ -45,8 +45,8 @@ print("ok: shared list is used offline and never overrides built-in terms")
 gj = tmp / "glossary" / "glossary.json"
 gj.parent.mkdir()
 gj.write_text(json.dumps({"terms": {
-    "supplier lead time": {"term": "Supplier Lead Time", "definition": "Days between placing an order and receiving it.", "source": "ai", "origin": "AI draft (gemini)"},
-    "spend under management": {"term": "Spend Under Management", "definition": "Share of spend covered by managed contracts.", "source": "web", "origin": "Wikipedia", "url": "https://x", "wv": G.WEB_VERSION},
+    "dock door turnaround": {"term": "Dock Door Turnaround", "definition": "Days between placing an order and receiving it.", "source": "ai", "origin": "AI draft (gemini)"},
+    "cabinet fill index": {"term": "Cabinet Fill Index", "definition": "Share of spend covered by managed contracts.", "source": "web", "origin": "Wikipedia", "url": "https://x", "wv": G.WEB_VERSION},
     "30 day raw cb": {"term": "30-Day Raw CB %", "definition": "Their own wording.", "source": "manual"},
     "otd": {"term": "OTD", "definition": "already built in", "source": "ai"},
     "sotif": {"term": "SOTIF", "definition": "already shared", "source": "ai"},
@@ -54,7 +54,7 @@ gj.write_text(json.dumps({"terms": {
     "checked": {"term": "Checked", "definition": "Words that need a look.", "source": "ai", "note": "words not in the report: a, b"}}}), encoding="utf-8")
 g = Glossary(gj)
 cand = GE.candidates(g, shared)
-assert [c["Term"] for c in cand] == ["30-Day Raw CB %", "Checked", "Spend Under Management", "Supplier Lead Time"], [c["Term"] for c in cand]
+assert [c["Term"] for c in cand] == ["30-Day Raw CB %", "Cabinet Fill Index", "Checked", "Dock Door Turnaround"], [c["Term"] for c in cand]
 assert "Check" in [c for c in cand if c["Term"] == "Checked"][0]["Notes for the reviewer"]
 out = tmp / "cand.csv"
 assert GE.export_candidates(g, out, shared) == 4
@@ -64,9 +64,9 @@ print("ok: candidates")
 # --- merge: only rows marked Y, nothing twice, nothing unfinished
 rowsx = list(csv.DictReader(open(out, encoding="utf-8-sig")))
 for r in rowsx:
-    if r["Term"] in ("Supplier Lead Time", "Spend Under Management", "Checked"):
+    if r["Term"] in ("Dock Door Turnaround", "Cabinet Fill Index", "Checked"):
         r["Approve (Y/N)"] = "y" if r["Term"] != "Checked" else "Yes"
-    if r["Term"] == "Supplier Lead Time":
+    if r["Term"] == "Dock Door Turnaround":
         r["Domain"] = "Procurement"
 rowsx.append({"Approve (Y/N)": "Y", "Term": "Supplier OTIF", "Domain": "x", "Definition": "dup", "Where it came from": "", "Notes for the reviewer": ""})
 rowsx.append({"Approve (Y/N)": "Y", "Term": "No Text", "Domain": "", "Definition": "", "Where it came from": "", "Notes for the reviewer": ""})
@@ -75,10 +75,10 @@ with open(out, "w", newline="", encoding="utf-8-sig") as f:
 added, known, unfinished = GE.merge_candidates(out, shared, today="18/11/2026")
 assert (added, known, unfinished) == (3, 1, 1), (added, known, unfinished)
 after = {r["Term"]: r for r in csv.DictReader(open(shared, encoding="utf-8-sig"))}
-assert after["Supplier Lead Time"]["Domain"] == "Procurement" and after["Spend Under Management"]["Domain"] == "General"
-assert after["Supplier Lead Time"]["Added"] == "18/11/2026" and "30-Day Raw CB %" not in after
+assert after["Dock Door Turnaround"]["Domain"] == "Procurement" and after["Cabinet Fill Index"]["Domain"] == "General"
+assert after["Dock Door Turnaround"]["Added"] == "18/11/2026" and "30-Day Raw CB %" not in after
 assert GE.merge_candidates(out, shared)[0] == 0                                    # running it twice adds nothing
-assert Glossary(tmp / "g2.json").lookup("Supplier Lead Time").source == "seed"       # now available to everyone, offline
+assert Glossary(tmp / "g2.json").lookup("Dock Door Turnaround").source == "seed"       # now available to everyone, offline
 print("ok: merge")
 
 # --- the command line

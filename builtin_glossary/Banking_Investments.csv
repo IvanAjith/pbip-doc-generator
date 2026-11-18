@@ -1,0 +1,88 @@
+﻿Term,Also known as,Better,Definition
+Assets Under Management,AUM,higher,The total market value of the investments that an organisation manages for its clients.
+Portfolio Return,,higher,"The gain or loss on an investment or portfolio over a period, usually shown as a percentage of its starting value."
+Volatility,,,How much the value of an investment moves up and down over time.
+Net Interest Income,NII,higher,The interest a bank earns on loans and investments minus the interest it pays on deposits and borrowing.
+Net Interest Margin,NIM,higher,The net interest income shown as a percentage of the bank's earning assets. It shows how profitable lending is.
+Interest Spread,Lending Spread; Yield Spread,higher,The difference between the average rate earned on loans and the average rate paid on deposits.
+Non-Interest Income,Fee Income; Other Income; Fees and Commission Income,higher,"Income a bank earns from fees, commissions and trading rather than from interest."
+Cost to Income Ratio,Efficiency Ratio; Cost-Income Ratio; CIR,lower,The bank's running costs shown as a percentage of its income. A lower figure means the bank is more efficient.
+Return on Assets Bank,Bank ROA; Return on Average Assets; ROAA,higher,The bank's profit shown as a percentage of its total assets.
+Return on Equity Bank,Bank ROE; Return on Average Equity; ROAE,higher,The bank's profit shown as a percentage of shareholders' funds.
+Loan Book,Gross Loans; Total Loans; Loans and Advances,,The total amount of loans a bank has lent out and not yet been repaid.
+Loan Growth,Credit Growth; Loan Book Growth; Lending Growth,higher,How much the loan book has grown compared with an earlier period.
+Deposit Growth,Deposits Growth; Deposit Base Growth,higher,How much the money held in customer deposits has grown compared with an earlier period.
+Total Deposits,Customer Deposits; Deposit Base; Deposits,,The total money held by customers in accounts at the bank.
+Loan to Deposit Ratio,LDR; Loans to Deposits,,The loans a bank has made shown as a percentage of the deposits it holds. A very high figure may mean it relies on other funding.
+CASA Ratio,Current and Savings Account Ratio; Low Cost Deposit Ratio; CASA,higher,"The share of deposits held in current and savings accounts, which are cheaper for the bank than fixed deposits."
+Non-Performing Loans,NPL; NPA; Bad Loans; Non-Performing Assets,lower,"Loans where the borrower has stopped paying interest or repayments for a set time, usually 90 days."
+Non-Performing Loan Ratio,NPL Ratio; Gross NPA Ratio; Gross NPA,lower,The non-performing loans shown as a percentage of total loans.
+Net NPA Ratio,Net Non-Performing Assets; Net NPL Ratio,lower,"The non-performing loans left after provisions have been set against them, shown as a percentage of net loans."
+Provision Coverage Ratio,PCR; Loan Loss Coverage; Coverage Ratio,higher,The money set aside for bad loans shown as a percentage of the non-performing loans.
+Loan Loss Provisions,Impairment Charge; Provisions for Bad Debts; Credit Loss Expense,lower,The amount charged to profit in a period for loans that may not be repaid.
+Cost of Credit,Credit Cost; Cost of Risk; Credit Loss Ratio,lower,The loan loss charge shown as a percentage of average loans.
+Write-Off Rate,Loan Write-Offs; Charge-Off Rate; Net Charge-Offs,lower,The share of loans that the bank has given up on and removed from its books.
+Delinquency Rate,Past Due Rate; Arrears Rate; Overdue Loans,lower,The share of loans where payments are late.
+Days Past Due,DPD; Overdue Days; Arrears Days,lower,The number of days a loan payment is late.
+Default Rate,Probability of Default; Default Ratio,lower,The share of borrowers who fail to repay their loans as agreed.
+Loss Given Default,LGD; Loss Severity,lower,The share of the loan amount that the lender expects to lose if the borrower fails to repay.
+Exposure at Default,EAD,,The amount a lender expects to be owed at the time the borrower fails to repay.
+Capital Adequacy Ratio,CRAR; Total Capital Ratio,higher,The bank's capital shown as a percentage of its risk-weighted assets. Regulators set a minimum to make sure banks can absorb losses.
+Common Equity Tier 1 Ratio,CET1; CET1 Ratio; Tier 1 Ratio,higher,The bank's highest-quality capital shown as a percentage of its risk-weighted assets.
+Risk-Weighted Assets,RWA; Risk Weighted Assets,,"The bank's assets adjusted for how risky each one is, used to work out how much capital the bank must hold."
+Leverage Ratio,Bank Leverage Ratio,,"The bank's core capital shown as a percentage of its total exposure, without adjusting for risk."
+Liquidity Coverage Ratio,LCR,higher,Whether the bank holds enough easy-to-sell assets to cover its cash needs for the next 30 days of stress.
+Net Stable Funding Ratio,NSFR,higher,Whether the bank's long-term funding is stable enough to support its long-term assets over a one-year period.
+Customer Acquisition Bank,New Accounts Opened; Account Openings; New Customers Banking,higher,The number of new customer accounts opened in a period.
+Active Customer Accounts,Account Activity Rate,higher,"The number of accounts that have had activity, such as a transaction, within a set recent period."
+Cross-Sell Ratio Banking,Products per Customer; Product Penetration; Cross Holding,higher,The average number of products each customer holds with the bank.
+Digital Adoption Rate,Mobile Banking Users; Digital Active Users; Online Banking Adoption,higher,The share of customers who use online or mobile banking.
+Digital Transaction Share,Digital Transactions; Self-Service Transactions; Branch Transaction Share,higher,The share of all transactions that are made through digital channels instead of branches or calls.
+Transaction Volume,Number of Transactions; Payment Volume; Transactions Processed,,The number of transactions processed in a period.
+Transaction Value,Payment Value; Total Transaction Value; Value of Payments,,The total money value of the transactions processed in a period.
+Transaction Success Rate,Payment Success Rate; Transaction Failure Rate; Failed Transactions,higher,The share of attempted transactions that went through successfully.
+Card Spend,Card Turnover; Card Spending; Card Transaction Value,higher,The total amount customers spent using the bank's cards.
+Card Activation Rate,Cards Activated; Card Usage Rate; Active Cards,higher,The share of issued cards that customers have started to use.
+Interchange Income,Interchange Fees; Card Fee Income; Merchant Fee Income,higher,The fees the bank earns each time its cards are used to pay a merchant.
+Loan Approval Rate,Approval Rate; Acceptance Rate Loans; Applications Approved,,The share of loan applications that the bank approved.
+Loan Application Turnaround Time,Time to Decision; Loan Processing Time; Time to Disburse,lower,The average time between a customer applying for a loan and getting a decision or the money.
+Loan to Value Ratio,LTV Ratio; Loan-to-Value,,"The amount of a loan shown as a percentage of the value of the asset bought with it, such as a house."
+Debt Service Coverage Ratio,DSCR; Debt Coverage Ratio,higher,The income available to pay debts divided by the amount of debt payments due. Above 1 means income covers the payments.
+Collection Efficiency,Recovery Rate; Collections Rate; Loan Recovery Rate,higher,The share of money due from borrowers that was actually collected.
+Net Promoter Score Banking,Bank NPS; Customer Recommend Score Bank,higher,How likely customers are to recommend the bank to others.
+Branch Productivity,Business per Branch; Revenue per Branch; Branch Profitability,higher,"The business, such as deposits and loans, or the profit generated by each branch."
+Employee Productivity Bank,Business per Employee; Profit per Employee Bank; Revenue per Employee Bank,higher,The business or profit per bank employee.
+Anti-Money Laundering Alerts,AML Alerts; Suspicious Transaction Alerts; AML Cases,,The number of transactions flagged as possibly linked to money laundering and sent for review.
+Suspicious Activity Reports,SAR; STR; Suspicious Transaction Reports,,The number of reports filed with the authorities about transactions that look suspicious.
+KYC Completion Rate,KYC Compliance; Know Your Customer Completion; KYC Refresh Rate,higher,The share of customers whose identity checks are complete and up to date.
+Fraud Losses,Fraud Loss Rate; Fraud Rate Banking; Fraud Cases,lower,"The money lost to fraud in a period, often shown as a percentage of transaction value."
+Net Asset Value,NAV,,"The value of a fund's assets minus what it owes, usually shown per unit or share."
+Net Asset Value per Unit,NAV per Unit; NAV per Share; Unit Price,,"The net asset value of a fund divided by the number of units, which is the price at which units are bought and sold."
+Assets Under Administration,AUA; Assets Under Custody; AUC,higher,"The value of the assets that a firm looks after for clients, without necessarily managing the investment decisions."
+Net Flows,Net Inflows; Net Sales Funds; Net New Money,higher,The money invested in a fund or platform minus the money withdrawn in a period.
+Gross Inflows,Gross Sales Funds; Subscriptions; Total Inflows,higher,The total money coming into a fund or platform before withdrawals are taken off.
+Redemptions,Outflows; Withdrawals; Fund Redemptions,lower,The money withdrawn by investors from a fund in a period.
+Management Fee,Management Fee Income; Advisory Fee; Fee Revenue,higher,"The fee charged to investors for managing their money, usually a percentage of the assets managed."
+Fee Margin,Fee Rate; Average Fee Rate; Revenue Yield,higher,The fee income shown as a percentage of average assets under management.
+Expense Ratio Fund,Total Expense Ratio; TER; Ongoing Charges Figure; OCF,lower,The yearly cost of running a fund shown as a percentage of the fund's assets.
+Alpha,Excess Return; Active Return; Outperformance,higher,"The return that an investment earned above its benchmark, after allowing for risk."
+Beta,Market Sensitivity; Market Beta,,How much an investment moves when the market moves. A beta of 1 means it moves in line with the market.
+Sharpe Ratio,Sharpe; Risk-Adjusted Return,higher,"The return earned above a risk-free rate for each unit of risk taken, measured by volatility. A higher figure means a better return for the risk."
+Sortino Ratio,Sortino; Downside Risk-Adjusted Return,higher,Similar to the Sharpe ratio but it counts only downside swings as risk.
+Maximum Drawdown,Max Drawdown; Peak to Trough; Drawdown,lower,The biggest fall in value from a peak to the lowest point before a new peak was reached.
+Tracking Error,Active Risk; Tracking Difference,lower,How much a portfolio's returns differ from those of its benchmark.
+Standard Deviation,Return Volatility; Std Dev,lower,A measure of how much returns vary around their average. A higher figure means a bumpier ride.
+Value at Risk,VaR,lower,"The largest loss that a portfolio is expected to suffer over a set period at a set level of confidence, such as 95%."
+Benchmark Return,Index Return; Benchmark Performance; Market Return,,The return of the market index or reference portfolio used to judge how an investment performed.
+Time-Weighted Return,TWR; Time Weighted Rate of Return,,"A return measure that removes the effect of money being added or withdrawn, so it shows how the investments performed."
+Money-Weighted Return,MWR; Internal Rate of Return Portfolio; Dollar-Weighted Return,,A return measure that takes into account the timing and size of money added or withdrawn.
+Annualised Return,Annualized Return; CAGR; Compound Annual Growth Rate,higher,The yearly rate of return that would give the same overall result as the actual returns over the period.
+Dividend Yield,Income Yield; Distribution Yield,higher,The yearly dividends paid per share shown as a percentage of the share price.
+Price to Earnings Ratio,PE Ratio; P/E; Earnings Multiple,,The share price divided by the earnings per share. It shows how much investors pay for each unit of profit.
+Earnings per Share,EPS; Basic EPS; Diluted EPS,higher,"The company's profit divided by the number of shares, showing the profit that belongs to each share."
+Asset Allocation,Portfolio Mix; Allocation; Asset Mix,,"The way a portfolio is split between asset types such as shares, bonds and cash."
+Portfolio Concentration,Top Holdings Share; Concentration Risk; Top 10 Holdings,lower,How much of a portfolio is held in its largest few investments.
+Portfolio Turnover,Turnover Ratio; Fund Turnover; Trading Turnover,,"How much of a portfolio is bought and sold in a year, which affects trading costs."
+Duration,Modified Duration; Interest Rate Sensitivity; Bond Duration,,"How sensitive the price of a bond or bond portfolio is to a change in interest rates, shown in years."
+Credit Rating,Bond Rating,higher,"A grade given by a rating agency showing how likely a borrower is to repay, which helps judge the risk of a bond."
+Yield to Maturity,YTM; Bond Yield; Redemption Yield,,The total return expected on a bond if it is held until it matures and all payments are made as promised.

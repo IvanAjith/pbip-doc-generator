@@ -1,0 +1,60 @@
+﻿Term,Also known as,Better,Definition
+Bounce Rate,,lower,The share of visits in which the visitor leaves after viewing only one page.
+CTR,Click Through Rate; Click-Through Rate,higher,Clicks divided by impressions: how often people who see an item click on it.
+CPC,Cost Per Click,lower,The average cost of each click on an advertisement.
+CPM,Cost Per Mille; Cost Per Thousand Impressions,lower,The cost of showing an advertisement one thousand times.
+ROAS,Return on Ad Spend,higher,Revenue earned for each unit of money spent on advertising.
+Impressions,Ad Impressions,,"The number of times an advert or piece of content was shown, whether or not anyone looked at it or clicked."
+Reach,Unique Reach; Audience Reach,higher,"The number of different people who saw the content at least once. Unlike impressions, each person is counted only once."
+Frequency,Ad Frequency; Average Frequency,,The average number of times each person in the reach saw the advert. Too high a number can annoy the audience.
+Clicks,Link Clicks; Total Clicks,higher,"The number of times people clicked on an advert, link or button."
+Cost per Lead,CPL; Lead Cost,lower,The marketing spend divided by the number of leads it produced.
+Cost per Acquisition,CPA; Cost per Action; Cost per Conversion,lower,"The marketing spend divided by the number of customers or actions it won, such as sign-ups or purchases."
+Cost per View,CPV; Cost per Video View,lower,The spend divided by the number of times a video was watched past the counting threshold.
+Landing Page Conversion Rate,Landing Page Conversion; Page Conversion Rate,higher,"The share of visitors to a landing page who took the wanted action, such as filling in a form."
+Marketing Spend,Marketing Cost; Ad Spend; Media Spend,,The total money spent on marketing activity in a period.
+Marketing Budget Utilisation,Budget Utilisation; Marketing Budget Used,,"How much of the planned marketing budget has been spent so far, shown as a percentage of the budget."
+Marketing ROI,Return on Marketing Investment; ROMI,higher,The profit or revenue gained from marketing compared with what was spent on it.
+Marketing Sourced Revenue,Marketing Attributed Revenue; Marketing Influenced Revenue,higher,"The revenue that can be traced back to marketing activity, such as campaigns that created the lead."
+Customer Acquisition Cost Payback,CAC Payback; Payback Period,lower,The number of months of customer revenue or margin needed to earn back the cost of winning that customer.
+Lead Generation,Leads Generated; New Leads; Leads,higher,The number of new people or companies who showed interest and left their details in a period.
+Lead Quality Score,Lead Score; Lead Scoring,higher,"A score given to each lead showing how likely it is to become a customer, based on who they are and what they have done."
+Cost per Qualified Lead,Cost per MQL; Cost per SQL,lower,The marketing spend divided by the number of leads that passed the quality check.
+Campaign Performance,Campaign Results,,"How well a marketing campaign did against its goals, looking at reach, response, leads and sales."
+Campaign Response Rate,Response Rate,higher,"The share of people contacted by a campaign who replied, clicked or took part."
+Email Open Rate,Open Rate,higher,The share of delivered emails that were opened. It shows how well subject lines and send times work.
+Email Click Rate,Email Click-Through Rate; Click to Open Rate,higher,The share of delivered emails in which a link was clicked.
+Email Unsubscribe Rate,Unsubscribe Rate; Opt-out Rate,lower,The share of delivered emails that led someone to unsubscribe.
+Email Deliverability,Delivery Rate; Email Delivery Rate,higher,The share of sent emails that reached the inbox rather than bouncing or being blocked.
+Email Bounce Rate,Hard Bounce Rate; Soft Bounce Rate,lower,"The share of sent emails that could not be delivered, for example because the address does not exist."
+Email List Growth,List Growth Rate; Subscriber Growth,higher,"How fast the email subscriber list is growing, after new sign-ups and unsubscribes are taken into account."
+Website Traffic,Site Visits; Web Visits; Traffic,higher,The number of visits to the website in a period.
+Unique Visitors,New Visitors,higher,"The number of different people who visited the website in a period, with each person counted once."
+Page Views,Pageviews; Page Impressions,,"The total number of pages opened on the website, including repeat views by the same person."
+Pages per Session,Pages per Visit,higher,The average number of pages a visitor looks at in one visit. It is a sign of how engaging the site is.
+Average Visit Duration,Time on Site; Visit Duration,higher,The average length of a website visit. It is a sign of how long people stay interested.
+Exit Rate,Page Exit Rate,lower,The share of views of a page that were the last page of the visit.
+Organic Traffic,Organic Visits; Organic Search Traffic,higher,"Visits that came from unpaid search results, without any advertising."
+Paid Traffic,Paid Visits; Paid Search Traffic,,Visits that came from adverts the business paid for.
+Referral Traffic,Referrals,,Visits that arrived by clicking a link on another website.
+Direct Traffic,Direct Visits,,"Visits where the person typed the address in or used a bookmark, so no other source is known."
+Social Media Followers,Followers; Fans; Page Likes,higher,The number of people who follow the business on a social media account.
+Engagement Rate,Social Engagement Rate; Interaction Rate,higher,"The share of the audience that reacted to, commented on, shared or clicked a post, compared with the number who saw it."
+Social Shares,Reposts,higher,The number of times people shared a post with their own contacts.
+Share of Voice,SOV,higher,"The business's share of all the advertising or online conversation in its market, compared with competitors."
+Brand Awareness,Brand Recall; Aided Awareness,higher,"How many people in the target market know the brand, often measured by survey."
+Brand Sentiment,Sentiment Score; Social Sentiment,higher,"Whether the things people say about the brand online are mostly positive, neutral or negative."
+Search Engine Ranking,Keyword Ranking; SERP Position,lower,The position at which a page appears in search results for a chosen word or phrase. Position 1 is the top.
+Backlinks,Inbound Links,higher,Links from other websites to your own. Good ones from trusted sites help the site rank better in search.
+Video Views,Video Plays,higher,The number of times a video was watched past the point that counts as a view.
+Video Completion Rate,Video Watch Rate,higher,The share of video starts that were watched to the end.
+Webinar Attendance Rate,Event Attendance Rate; Show Rate,higher,The share of people who registered for a webinar or event who actually took part.
+Event Registrations,Registrations; Sign-ups,higher,The number of people who signed up for an event or webinar.
+Content Downloads,Asset Downloads; Whitepaper Downloads,higher,"The number of times gated content, such as a guide or report, was downloaded."
+Net Promoter Score for Campaign,Campaign NPS,higher,"How likely people reached by a campaign are to recommend the brand, scored from -100 to 100."
+Cost per Engagement,CPE,lower,The spend divided by the number of times people interacted with an advert or post.
+Return on Ad Spend by Channel,Channel ROAS; Channel ROI,higher,"The revenue earned for each unit spent, shown separately for each channel such as search, social or email."
+Attribution,Marketing Attribution; Multi-Touch Attribution,,The way credit for a sale is shared among the marketing activities that the customer came across before buying.
+Customer Lifetime Value to CAC,LTV to CAC; LTV:CAC,higher,How much a customer is expected to be worth over their lifetime compared with the cost of winning them. A figure of 3 or more is often seen as healthy.
+Promotion Uplift,Promo Uplift; Incremental Sales,higher,The extra sales produced by a promotion compared with what would have been sold without it.
+Coupon Redemption Rate,Redemption Rate; Voucher Redemption Rate,higher,The share of issued coupons or vouchers that customers actually used.

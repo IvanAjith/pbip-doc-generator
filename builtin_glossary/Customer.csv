@@ -1,0 +1,68 @@
+﻿Term,Also known as,Better,Definition
+NPS,NPS Score; Net Promoter Score,higher,"A widely-used loyalty score based on how likely customers are to recommend the company, ranging roughly from -100 (everyone's a detractor) to +100 (everyone's a promoter)."
+CSAT,Customer Satisfaction,higher,"A direct measure of how satisfied customers say they are, usually from a survey rating."
+CES,Customer Effort Score,lower,How much effort customers felt they had to put in to get something resolved -- lower effort is generally linked to higher loyalty.
+Churn,Churn Rate,lower,The share of customers who stopped doing business with the company over a period.
+CLV,LTV; Customer Lifetime Value,higher,"The total value a customer is expected to bring over the entire relationship, not just one purchase."
+CAC,Customer Acquisition Cost,lower,"How much, on average, it costs to win one new customer."
+Conversion Rate,,higher,The share of prospects or leads that turned into an actual sale.
+Win Rate,,higher,The share of sales opportunities pursued that were actually won.
+Pipeline,,,"The set of sales opportunities currently being worked, not yet won or lost."
+ARR,Annual Recurring Revenue,higher,"Predictable subscription-style revenue, counted on an annual basis."
+MRR,Monthly Recurring Revenue,higher,"Predictable subscription-style revenue, counted on a monthly basis."
+Quota Attainment,,higher,How much of an assigned sales target has actually been achieved.
+Retention,User Retention,higher,The share of customers or users who are still active after a given period.
+MAU,Monthly Active Users,higher,The number of distinct users who were active at least once in the month.
+DAU,Daily Active Users,higher,The number of distinct users who were active on a given day.
+Subscribers,Subscriber Count,higher,The number of customers with an active subscription.
+Watch Time,Hours Watched; Time Spent,higher,The total time users spend consuming content or using the product.
+Completion Rate,,higher,"The share of people who started something (a title, course or level) and finished it."
+Customer Count,Number of Customers; Active Customers; Total Customers,higher,The number of customers who bought from or were served by the business in a period.
+New Customers,New Customer Count; Customer Acquisitions; Customers Acquired,higher,The number of customers who bought for the first time in a period.
+Returning Customers,Repeat Customers; Existing Customers,higher,The number of customers who had bought before and came back in the period.
+Lost Customers,Customers Lost; Churned Customers,lower,The number of customers who stopped buying or cancelled in a period.
+Customer Retention Cost,Retention Cost; Cost to Retain,lower,"The money spent to keep existing customers, such as loyalty offers, account management and support."
+Customer Satisfaction Index,CSI; Satisfaction Index; Satisfaction Score,higher,"A combined satisfaction score built from several survey questions, shown on a fixed scale."
+Customer Loyalty,Loyalty Score; Brand Loyalty,higher,"How strongly customers prefer to keep buying from the business, shown by repeat purchases and willingness to recommend."
+Customer Health Score,Health Score; Account Health,higher,"A score that combines usage, support issues, payments and survey feedback to show how likely a customer is to stay."
+Customer Effort,Effort Score,lower,"How hard customers find it to get something done with the business, such as solving a problem. Less effort usually means more loyalty."
+Customer Complaints Rate,Complaints per Thousand,lower,"The number of complaints received compared with the number of customers or orders, so that busy and quiet periods can be compared."
+Complaint Resolution Time,Time to Resolve Complaint; Complaint Closure Time,lower,The average time taken to close a complaint from when it was received.
+Net Revenue Retention,NRR; Net Dollar Retention,higher,"The revenue kept from existing customers after upgrades, downgrades and cancellations, compared with what they paid at the start of the period. Above 100% means existing customers are growing."
+Gross Revenue Retention,GRR; Gross Dollar Retention,higher,"The share of starting revenue from existing customers that is kept after cancellations and downgrades, ignoring any upgrades."
+Revenue Churn,Revenue Churn Rate; Dollar Churn,lower,The share of recurring revenue lost in a period because customers cancelled or paid less.
+Logo Churn,Customer Churn Rate; Logo Retention,lower,"The share of customers, counted by number rather than by value, who left in a period."
+Expansion Revenue,Expansion MRR; Upgrade Revenue,higher,The extra recurring revenue gained from existing customers who bought more or moved to a bigger plan.
+Contraction Revenue,Contraction MRR; Downgrade Revenue,lower,The recurring revenue lost from customers who stayed but moved to a smaller plan or bought less.
+Average Revenue per Account,ARPA; Revenue per Customer,higher,The average recurring revenue from each customer account.
+Customer Profitability,Profit per Customer; Customer Margin,higher,The profit made from a customer after the cost of serving them has been taken off.
+Customer Lifetime,Customer Lifespan; Average Customer Lifetime,higher,The average length of time a customer keeps buying before leaving.
+Time to Value,TTV; Time to First Value,lower,The time it takes a new customer to get the first real benefit from the product or service.
+Onboarding Completion Rate,Onboarding Rate; Activation Rate,higher,The share of new customers who finish the set-up steps that lead to proper use of the product.
+Product Adoption Rate,Adoption Rate; Feature Adoption,higher,"The share of customers who use a product or feature, compared with those who could."
+Active Users,Active Accounts,higher,The number of users who did something meaningful in the product in a period.
+Weekly Active Users,WAU,higher,The number of different users who were active at least once in a week.
+Customer Support Tickets,Support Tickets; Tickets Raised; Ticket Volume,,The number of requests for help received by the support team in a period.
+Tickets Resolved,Resolved Tickets; Tickets Closed,higher,The number of support tickets that were closed in a period.
+Open Tickets,Ticket Backlog; Unresolved Tickets,lower,The number of support tickets that are still waiting for an answer or a fix.
+First Response Time,FRT; Time to First Response,lower,The average time between a customer raising a request and first getting a reply from the support team.
+Average Resolution Time,Time to Resolution; Mean Time to Resolve Ticket,lower,The average time between a ticket being raised and being closed.
+First Contact Resolution,FCR; First Call Resolution,higher,"The share of customer requests that were solved at the first contact, with no need for follow-up."
+Average Handle Time,AHT; Handling Time,lower,"The average time an agent spends on a single customer contact, including any follow-up work done straight after."
+Service Level,Service Level Agreement Compliance; Calls Answered in Target,higher,"The share of customer contacts answered within the target time, for example calls answered within 20 seconds."
+Abandonment Rate,Call Abandonment Rate; Abandoned Calls,lower,The share of customers who gave up and hung up or left the queue before reaching an agent.
+Average Wait Time,Queue Time; Average Speed of Answer; ASA,lower,The average time customers wait before an agent answers.
+Agent Occupancy,Occupancy Rate; Agent Utilisation,,The share of an agent's working time spent actually handling customer contacts rather than waiting for them.
+Escalation Rate,Escalations; Ticket Escalation Rate,lower,The share of support tickets that had to be passed to a more senior team.
+Reopen Rate,Ticket Reopen Rate; Reopened Tickets,lower,The share of closed tickets that the customer reopened because the problem was not really fixed.
+SLA Breach Rate,SLA Breaches; SLA Miss Rate,lower,The share of tickets or requests that were not handled within the time promised in the service agreement.
+Customer Referral Rate,Referral Rate; Referrals Received,higher,The share of new customers who came because an existing customer recommended the business.
+Review Rating,Average Rating; Star Rating; Customer Rating,higher,"The average score customers give in reviews, usually out of five."
+Number of Reviews,Review Count; Reviews Received,higher,The count of customer reviews received in a period.
+Survey Response Rate,Feedback Response Rate; Survey Completion Rate,higher,The share of customers who answered a satisfaction survey out of everyone who was asked.
+Renewal Rate,Contract Renewal Rate; Subscription Renewal Rate,higher,The share of contracts or subscriptions due for renewal that were actually renewed.
+Cancellation Rate,Cancellations; Subscription Cancellation Rate,lower,The share of subscriptions or orders that were cancelled in a period.
+Trial Conversion Rate,Free Trial Conversion; Trial to Paid,higher,The share of free trial users who went on to become paying customers.
+Customer Segmentation,Segment Mix; Customer Segments,,"The split of customers into groups with similar needs or behaviour, such as by size, region or spending."
+Share of Wallet,Wallet Share,higher,The share of a customer's total spending in a category that goes to this business rather than to competitors.
+Recency Frequency Monetary,RFM; RFM Score,higher,"A way of scoring customers on how recently they bought, how often they buy and how much they spend."

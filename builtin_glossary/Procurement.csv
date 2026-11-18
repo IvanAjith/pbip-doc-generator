@@ -1,0 +1,63 @@
+﻿Term,Also known as,Better,Definition
+Procurement Spend,Total Spend; Purchase Spend,,The total money paid to suppliers for goods and services in a period.
+Spend Under Management,Managed Spend; Addressable Spend Managed,higher,"The share of total spend that is covered by contracts, agreed prices or the purchasing team's control."
+Maverick Spend,Off-Contract Spend; Rogue Spend,lower,"Purchases made outside the agreed suppliers or contracts, which are often more expensive and harder to track."
+Tail Spend,Long Tail Spend,lower,The many small purchases from many suppliers that add up to a small share of spend but take a lot of effort to manage.
+Contract Compliance,Procurement Compliance; Purchasing Compliance,higher,"The share of purchases made in line with the agreed contracts, prices and terms."
+Purchase Price Variance,PPV; Price Variance,lower,The difference between the price actually paid for an item and its standard or expected price. A positive variance means the business paid more than planned.
+Cost Savings,Procurement Savings; Savings Achieved; Negotiated Savings,higher,"The reduction in cost achieved by purchasing, compared with a baseline such as last year's price."
+Cost Avoidance,Avoided Cost,higher,"The increase in cost that the buyers prevented by negotiating, compared with what suppliers first asked for."
+Savings Target Achievement,Savings vs Target; Target Savings Delivered,higher,"How much of the planned savings has been delivered, shown as a percentage of the savings target."
+Savings Realisation,Realised Savings; Savings Realization; Savings Leakage,higher,"The share of agreed savings that actually shows up in the accounts, rather than being lost along the way."
+Purchase Order,PO; PO Count; Purchase Orders Raised,,"A formal document sent to a supplier stating what is being bought, the quantity, the price and the delivery date."
+Purchase Order Cycle Time,PO Cycle Time; Requisition to PO Time; Procure-to-Order Time,lower,The time between a purchase request being raised and the purchase order being sent to the supplier.
+Purchase Requisition,Requisitions; Purchase Request,,An internal request asking the purchasing team to buy something.
+Requisition Approval Time,PR Approval Time; Approval Cycle Time,lower,The time taken for a purchase request to be approved.
+Procure to Pay Cycle Time,P2P Cycle Time; Procure-to-Pay Cycle,lower,The total time from raising a purchase request to paying the supplier.
+PO Value,Purchase Order Value; Average PO Value,,"The money value of purchase orders raised, shown as a total or as an average per order."
+Purchase Orders without PO,No PO No Pay; Invoices without PO; Retrospective POs,lower,The share of invoices or purchases that had no purchase order raised beforehand.
+Open Purchase Orders,Open POs; Outstanding Orders; Open PO Value,,The purchase orders that have been sent but where goods or services have not yet been fully received.
+Late Purchase Orders,Overdue POs; Past-Due Orders,lower,The purchase orders where the supplier has passed the promised delivery date without delivering.
+Three-Way Match Rate,3-Way Match; Three Way Match,higher,"The share of invoices where the purchase order, goods received note and invoice all agree, so they can be paid without checking."
+Invoice Processing Cost,Cost per Invoice; Invoice Cost,lower,"The average cost of receiving, checking, approving and paying a supplier invoice."
+Invoice Processing Time,Invoice Cycle Time; Invoice Approval Time,lower,The average time between receiving a supplier invoice and paying it.
+Invoice Exception Rate,Invoice Error Rate; Invoice Dispute Rate,lower,The share of supplier invoices that need to be checked or corrected before they can be paid.
+Early Payment Discount Captured,Prompt Payment Discount; Discounts Taken; Discount Capture,higher,The share of available early-payment discounts that the business took advantage of.
+Payment Terms,Average Payment Terms; Supplier Payment Terms,,The number of days the business is allowed to pay a supplier after receiving the invoice.
+On-Time Payment Rate,Supplier Payment Timeliness; Invoices Paid On Time,higher,The share of supplier invoices that were paid on or before the due date.
+Number of Active Suppliers,Supplier Count; Active Vendors; Vendor Count,,The number of suppliers that were paid or had open orders in the period.
+Supplier Consolidation,Supplier Base Reduction; Supplier Rationalisation,,"Reducing the number of suppliers by moving purchases to fewer, preferred ones, usually to get better prices and easier management."
+Preferred Supplier Spend,Spend with Preferred Suppliers; Approved Supplier Spend,higher,The share of total spend that goes to suppliers on the approved or preferred list.
+Supplier Concentration,Top Supplier Share; Spend Concentration,,How much of total spend goes to the largest few suppliers. A high figure means the business depends on a few sources.
+Supplier Performance Score,Supplier Scorecard; Vendor Rating; Supplier Rating,higher,"An overall score for a supplier that combines delivery, quality, price, service and other measures."
+Supplier Quality Incidents,Supplier Non-Conformances; Supplier Complaints; Supplier NCRs,lower,"The number of problems found with goods or services received from suppliers, such as defects or wrong items."
+Supplier Corrective Action Closure,SCAR Closure; Supplier CAR Closure Rate,higher,The share of corrective actions asked of suppliers that were closed on time.
+Supplier Defect Rate PPM,Supplier PPM; Parts Per Million Defective,lower,The number of defective parts received from a supplier for every million parts received.
+Supplier Responsiveness,Supplier Response Time,higher,"How quickly and fully a supplier answers questions, quote requests and problem reports."
+Supplier Risk Rating,Supplier Financial Risk; Vendor Risk Rating,lower,"A rating of how likely a supplier is to fail or cause a disruption, based on finances, location and dependency."
+Supplier Diversity,Diverse Supplier Spend; Small Business Spend; Local Supplier Spend,higher,"The share of spend that goes to suppliers from groups the business wants to support, such as small, local or minority-owned firms."
+Supplier Onboarding Time,Vendor Onboarding Time; Supplier Set-up Time,lower,The time taken to approve a new supplier and set it up so that it can be used for orders and payments.
+Supplier Audit Completion,Supplier Audits Completed; Supplier Assessment Completion,higher,The share of planned supplier audits or assessments that were carried out.
+Sourcing Cycle Time,Tender Cycle Time; RFP Cycle Time; Time to Source,lower,"The time taken from starting a sourcing exercise, such as a tender, to signing a contract."
+Request for Quotation,RFQ; RFQs Issued; Quote Request,,A request sent to suppliers asking them to price a defined set of goods or services.
+Request for Proposal,RFP; Tender,,A formal invitation for suppliers to propose a solution and price for a larger or more complex need.
+Number of Bids Received,Bids per Tender; Quotes Received; Average Bidders,higher,The average number of suppliers that responded to each request for quotation or tender.
+Competitive Bidding Rate,Competitive Sourcing Rate; Spend Competitively Sourced,higher,The share of spend that was awarded after comparing quotes from more than one supplier.
+Contract Coverage,Spend on Contract; Contracted Spend; Contract Utilisation,higher,The share of spend that is covered by a signed contract.
+Contract Expiry,Contracts Expiring; Contracts Nearing Expiry; Contract Renewals Due,,"The number or value of contracts that will end within a given period, so that they can be renewed or replaced in time."
+Contract Cycle Time,Contract Approval Time; Contract Turnaround Time,lower,"The time taken to draft, negotiate and sign a contract."
+Contract Value,Total Contract Value; Contracted Value,,The total amount agreed in a contract over its full term.
+Price Increase Rate,Supplier Price Increases; Price Inflation,lower,The average change in supplier prices compared with an earlier period.
+Total Cost of Ownership,TCO,lower,"The full cost of buying and using something over its life, including purchase price, delivery, running, maintenance and disposal."
+Should-Cost,Should Cost Model; Fact-Based Cost,,"An estimate of what an item ought to cost to make, built from materials, labour and overheads, and used to challenge supplier prices."
+Category Spend,Spend by Category; Category Spend Share,,"Spend split by type of goods or service, such as raw materials, packaging, logistics or IT."
+Direct Spend,Direct Materials Spend; Production Spend,,Spend on materials and services that go straight into the product being sold.
+Indirect Spend,Indirect Procurement; MRO Spend; Non-Production Spend,,"Spend on things the business needs to run but that are not part of the product, such as office supplies, maintenance, travel and services."
+Buyer Productivity,Spend per Buyer; POs per Buyer; Purchasing Productivity,higher,The amount of spend or the number of orders handled by each buyer.
+Procurement Cost to Spend,Cost of Procurement; Procurement Operating Cost,lower,"What the purchasing function costs to run, shown as a percentage of the spend it manages."
+Procurement ROI,Procurement Return on Investment; Return on Procurement,higher,The savings delivered by procurement compared with the cost of the procurement team.
+E-Procurement Adoption,Catalogue Spend; Catalog Spend; Purchases via System,higher,The share of purchases made through the electronic purchasing system or catalogue rather than by email or phone.
+Goods Receipt Timeliness,Receipt Cycle Time; GRN Timeliness,higher,The share of deliveries recorded in the system on the day they arrived.
+Material Shortage Incidents,Parts Shortages; Shortage Count; Line Stoppage Due to Shortage,lower,The number of times production or service was held up because a needed material or part was not available.
+Expedited Orders,Rush Orders; Expedite Rate; Premium Freight Orders,lower,"The share of purchase orders that had to be rushed, often at extra cost, because of late planning or shortages."
+Sustainable Procurement,Green Procurement; ESG Spend; Sustainable Sourcing,higher,"The share of spend that goes to suppliers meeting set environmental, social or governance standards."

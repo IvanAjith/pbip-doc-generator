@@ -1,0 +1,69 @@
+﻿Term,Also known as,Better,Definition
+OTD,On-Time Delivery; On Time Delivery,higher,The share of orders that were delivered by the date the customer was promised.
+OTIF,On-Time In-Full,higher,The share of orders delivered both on the promised date and with the complete quantity ordered -- a stricter version of On-Time Delivery.
+Backlog,,,Orders that have been placed but not yet completed or shipped.
+Lead Time,,lower,How long it takes from an order being placed to it being ready or delivered.
+Fill Rate,,higher,The share of ordered items that could be shipped immediately from available stock.
+Inventory Turnover,Inventory Turns,higher,How many times inventory is sold and replaced over a period -- a higher number generally means less cash tied up sitting on shelves.
+Days of Supply,DOS,,"How many days current inventory would last at the normal rate of use, if nothing more came in."
+SLA,Service Level Agreement,higher,A commitment to a standard of service -- e.g. how fast an order or request will be handled. An SLA score shows how often that commitment was actually met.
+Unscheduled,,lower,Orders or jobs that are open but haven't yet been assigned a production or delivery slot.
+Inventory,Stock; Stock on Hand; Inventory on Hand,,The quantity or value of goods held ready for use or sale.
+Stockout,Stockouts; Stock Out,lower,Occasions when an item is requested but there is none available.
+Safety Stock,,,Extra inventory kept as a buffer against uncertainty in demand or supply.
+Reorder Point,,,The stock level at which a new order should be placed to avoid running out.
+Days Inventory Outstanding,DIO; Days of Inventory,lower,The average number of days inventory is held before it is sold or used.
+Stock Turn,Stock Turns; Stock Turnover,higher,How many times inventory is sold or used and replaced in a period.
+Available Inventory,Available to Promise; ATP; Free Stock,,"The stock that can still be promised to customers, found by taking the stock on hand and removing what is already reserved for orders."
+Inventory Value,Stock Value; Inventory Valuation; Value of Inventory,,"The money value of the stock held, normally at cost."
+Average Inventory,Average Stock; Average Inventory Level,,"The average amount of stock held over a period, usually found from the opening and closing figures."
+Inventory Accuracy,Stock Accuracy; Record Accuracy,higher,"How closely the stock records match what is actually counted on the shelves, shown as a percentage."
+Inventory Variance,Stock Variance; Stock Count Variance; Count Variance,lower,The difference between the quantity or value in the records and what was found in a physical count.
+Inventory Shrinkage,Shrinkage; Shrink; Stock Loss,lower,"Stock lost to theft, damage, errors or spoilage, so that less is found than the records say."
+Inventory to Sales Ratio,Stock to Sales Ratio; Inventory Cover,,"How much stock is held compared with sales, showing how many months of sales are covered by the stock on hand."
+Inventory Holding Cost,Carrying Cost; Inventory Carrying Cost; Holding Cost,lower,"The cost of keeping stock, including storage, insurance, handling, capital tied up and losses from ageing."
+Gross Margin Return on Inventory,GMROI,higher,The gross profit earned for each unit of money invested in stock. It shows whether stock is paying its way.
+Inventory Ageing,Aged Inventory; Stock Ageing; Inventory Aging,lower,"A breakdown of stock by how long it has been held, for example 0 to 30 days or over 180 days."
+Slow-Moving Inventory,Slow Movers; Slow Moving Stock,lower,"Stock that sells only in small quantities, so it stays on the shelf for a long time."
+Obsolete Inventory,Obsolete Stock; Dead Stock; E&O,lower,"Stock that is no longer wanted or can no longer be sold, and which may have to be written off."
+Excess Inventory,Excess Stock; Overstock,lower,Stock held above what is needed to meet expected demand.
+Inventory Write-Off,Stock Write-Off; Inventory Provision; Write-Down,lower,"The value of stock that has been removed from the books because it is lost, damaged or no longer sellable."
+Stockout Rate,Out of Stock Rate; Stock-Out Rate; OOS Rate,lower,"The share of demand, orders or items that could not be met because the stock had run out."
+Back Orders,Backorders; Backorder Quantity,lower,"Orders that could not be filled when placed because stock was not available, and are waiting to be supplied."
+Perfect Order Rate,Perfect Order Index; Perfect Order,higher,"The share of orders delivered complete, on time, undamaged and with the right documents."
+Order Accuracy,Order Picking Accuracy; Pick Accuracy,higher,The share of orders sent out with the right items and quantities.
+Order Processing Time,Order Lead Time,lower,The time taken from receiving an order to having it ready or delivered to the customer.
+Order Line Fill Rate,Line Fill Rate; Line Item Fill Rate,higher,The share of order lines that were shipped in full from stock.
+Demand Forecast Accuracy,Forecast Error; MAPE; Forecast Bias,higher,How closely the forecast of demand matched what customers actually ordered.
+Demand Variability,Demand Volatility; Coefficient of Variation,lower,How much demand moves up and down from period to period. Higher variability needs more safety stock.
+Supplier Lead Time,Vendor Lead Time; Procurement Lead Time,lower,The time between placing an order with a supplier and receiving the goods.
+Lead Time Variability,Lead Time Variance,lower,How much the time it takes to receive goods changes from order to order. A steady lead time is easier to plan around.
+Supplier On-Time Delivery,Vendor OTD; Supplier Delivery Performance; Supplier OTD,higher,The share of supplier deliveries that arrived on or before the promised date.
+Supplier Fill Rate,Vendor Fill Rate,higher,The share of ordered quantities that the supplier delivered.
+Supplier Quality Rate,Incoming Quality; Supplier Defect Rate; Vendor Quality,higher,The share of goods received from a supplier that passed inspection.
+Cash-to-Cash Cycle Time,Cash Conversion Cycle; C2C; CCC,lower,The number of days between paying suppliers for materials and being paid by customers for the finished goods.
+Days Payable Outstanding,DPO; Payable Days,,The average number of days the business takes to pay its suppliers.
+Total Supply Chain Cost,Supply Chain Cost; Cost to Serve; Supply Chain Spend,lower,"The sum of all costs of buying, making, storing and delivering goods, shown in total or as a percentage of sales."
+Logistics Cost,Logistics Cost to Sales; Distribution Cost,lower,"The cost of storing and moving goods, shown in total or as a percentage of sales."
+Freight Cost,Transportation Cost; Shipping Cost; Freight Spend,lower,"The money spent on moving goods by road, sea, air or rail."
+Freight Cost per Unit,Transport Cost per Unit; Shipping Cost per Unit,lower,The freight cost divided by the number of units moved.
+On-Time Pickup,Pickup Timeliness; On-Time Collection,higher,The share of shipments collected from the warehouse or supplier at the agreed time.
+On-Time Shipment,On-Time Dispatch; Shipping Timeliness,higher,The share of orders that left the warehouse on or before the planned dispatch date.
+Delivery Lead Time,Transit Time; Delivery Time; Shipping Lead Time,lower,The time between an order leaving the warehouse and arriving at the customer.
+Damage Rate,Shipping Damage Rate; Freight Damage Rate; Transit Damage,lower,The share of shipments or items that arrived damaged.
+Loading Efficiency,Truck Fill Rate; Vehicle Fill Rate; Load Factor,higher,How much of a vehicle's capacity was used on a trip. A fuller load means a lower cost per unit moved.
+Warehouse Capacity Utilisation,Warehouse Utilization; Space Utilisation; Storage Utilization,higher,The share of the warehouse's storage space that is in use.
+Warehouse Picking Productivity,Lines Picked per Hour; Picks per Hour; Pick Rate,higher,The number of items or order lines picked for each hour of labour.
+Dock to Stock Time,Putaway Time; Receiving Cycle Time,lower,The time between goods arriving at the dock and being available to pick in stock.
+Receiving Accuracy,Goods Receipt Accuracy,higher,The share of goods receipts where the quantity and item received match the order and delivery note.
+Economic Order Quantity,EOQ,,The order size that gives the lowest combined cost of ordering and holding stock.
+Minimum Order Quantity,MOQ,,The smallest amount that a supplier will agree to sell in one order.
+Order Frequency,Replenishment Frequency; Number of Orders Placed,,How often orders are placed with suppliers for an item or a group of items.
+Replenishment Lead Time,Restocking Time; Replenishment Time,lower,The time taken to bring stock back up to its target level after a need is identified.
+Min-Max Level,Min Max; Minimum and Maximum Stock,,"The lowest and highest stock levels set for an item. Stock is ordered when it falls to the minimum, up to the maximum."
+Safety Stock Coverage,Days of Safety Stock,higher,How many days of average demand the safety stock can cover.
+Stock Cover,Weeks of Cover; Weeks of Supply; Days of Cover,,How long the stock on hand would last at the current rate of sales or use.
+Returns Rate to Supplier,Return to Vendor Rate; RTV,lower,The share of goods received that were sent back to the supplier.
+Reverse Logistics Cost,Returns Handling Cost; Returns Processing Cost,lower,"The cost of taking back, checking and re-stocking or disposing of returned goods."
+Supply Chain Risk Score,Supplier Risk Score; Supply Risk,lower,"A score showing how exposed the supply chain is to disruptions such as supplier failure, delays or shortages."
+Single-Source Dependency,Single Source Items; Sole Source Dependency,lower,"The share of items that can be bought from only one supplier, which makes supply fragile."

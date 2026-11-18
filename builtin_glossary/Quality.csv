@@ -1,0 +1,67 @@
+﻿Term,Also known as,Better,Definition
+FPY,First Pass Yield,higher,"The share of units that come out right the first time, with no rework or scrap needed."
+DPMO,Defects Per Million Opportunities,lower,"A standardized defect rate -- how many defects would occur per million chances for one, letting very different processes be compared on the same scale."
+COPQ,Cost of Poor Quality,lower,"The total cost of things going wrong -- scrap, rework, returns, and warranty claims."
+Scrap Rate,Scrap %,lower,The share of material or units that had to be thrown away rather than used or sold.
+Rework,,lower,Work that had to be redone because it didn't meet quality standards the first time.
+Comeback,Claim Rate; Warranty Claim,lower,The share of shipped units that were sent back as faulty or under warranty.
+Six Sigma,,,"A quality methodology aimed at reducing process variation and defects to a very small, statistically defined rate."
+SPC,Statistical Process Control,,Using statistics to monitor a process in real time and catch it drifting out of spec before it produces bad output.
+Yield,,higher,"The share of output that comes out good, out of everything started or processed."
+Defect Rate,Defects,lower,The share of items produced that do not meet quality requirements.
+Customer Complaints,Complaints; Complaint Rate,lower,The number of times customers formally report a problem with a product or service.
+Returns,Return Rate,lower,"Products sent back by customers, shown as a count or as a share of sales."
+Right First Time,RFT; First Time Right; FTR,higher,"The share of products or jobs that were done correctly the first time, with no rework or repair."
+Rolled Throughput Yield,RTY,higher,"The chance that a unit passes through every step of a process without a defect, found by multiplying the first-pass yield of each step."
+Defects per Unit,DPU,lower,The average number of defects found on each unit inspected.
+Defects per Million,PPM Defective; Parts Per Million,lower,The number of defective items for every million produced or inspected.
+Defect Count,Number of Defects; Total Defects,lower,The total number of defects found in a period.
+Defective Rate,Percent Defective; Reject Rate; Rejection Rate,lower,The share of inspected items that were found to be defective.
+Defect Escape Rate,Escaped Defects; Defects Found by Customers,lower,The share of defects that were not caught in-house and were found by the customer instead.
+Defect Detection Efficiency,Defect Removal Efficiency; DRE,higher,The share of all defects that were found before the product reached the customer.
+Cost of Quality,CoQ; Quality Cost,lower,"The total cost of making sure quality is right and of fixing it when it is wrong, including prevention, checking and failure costs."
+Cost of Poor Quality Percentage,COPQ Percentage; Poor Quality Cost to Sales,lower,The cost of poor quality shown as a percentage of sales.
+Internal Failure Cost,Internal Failure Costs; Cost of Internal Failure,lower,"The cost of problems found before the product leaves the business, such as scrap, rework and re-inspection."
+External Failure Cost,External Failure Costs; Cost of External Failure,lower,"The cost of problems found after the product has reached the customer, such as returns, warranty claims and recalls."
+Prevention Cost,Prevention Costs; Cost of Prevention,,"The money spent to stop quality problems happening in the first place, such as training, planning and design reviews."
+Appraisal Cost,Appraisal Costs; Inspection Cost; Cost of Appraisal,,"The money spent on checking products and processes to find problems, such as inspection and testing."
+Scrap Cost,Cost of Scrap; Scrap Value; Scrap Loss,lower,The value of material and effort lost on items that cannot be fixed or sold.
+Scrap Quantity,Scrap Units; Units Scrapped,lower,The number of units thrown away as unusable in a period.
+Rework Rate,Rework Percentage; Reworked Units,lower,The share of items that needed to be reworked before they could be accepted.
+Rework Cost,Cost of Rework; Repair Cost,lower,"The cost of fixing items that were not right the first time, including labour and materials."
+Warranty Claims,Warranty Cost; Warranty Returns; Warranty Rate,lower,The number or cost of claims made by customers under the product warranty.
+Warranty Cost Percentage,Warranty Cost to Sales; Warranty Expense Rate,lower,The cost of warranty claims shown as a percentage of sales.
+Customer Returns Rate,Return Merchandise Authorisation Rate; RMA Rate; Customer Return Rate,lower,"The share of delivered items that customers sent back, usually because of a quality problem."
+Customer Complaints per Million,Complaints per Million; Complaint PPM,lower,The number of customer complaints for every million units sold or delivered.
+Complaint Closure Rate,Complaints Closed; Closed Complaints,higher,The share of customer complaints that were closed in a period.
+Non-Conformance,NC; Non-Conformity; Non-Conformances,lower,"A case where a product, process or service does not meet the requirement or specification."
+Non-Conformance Report,NCR; NCRs Raised; Open NCRs,lower,"A formal record raised when a non-conformance is found, which tracks the cause and what is done about it."
+Non-Conformance Closure Time,NCR Closure Time; Time to Close NCR,lower,The average time taken to close a non-conformance report from when it was raised.
+Corrective Action Closure Rate,Corrective Actions Closed; CA Closure,higher,The share of corrective actions that were closed by their due date.
+Preventive Action,Preventive Actions Completed; PA Closure,higher,Steps taken to remove the cause of a possible problem before it happens.
+Root Cause Analysis Completion,RCA Completion; Root Cause Closure,higher,The share of problems for which the root cause was found and recorded within the target time.
+Repeat Defects,Recurring Defects; Repeat Issues; Repeat Non-Conformances,lower,The number of problems that happened again after they had supposedly been fixed.
+Inspection Pass Rate,Pass Rate; First Pass Inspection Rate; Acceptance Rate,higher,The share of inspections that were passed.
+Incoming Inspection Rejection Rate,Receiving Inspection Reject Rate; Incoming Quality Rejection,lower,The share of delivered goods that were rejected when checked on arrival.
+Final Inspection Pass Rate,Outgoing Quality; Final Quality Pass Rate,higher,The share of finished goods that passed the final check before being shipped.
+Audit Findings,Audit Non-Conformities; Findings per Audit; Audit Observations,lower,The number of problems or gaps noted during an audit.
+Audit Completion Rate,Audits Completed; Audit Plan Completion; Audit Schedule Adherence,higher,The share of planned audits that were completed on time.
+Audit Score,Audit Rating; Audit Compliance Score,higher,"The overall score given after an audit, showing how well the area meets the requirements."
+Calibration Compliance,Calibration On Time; Gauge Calibration Compliance; Calibrations Due,higher,The share of measuring instruments that were calibrated by their due date.
+Document Control Compliance,Document Compliance; Document Review Compliance; Overdue Documents,higher,The share of controlled documents that are current and reviewed on time.
+Training Compliance,Quality Training Completion; Training Completion Rate; Mandatory Training Rate,higher,The share of required training that was completed by the people who needed it.
+Quality Score,Quality Index; Quality Rating; Overall Quality,higher,"A summary score of quality, usually combining several measures such as defects, returns and audit results."
+Supplier Quality Rating,Vendor Quality Rating; Supplier Quality Index,higher,A score showing the quality of goods received from a supplier.
+Process Sigma Level,Sigma Level; Sigma Score,higher,A measure of how rarely a process makes a defect. A higher sigma level means fewer defects.
+Control Chart Violations,Out of Control Points; SPC Alarms; Out-of-Control Points,lower,"The number of times a measured value moved outside the control limits, signalling that the process may have changed."
+Gauge R&R,Measurement System Analysis; MSA; Measurement Error,lower,A test of how much of the variation in measurements comes from the measuring equipment and the people using it rather than the product.
+Process Capability Cp,Cp; Capability Ratio,higher,"A measure of whether a process can stay within its limits, compared with the width of the limits. A value above 1.33 is often seen as capable."
+Right First Time Delivery,Delivery Right First Time; Perfect Delivery,higher,"The share of deliveries made with the right product, quantity, quality and paperwork the first time."
+Product Recall,Recalls; Recall Count; Recall Events,lower,The number of times products had to be taken back from customers because of a safety or quality problem.
+Customer Quality Rating,Customer Scorecard; Customer Quality Score,higher,"The score given to the business by a customer who rates its quality, delivery and service."
+Quality Escapes,Quality Escape Rate; Escapes,lower,The number of defective products that got past the checks and reached the next process or the customer.
+Concession Rate,Deviations; Waivers; Concessions,lower,"The share of products accepted even though they did not fully meet the specification, with approval to do so."
+First Pass Quality Rate,First Pass Rate; FPQ; First Time Through,higher,The share of units that pass all checks the first time they go through a process.
+Defects by Category,Defect Types; Defect Pareto; Defect Breakdown,,"A breakdown of defects by type, usually shown from the biggest to the smallest so the main causes stand out."
+Lot Acceptance Rate,Batch Acceptance Rate; Lot Pass Rate,higher,The share of lots or batches that were accepted after inspection.
+Yield Loss,Loss of Yield; Yield Variance,lower,The amount lost during a process because the output was less than the input should have given.

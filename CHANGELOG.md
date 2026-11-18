@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.0 - 18/11/2026
+- The built-in glossary is now a real offline dictionary: 15 domains, at least 50 terms each (about 1,050 in total), every term with a
+  plain-English definition and, where it makes sense, whether higher or lower is better. New domains: Procurement, Technology & SaaS.
+  Sales, Marketing, Customer, Operations, Quality, Safety, HR, Insurance, Banking & Investments, Gaming & Media and Finance were widened.
+- The glossary now lives in `builtin_glossary\*.csv` (one file per domain, easy to open in Excel and edit) instead of inside the code.
+- A term written with a % or ratio (for example "Expense Ratio") only matches a measure name that also says %, ratio or percentage,
+  so it no longer captures a plain measure that happens to share the first word.
+- New test: `tests/test_builtin_glossary.py` (50+ terms per domain, valid definitions, no name used by two entries, offline lookups work).
+- `docs/Built_in_KPI_Glossary.xlsx` regenerated.
+
 ## 1.7.0 - 18/11/2026
 - New: `python run.py --export-glossary` writes the built-in glossary to Excel: an Overview (how the tool uses it, terms per domain),
   an "All terms" sheet with filters, and one sheet per domain. No project needed.

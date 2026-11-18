@@ -1,0 +1,55 @@
+﻿Term,Also known as,Better,Definition
+Orders,Order Intake; Bookings,higher,The number or value of customer orders received in a period.
+Units Sold,Units; Quantity Sold,higher,"The number of items sold in a period, counted in units rather than money."
+Average Order Value,AOV,higher,Total order value divided by the number of orders.
+ARPU,Average Revenue Per User,higher,Revenue divided by the number of users or subscribers in the period.
+Sales Growth,Sales Growth Rate; Revenue Growth,higher,"How much sales have gone up or down compared with an earlier period, shown as a percentage of that earlier period."
+Same-Store Sales,Like-for-Like Sales; Comparable Sales; SSS,higher,"Sales from stores or outlets that were open in both periods being compared, so growth is not flattered by new openings."
+Sales Target,Sales Goal,,"The amount of sales a person, team or region is expected to reach in a period. Actual sales are measured against it."
+Target Attainment,Sales Target Achievement; Achievement Rate,higher,"How much of the sales target has been reached, shown as a percentage of the target."
+Sales Forecast,Revenue Forecast,,"The sales the business expects to make in a future period, usually built from pipeline, history and seasonality."
+Forecast Accuracy,,higher,How close the sales forecast turned out to be to what was actually sold. A figure near 100% means the forecast was reliable.
+Sales Pipeline Value,Pipeline Value; Pipeline Coverage,higher,The total value of open deals that could still be won. It is often compared with the target to see whether there is enough in the funnel.
+Weighted Pipeline,Weighted Pipeline Value,higher,"Open deals counted at their chance of closing, for example a deal worth 100 with a 30% chance counts as 30. It is a more cautious view than the plain pipeline."
+Opportunities,Open Opportunities,,The number of potential sales that sales people are actively working on.
+Qualified Leads,Sales Qualified Leads; SQL,higher,"Leads that sales has checked and agreed are worth pursuing because they have a need, a budget and a decision maker."
+Marketing Qualified Leads,MQL,higher,"Leads that marketing considers ready to pass to sales because they have shown enough interest, for example by downloading content or requesting a demo."
+Lead Conversion Rate,Lead to Customer Rate; Lead to Opportunity Rate,higher,"The share of leads that move to the next stage, such as an opportunity or a paying customer."
+Lead Response Time,Speed to Lead,lower,How long it takes to make first contact after a lead arrives. Faster responses usually mean a better chance of winning the deal.
+Sales Cycle Length,Sales Cycle; Deal Cycle Time,lower,The average number of days from first contact with a prospect to a closed deal.
+Average Deal Size,Average Sale Value; Average Contract Value; ACV,higher,The average value of the deals that were won in a period.
+Deals Won,Closed Won; Won Deals,higher,The number of deals that were signed in a period.
+Deals Lost,Closed Lost; Lost Deals,lower,The number of deals that ended without a sale in a period.
+Loss Rate,Deal Loss Rate,lower,The share of closed deals that were lost rather than won.
+Order Backlog,Backlog of Orders; Open Orders Value,,The value of orders taken but not yet delivered or invoiced. It shows how much work is already secured.
+Book-to-Bill Ratio,Book to Bill,higher,"Orders received divided by sales invoiced in the same period. Above 1 means more orders are coming in than going out, which signals growth."
+Sales per Rep,Revenue per Sales Rep; Sales per Salesperson,higher,The average sales made by each sales person in a period. It shows how productive the team is.
+Quota Attainment Rate,Quota Achievement; Reps at Quota,higher,The share of sales people who reached their quota in the period.
+Sales Rep Ramp Time,Ramp Time; Time to Productivity,lower,The time a new sales person needs before reaching a normal level of sales.
+Sales Productivity,,higher,"How much sales are produced for the effort or cost put in, for example sales per rep or per sales call."
+Calls Made,Sales Calls; Outbound Calls,,"The number of calls the sales team made in a period. It measures activity, not results."
+Meetings Booked,Appointments Set; Demos Booked,higher,The number of meetings or demos that sales people arranged with prospects in a period.
+Proposals Sent,Quotes Sent; Quotations Issued,,The number of formal offers sent to customers in a period.
+Quote to Close Rate,Quote Conversion Rate; Quote Win Rate,higher,The share of quotes sent that turned into orders.
+Discount Rate,Average Discount; Discount Given,lower,"The reduction from list price that was given on sales, as a percentage of list price. Deep discounts reduce profit."
+Discount Leakage,,lower,Discounts given above what policy or approval rules allow. It is margin that was given away without a reason.
+Price Realization,Realized Price,higher,The share of the list price that the business actually collected after discounts and deductions.
+Average Selling Price,ASP; Average Unit Price,,"The average price at which a product sold, found by dividing sales value by units sold."
+Gross Margin per Sale,Margin per Order; Margin per Deal,higher,The profit left on a sale after the direct cost of the goods or service has been taken off.
+Cross-Sell Rate,Cross-Sell,higher,The share of customers who buy a different product or service from you on top of what they already have.
+Upsell Rate,Upsell Revenue; Upsell,higher,The share of customers who move to a more expensive product or add more of what they already buy.
+Attach Rate,Accessory Attach Rate,higher,"How many add-on or related products are sold per main product, for example accessories per device sold."
+Repeat Purchase Rate,Repeat Customer Rate; Repeat Orders,higher,The share of customers who buy again within a period. It shows loyalty and satisfaction.
+Customer Concentration,Top Customer Share; Revenue Concentration,lower,How much of total sales comes from the biggest few customers. A high figure means the business depends on a small number of buyers.
+New Customer Revenue,New Business Revenue,higher,Sales made to customers who bought for the first time in the period.
+Existing Customer Revenue,Repeat Business Revenue; Installed Base Revenue,,Sales made to customers who had already bought before the period started.
+Sales by Region,Regional Sales; Territory Sales,,"Sales split by geographic area, used to compare how regions are performing against each other."
+Sales by Channel,Channel Sales; Channel Mix,,"Sales split by how they were made, such as direct, distributors, online or retail."
+Market Share,Share of Market,higher,The portion of total market sales that the business holds. It shows how it is doing compared with competitors.
+Win Rate by Competitor,Competitive Win Rate,higher,The share of deals won when a specific competitor was also bidding.
+Sales Commission,Commission Paid; Incentive Pay,,"Variable pay earned by sales people for the sales they close, usually a percentage of the sale value."
+Sales Efficiency,Sales Efficiency Ratio,higher,How much new revenue is gained for each unit of sales and marketing spend.
+Customer Visits,Store Visits; Footfall,higher,The number of people who visited a store or site in a period. Together with the conversion rate it explains sales.
+Basket Size,Average Basket; Items per Basket; Units per Transaction,higher,The average number of items in a customer's purchase.
+Average Transaction Value,ATV; Average Ticket; Average Sale,higher,"The average money spent in one purchase, found by dividing sales by the number of transactions."
+Sales per Square Foot,Sales Density; Sales per Square Metre,higher,The sales a store makes for each unit of selling floor space. It shows how well the space is being used.

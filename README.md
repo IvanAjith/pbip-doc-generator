@@ -61,6 +61,8 @@ run again: the AI then receives your meanings and the refused terms are redrafte
 sheet per domain). A copy of the current list is in `docs/`. The tool matches the names it reads from the Power BI file against this list
 (exact name or alternative name; a time window such as "6 months" or "YTD" is ignored); the domain is only a label.
 
+The list is the tool's offline dictionary: **15 domains with at least 50 terms each** (Finance, Sales, Marketing, Customer, Operations, Supply Chain & Inventory, Procurement, Quality, Safety, HR & People, Insurance, Banking & Investments, Gaming & Media, Technology & SaaS, General). It lives in `builtin_glossary\`, one CSV per domain (Term, Also known as, Better, Definition); open one in Excel to add or correct a term. A name written with a % or "ratio" only matches a measure that also says % or ratio, so "Expense Ratio" is not used for a measure called "Expense".
+
 Definitions an AI or the web found, or that you typed, stay on your computer in `glossary\`. To share them so that everyone (and offline
 mode) benefits, with a person checking first:
 ```
@@ -124,7 +126,7 @@ Open `output\<Name>_KPI_Glossary.docx`:
 
 Alternatively edit `glossary/my_definitions.csv` in Excel (one row per indicator; type `ok` to accept a suggestion).
 
-Definition order: your own → built-in standard terms (~180 across finance, sales, HR, safety, inventory, subscriptions, gaming, insurance) → web (Wikipedia, optional `ddgs`) → AI draft (if `--ai`) → formula draft → "needs your definition".
+Definition order: your own → built-in standard terms (about 1,050 across 15 domains, at least 50 per domain, each with a plain-English definition) → web (Wikipedia, optional `ddgs`) → AI draft (if `--ai`) → formula draft → "needs your definition".
 
 If definitions from the web are missing, open `glossary/web_log.txt`: it lists each term searched and why nothing was used.
 
@@ -147,6 +149,7 @@ python tests/test_menu.py               # the start-up question (AI / offline)
 python tests/test_custom_service.py     # key recognition, 'Other' services, web-address checks
 python tests/test_checks.py             # the checks on AI sentences + context.txt
 python tests/test_shared_glossary.py    # Excel export + shared glossary (export / review / merge)
+python tests/test_builtin_glossary.py   # every domain has 50+ terms with definitions; no name used twice
 python tests/test_secrets.py            # key storage, masking, guided setup
 python tests/test_secret_scan.py        # no key-like text in files Git would publish
 ```

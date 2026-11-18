@@ -1,0 +1,69 @@
+﻿Term,Also known as,Better,Definition
+TRIR,Total Recordable Incident Rate,lower,"How often work-related injuries serious enough to need medical treatment are happening, adjusted so plants or teams of different sizes can be compared fairly."
+LTIR,Lost Time Incident Rate; LTIFR,lower,"How often injuries happen that are serious enough to cause someone to miss work, adjusted for team size so different periods or sites can be compared fairly."
+DART,DART Rate,lower,"How often injuries happen that are serious enough to cause days away from work, restricted duty, or a job transfer."
+Near Miss,Near Misses,lower,Incidents that could have caused harm but didn't. Tracking these closely helps catch safety issues before someone actually gets hurt.
+Gemba,Gemba Walk,higher,“Gemba” means “the real place” -- the shop floor. A Gemba walk is a scheduled walkthrough where leaders check conditions in person rather than from a desk.
+5S,5S Audit,higher,"A workplace-organization standard covering five habits: Sort, Set in order, Shine, Standardize, and Sustain. A 5S score reflects how well an area is following it."
+PPE,,,"Personal Protective Equipment -- the gear (gloves, goggles, hard hats, etc.) workers wear to stay safe on the job."
+CAPA,Corrective and Preventive Action; Corrective Action,higher,The formal process of fixing the immediate cause of a safety or quality issue (corrective) and changing the process so it doesn't happen again (preventive).
+Action Closure,Action Item Closure,higher,"The share of open follow-up items -- issues flagged in an audit, walk, or review -- that have actually been resolved."
+Safety Score,Safety Rating,higher,An overall measure of how well safety requirements are being met.
+Safety Incidents,Incidents; Accidents,lower,"Events at work that caused, or could have caused, injury or damage."
+First Aid Cases,First Aid,lower,Minor work injuries treated on site without needing professional medical treatment.
+Lost Time Injuries,LTI,lower,Work injuries that caused the employee to miss one or more days of work.
+Total Recordable Cases,Recordable Incidents; Recordable Cases; Recordables,lower,"The number of work injuries and illnesses serious enough to be recorded under safety rules, because they need more than first aid."
+Lost Time Injury Frequency Rate,Lost Time Frequency Rate,lower,The number of injuries causing lost working time for every million hours worked.
+Total Recordable Injury Frequency Rate,TRIFR; Recordable Injury Frequency Rate,lower,The number of recordable injuries for every million hours worked.
+Severity Rate,Injury Severity Rate; Incident Severity Rate,lower,"The number of working days lost because of injuries for every million hours worked. It shows how serious injuries are, not only how many there are."
+Days Away Restricted or Transferred,Days Away; Restricted Days; DART Days,lower,"The number of days people were away from work, or on restricted or changed duties, because of a work injury or illness."
+Lost Workdays,Lost Days; Days Lost; Lost Time Days,lower,The total number of working days lost because of work injuries and illnesses.
+Fatalities,Fatality Rate; Work-Related Deaths; Fatal Accidents,lower,The number of deaths caused by work. The aim is always zero.
+Hours Worked,Exposure Hours; Man-Hours; Total Hours Worked,,The total hours worked by all employees and contractors in a period. It is the base used to work out safety rates.
+Days Without Lost Time Injury,Days Since Last Accident; Days Since Last LTI; Safe Days,higher,The number of days that have passed since the last injury that caused lost working time.
+Incident Rate,Incident Frequency Rate; Accident Frequency Rate; Accident Rate,lower,"The number of incidents for each fixed number of hours worked, so that different sites can be compared fairly."
+Incident Count,Number of Incidents; Total Incidents; Incidents Reported,lower,The total number of safety incidents recorded in a period.
+Near Miss Reporting Rate,Near Misses Reported; Near Miss Frequency; Near-Miss Rate,higher,The number of near misses reported for each fixed number of hours worked or employees. A higher figure is good because it shows people are speaking up.
+Hazard Reports,Hazards Reported; Hazards Identified; Unsafe Conditions Reported,higher,The number of unsafe conditions or acts that people reported before anyone was hurt.
+Hazard Closure Rate,Hazards Closed; Hazards Resolved,higher,The share of reported hazards that have been fixed and closed.
+Open Actions,Overdue Actions; Open Safety Actions; Outstanding Actions,lower,"The number of safety actions that are still waiting to be finished, often with a count of those past their due date."
+Action Closure Time,Time to Close Action; Average Closure Time,lower,The average number of days taken to close a safety action from when it was raised.
+Incident Investigation Completion,Investigations Completed; Investigation Closure Rate,higher,The share of incidents that were investigated and closed within the target time.
+Safety Inspections Completed,Inspections Done; Safety Walks; Workplace Inspections,higher,The number or share of planned safety inspections that were carried out.
+Safety Observations,Behaviour Observations; Behavior-Based Safety Observations; BBS Observations,higher,The number of checks where a person watches how work is done and notes safe and unsafe behaviour.
+Safe Behaviour Rate,Safe Behavior Percentage; Percent Safe; Safe Acts,higher,The share of observed behaviours that were safe.
+Safety Audit Score,Safety Audit Rating; EHS Audit Score; Safety Compliance Score,higher,"The overall score given after a safety audit, showing how well the site meets the requirements."
+Safety Audit Findings,EHS Audit Findings; Audit Non-Compliances,lower,The number of gaps or breaches found during safety audits.
+Safety Training Completion,Safety Training Rate; EHS Training Compliance; Induction Completion,higher,The share of required safety training that has been completed by the people who need it.
+Safety Training Hours,Hours of Safety Training; EHS Training Hours,higher,The total hours spent on safety training in a period.
+Toolbox Talks,Safety Briefings; Tool Box Talks; Safety Meetings Held,higher,"The number of short safety talks given to work teams, usually before a shift or a job."
+Safety Meetings Attendance,Safety Briefing Attendance; Attendance at Safety Meetings,higher,The share of people who attended the planned safety meetings or briefings.
+Emergency Drills Completed,Fire Drills; Evacuation Drills; Drills Conducted,higher,The number or share of planned emergency drills that were carried out.
+Permit to Work Compliance,PTW Compliance; Work Permit Compliance; Permits Issued,higher,The share of high-risk jobs carried out with the correct work permit in place.
+Lockout Tagout Compliance,LOTO Compliance; Isolation Compliance,higher,The share of checks where machines were correctly locked off and tagged before work started.
+PPE Compliance,PPE Usage; PPE Compliance Rate; Protective Equipment Compliance,higher,The share of checks in which people were wearing the protective equipment their task needs.
+Risk Assessments Completed,Risk Assessment Completion; Risk Assessments Reviewed; JSA Completion,higher,The share of jobs or areas that have an up-to-date risk assessment.
+High-Risk Findings,High Risk Hazards; Critical Findings; High Severity Findings,lower,"The number of hazards or audit findings rated as high risk, which need quick action."
+Safety Critical Equipment Inspections,Critical Equipment Checks; Safety Equipment Inspection Compliance,higher,"The share of safety-critical equipment, such as fire extinguishers, alarms and guards, that was inspected on time."
+Medical Treatment Cases,MTC; Medical Treatment Injuries,lower,The number of injuries that needed medical treatment beyond first aid.
+Restricted Work Cases,RWC; Restricted Work Injuries; Modified Duty Cases,lower,The number of injuries after which a person could work only in a limited way.
+First Aid Case Rate,First Aid Injury Rate; FAC Rate,lower,The number of first aid cases for every million hours worked.
+Property Damage Incidents,Property Damage; Damage Incidents; Equipment Damage Incidents,lower,"The number of incidents that damaged equipment, buildings or other property."
+Vehicle Incidents,Motor Vehicle Accidents; Vehicle Accidents; Driving Incidents,lower,"The number of accidents involving company vehicles or drivers, often shown per million kilometres driven."
+Environmental Incidents,Spills; Environmental Releases; Environmental Non-Compliances,lower,"The number of events that harmed or could have harmed the environment, such as chemical spills or illegal discharges."
+Environmental Compliance,Regulatory Compliance Rate; Legal Compliance; EHS Compliance,higher,The share of environmental and safety legal requirements that the site is meeting.
+Regulatory Notices,Notices of Violation; Enforcement Notices; Fines and Penalties,lower,"The number of formal notices, fines or penalties received from safety or environmental regulators."
+Workers Compensation Cost,Workers' Comp Cost; Injury Cost; Cost of Injuries,lower,The money paid out or set aside for compensation and treatment because of work injuries.
+Experience Modification Rate,EMR; Experience Mod; Insurance Mod,lower,A figure used by insurers to adjust the price of workers' compensation cover based on the business's own claims record compared with similar businesses. Below 1 is better than average.
+Safety Culture Score,Safety Climate Score; Safety Perception Score; Safety Survey Score,higher,A score from a staff survey about how safe people feel and how seriously safety is taken in their workplace.
+Safety Suggestions,Safety Ideas; Safety Improvement Ideas,higher,The number of ideas people put forward to make work safer.
+Ergonomic Assessments,Ergonomic Risk Assessments; Ergonomic Reviews Completed,higher,The number of workstations or tasks checked for strain and posture risks.
+Occupational Illness Rate,Occupational Disease Rate; Work-Related Illness Rate,lower,"The number of illnesses caused by work, such as hearing loss or skin conditions, for each fixed number of hours worked."
+Health Surveillance Completion,Medical Surveillance Completion; Health Checks Completed,higher,"The share of employees who had their planned health checks, such as hearing or lung tests."
+Chemical Inventory Compliance,Hazardous Substance Register; Safety Data Sheet Compliance; SDS Compliance,higher,The share of hazardous chemicals on site that are listed in the register and have a current safety data sheet.
+Contractor Safety Performance,Contractor TRIR; Contractor Safety Rating; Contractor Incident Rate,lower,"The safety results of outside contractors working on site, such as their incident rate or audit score."
+Contractor Pre-Qualification,Contractor Safety Pre-Qual; Contractor Approval Rate,higher,The share of contractors who passed the safety checks before being allowed to work on site.
+Management Safety Walks,Leadership Safety Tours; Manager Safety Visits; Visible Felt Leadership,higher,The number of times managers went out to the work area to talk about safety and check conditions.
+Stop Work Authority Used,Stop Work Events; Work Stoppages for Safety,higher,The number of times someone stopped a job because they believed it was unsafe. A higher figure can mean people feel free to speak up.
+Safety Observation Closure Rate,Observation Closure; Observations Closed,higher,The share of safety observations that have been dealt with and closed.
+Total Incident Rate by Site,Site Incident Rate; Incident Rate by Location,lower,The incident rate shown for each site or department so that they can be compared.

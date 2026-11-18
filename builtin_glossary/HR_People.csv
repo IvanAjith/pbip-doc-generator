@@ -1,0 +1,79 @@
+﻿Term,Also known as,Better,Definition
+FTE,Full-Time Equivalent; Full Time Equivalent,,A way of counting staff that blends full-time and part-time hours into a single “equivalent number of full-time people” figure.
+Headcount,,,"The number of people employed at a point in time, counting each person once whether they work full time or part time."
+Turnover,Attrition,lower,"The share of employees who left over a period, voluntarily or otherwise."
+Absenteeism,,lower,How often employees are unexpectedly absent from scheduled work.
+Time to Fill,,lower,"How long it takes, on average, to fill an open position from when it's posted."
+Overtime,OT,,"Hours worked beyond an employee's standard schedule, usually paid at a higher rate."
+Direct Labour,Direct Labor; DL,,"Staff whose work directly produces the product or service being sold (e.g. machine operators), as opposed to support roles."
+Indirect Labour,Indirect Labor; IDL,,"Staff who support production without directly making the product themselves -- maintenance, quality, supervision, and similar roles."
+Tenure,,,How long an employee has been with the company.
+Engagement,Engagement Score,higher,"A measure of how motivated and committed employees feel, usually from survey results."
+eNPS,Employee Net Promoter Score,higher,"How likely employees are to recommend the company as a place to work, on the same scale logic as customer NPS."
+Turnover Rate,HR Turnover Rate; Attrition Rate; Employee Turnover; Employee Turnover Rate; Staff Turnover,lower,"The share of employees who leave the organisation in a period, usually shown as a percentage of average headcount."
+Retention Rate,Employee Retention; Employee Retention Rate,higher,The share of employees who stay with the organisation over a period.
+New Hires,Hires,,The number of people who joined the organisation in a period.
+Open Positions,Vacancies; Open Roles,,Jobs the organisation is trying to fill that are not yet filled.
+Training Hours,Training Completion,higher,"Time spent by employees on training, or the share of required training that has been completed."
+Absence Rate,Absentee Rate,lower,The share of scheduled working time lost to employee absence.
+Employee Count,Total Employees; Workforce,,The number of people employed at a point in time.
+Employee Turnover Cost,Cost of Turnover; Attrition Cost; Replacement Cost,lower,"The total cost of an employee leaving, including hiring a replacement, training and lost output while the role is empty."
+Voluntary Turnover,Voluntary Attrition; Resignation Rate; Voluntary Resignations,lower,"The share of employees who chose to leave, rather than being dismissed, in a period."
+Involuntary Turnover,Involuntary Attrition; Dismissal Rate; Terminations,lower,The share of employees who left because the business ended their employment.
+Regretted Attrition,Regretted Turnover; Regretted Loss; Regrettable Attrition,lower,"The share of leavers who the business would have preferred to keep, such as high performers."
+Early Attrition,First Year Attrition; New Hire Turnover; 90-Day Attrition,lower,"The share of new joiners who leave within a short time, often the first year, after they started."
+Leavers,Exits; Separations; Employees Left,lower,The number of employees who left the business in a period.
+Joiners,Starters; New Joiners; Employees Joined,,The number of employees who joined the business in a period.
+Internal Mobility,Internal Transfers; Internal Moves; Internal Fill Rate,higher,The share of roles that were filled by existing employees through moves or promotions.
+Promotion Rate,Promotions; Promotion Percentage,higher,The share of employees who were promoted in a period.
+Span of Control,Management Span; Spans and Layers; Manager Span,,The average number of people who report directly to each manager.
+Revenue per Employee,Revenue per FTE; Sales per Employee,higher,"The total revenue divided by the number of employees, used as a broad measure of how productive the workforce is."
+Profit per Employee,Profit per FTE; Income per Employee,higher,The total profit divided by the number of employees.
+Labour Cost Percentage,Labor Cost Ratio; Payroll to Revenue; People Cost Ratio,lower,The cost of employing people shown as a percentage of revenue.
+Total Payroll Cost,Payroll Cost; Salary Cost; Total Employee Cost; Staff Cost,,"The total money spent on pay, benefits and related costs for employees in a period."
+Average Salary,Average Pay; Mean Salary; Average Compensation,,"The average pay of employees, found by dividing total salary cost by the number of employees."
+Compa-Ratio,Compa Ratio; Compensation Ratio,,A person's pay divided by the middle of the pay range for their job. A figure of 1 means they are paid exactly at the midpoint.
+Pay Equity,Pay Gap; Gender Pay Gap; Equal Pay,,"A comparison of pay between groups, such as men and women, doing similar work, used to check that pay is fair."
+Benefits Cost,Cost of Benefits; Benefits per Employee; Benefits Spend,,"The money spent on employee benefits such as health cover, pensions and allowances."
+Cost per Hire,Hiring Cost; Recruitment Cost; Cost of Hire,lower,"The total cost of recruiting, including adverts, agency fees and staff time, divided by the number of people hired."
+Time to Hire,Time to Offer; Days to Hire; Recruitment Cycle Time,lower,"The number of days between a candidate applying, or a job being approved, and the offer being accepted."
+Offer Acceptance Rate,Offers Accepted; Job Offer Acceptance Rate,higher,The share of job offers that the candidates accepted.
+Offer Decline Rate,Offers Declined; Offer Rejection Rate,lower,The share of job offers that the candidates turned down.
+Applicants per Vacancy,Applications per Role; Applicants per Job; Applicant Volume,,The average number of people who applied for each open position.
+Source of Hire,Hiring Source; Recruitment Channel; Candidate Source,,"The channel that the hired candidates came from, such as job boards, referrals or agencies."
+Employee Referral Rate,Referral Hires; Referral Hire Rate,higher,The share of hires that came through a recommendation by an existing employee.
+Quality of Hire,Hire Quality; New Hire Performance,higher,"A score showing how well new hires perform and stay, often combining performance ratings and retention."
+Vacancy Rate,Vacancy Percentage; Open Roles Rate,lower,The share of all positions that are currently empty.
+Vacancy Duration,Vacancy Age; Days Vacant; Time Vacant,lower,The average number of days that a position stays empty.
+Hiring Plan Attainment,Hiring vs Plan; Hiring Target Achievement; Recruitment Plan Achievement,higher,"How many of the planned hires have been made, shown as a percentage of the hiring plan."
+Time to Competency,Ramp-Up Time; Time to Proficiency,lower,The time a new employee needs before working at a normal level.
+New Hire Retention,New Hire Retention Rate; First Year Retention,higher,"The share of new joiners who are still with the business after a set time, such as one year."
+Training Cost per Employee,Learning Spend per Employee; Training Spend per Head; L&D Spend,,The money spent on training divided by the number of employees.
+Training Effectiveness,Learning Effectiveness; Training ROI; Learning Impact,higher,"A measure of how far training led to better skills, behaviour or results after it was completed."
+Skills Coverage,Skills Gap; Skill Coverage; Competency Coverage,higher,The share of the skills the business needs that its people already have.
+Succession Readiness,Succession Coverage; Bench Strength; Ready-Now Successors,higher,"The share of key roles that have at least one person ready, or nearly ready, to step into them."
+Performance Review Completion,Appraisal Completion; Review Completion Rate; Performance Appraisals Done,higher,The share of planned performance reviews that were completed on time.
+Performance Rating Distribution,Rating Distribution; Performance Curve; Ratings Spread,,"The share of employees at each performance rating level, used to check that ratings are spread fairly."
+High Performer Retention,Top Talent Retention; Key Talent Retention,higher,The share of the best performing employees who stayed with the business.
+Goal Completion Rate,Objectives Achieved; Goal Achievement; OKR Attainment,higher,The share of employee or team goals that were reached in the period.
+Employee Satisfaction,Employee Satisfaction Score; ESAT; Job Satisfaction,higher,A score from a survey showing how happy employees are with their work and workplace.
+Employee Engagement Score,Engagement Index; Engagement Survey Score,higher,A score from a survey showing how committed and motivated employees are.
+Survey Participation Rate,Engagement Survey Response Rate; Survey Response Rate Employees,higher,The share of employees who answered the staff survey.
+Employee Net Promoter Score Response,Recommend as a Place to Work; Employer Net Promoter,higher,How likely employees are to recommend the business as a place to work.
+Absence Days,Sick Days; Sickness Absence; Days Absent,lower,The total number of working days lost to absence in a period.
+Sick Leave Rate,Sickness Rate; Sick Leave Percentage; Sickness Absence Rate,lower,The share of working days lost to sickness.
+Unplanned Absence,Unscheduled Absence; Short-Term Absence; Casual Leave,lower,"Absence that was not arranged in advance, such as sickness or emergencies."
+Bradford Factor,Bradford Score; Absence Pattern Score,lower,"A score that gives extra weight to frequent short absences, as these are often more disruptive than a single long one."
+Leave Utilisation,Leave Balance; Annual Leave Taken; Holiday Taken; Leave Liability,,"The share of annual leave that employees have taken, compared with what they are entitled to."
+Overtime Cost,Overtime Spend; Overtime Pay,lower,The money paid for hours worked beyond normal hours.
+Overtime Hours,Extra Hours; Overtime Hours Worked,lower,The total number of hours worked beyond normal working hours in a period.
+Contractor Ratio,Contingent Workforce Ratio; Contractor Percentage; Temp Worker Share,,The share of the workforce made up of contractors and temporary staff rather than permanent employees.
+Gender Diversity,Gender Ratio; Female Representation; Women in Workforce,,"The share of the workforce, or of a level such as management, that is made up of each gender."
+Workforce Diversity,Diversity Ratio; Diversity and Inclusion; Diversity Index,,"A measure of how varied the workforce is in terms such as gender, age, background and ability."
+Age Profile,Average Age; Age Distribution; Workforce Age,,"The spread of employees across age groups, used to plan for retirements and recruitment."
+Grievances Raised,Grievance Rate; Employee Complaints; Employee Relations Cases,lower,The number of formal complaints raised by employees in a period.
+Disciplinary Cases,Disciplinary Actions; Disciplinary Rate; Disciplinary Cases Opened,lower,The number of formal disciplinary cases opened in a period.
+Employee Wellbeing Score,Wellbeing Index; Wellness Score; Employee Wellness,higher,"A score from a survey or health programme showing how well employees feel, in body and mind."
+Exit Interview Completion,Exit Survey Completion; Exit Interviews Held,higher,The share of leavers who took part in an exit interview or survey.
+HR to Employee Ratio,HR Headcount Ratio; HR Staff Ratio; Employees per HR,,The number of employees served by each member of the HR team.
+HR Cost per Employee,HR Cost; HR Operating Cost; Cost of HR,lower,The cost of running the HR function divided by the number of employees.

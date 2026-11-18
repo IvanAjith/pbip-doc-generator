@@ -1,0 +1,60 @@
+﻿Term,Also known as,Better,Definition
+Annual Contract Value,ACV SaaS; Average Annual Contract Value,higher,"The average yearly value of a customer contract, with one-off fees left out."
+Annual Recurring Revenue Growth,ARR Growth; ARR Growth Rate,higher,How much annual recurring revenue has grown compared with an earlier period.
+New ARR,New Business ARR; New Logo ARR; New MRR,higher,The recurring revenue added from customers who signed up for the first time in a period.
+Net New ARR,Net New MRR; Net New Recurring Revenue,higher,The recurring revenue added in a period after taking away what was lost to cancellations and downgrades.
+Customer Churn Rate SaaS,Monthly Churn; Annual Churn; Subscription Churn Rate,lower,The share of subscribers or accounts lost in a period.
+Rule of 40,Rule of Forty,higher,A rule of thumb for software firms: the growth rate plus the profit margin should add up to at least 40%.
+SaaS Magic Number,Magic Number; Sales Efficiency Magic Number,higher,A measure of how much recurring revenue is gained for each unit of sales and marketing spend in the previous period.
+Burn Rate,Monthly Burn; Cash Burn; Net Burn,lower,The amount of cash the business spends more than it earns each month.
+Runway,Cash Runway; Months of Runway,higher,The number of months the business can keep going at the current burn rate before the cash runs out.
+Gross Margin SaaS,Subscription Gross Margin; Software Gross Margin,higher,"The share of revenue left after the direct cost of delivering the service, such as hosting and support."
+Cost of Delivery,Cost of Revenue; Hosting Cost,lower,"The cost of running and supporting the service for customers, including hosting, support and licences."
+Cloud Spend,Cloud Cost; Cloud Bill; Infrastructure Spend,lower,"The money spent on cloud services such as servers, storage and databases."
+Cloud Cost per Customer,Infrastructure Cost per Customer; Hosting Cost per User; Cost per Active User,lower,The cloud cost divided by the number of customers or active users.
+Cloud Utilisation,Resource Utilisation; CPU Utilisation; Server Utilisation,,"The share of the available computing capacity, such as processor or memory, that is in use."
+System Availability,Service Availability; Availability Percentage; Service Uptime,higher,The share of time that a system or service is working and can be used.
+Service Level Objective,SLO; SLO Attainment; SLO Compliance,higher,"An internal target for how well a service should perform, such as 99.9% availability, and how often it is met."
+Service Level Agreement Uptime,SLA Uptime; Contractual Uptime; SLA Compliance Uptime,higher,"The availability promised to customers in the service agreement, and whether it was achieved."
+Error Rate,Failure Rate; Request Error Rate; Error Percentage,lower,The share of requests or operations that ended in an error.
+Response Time,Latency; Page Load Time; API Response Time,lower,The time taken for a system to answer a request.
+Throughput Requests,Requests per Second; Transactions per Second; TPS,,The number of requests or transactions a system handles per second.
+Mean Time to Detect,MTTD; Time to Detect,lower,The average time between a problem starting and the team noticing it.
+Mean Time to Recover,MTTR Incident; Mean Time to Restore; Mean Time to Resolve Incident,lower,The average time taken to restore service after an incident.
+Mean Time Between Incidents,MTBI; Time Between Incidents,higher,The average time that passes between one incident and the next.
+Production Incidents,P1 Incidents; Service Incidents,lower,"The number of service disruptions or incidents in a period, often split by how serious they were."
+Change Failure Rate,Failed Changes; Failed Deployments; Deployment Failure Rate,lower,The share of changes or releases that caused a failure and needed a fix or a roll-back.
+Deployment Frequency,Release Frequency; Deployments per Week; Release Cadence,higher,How often new versions of software are released to production.
+Lead Time for Changes,Change Lead Time; Commit to Deploy Time; Cycle Time Software,lower,The time taken for a code change to go from being written to running in production.
+Sprint Velocity,Velocity; Story Points per Sprint; Team Velocity,,"The amount of work, usually measured in story points, that a development team completes in each sprint."
+Sprint Commitment Accuracy,Sprint Completion Rate; Sprint Predictability; Committed vs Delivered,higher,The share of the work planned for a sprint that was actually finished.
+Backlog Size,Product Backlog; Open Backlog Items; Backlog Count,,The number of work items waiting to be done in the product backlog.
+Bug Count,Open Bugs; Defects Open; Bugs Reported,lower,The number of known software faults that have not yet been fixed.
+Bug Fix Time,Time to Fix; Bug Resolution Time; Defect Resolution Time,lower,The average time taken to fix a software fault from when it was reported.
+Defect Density,Bugs per Thousand Lines; Defects per KLOC; Bug Density,lower,"The number of defects found for each thousand lines of code, or for each unit of software size."
+Code Coverage,Test Coverage; Unit Test Coverage,higher,The share of the code that is run by automated tests.
+Test Pass Rate,Automated Test Pass Rate; Build Success Rate; Test Success Rate,higher,The share of automated tests that passed in a run.
+Technical Debt,Tech Debt; Technical Debt Ratio; Code Debt,lower,"The extra work that builds up when quick fixes are chosen instead of better solutions, and which must be paid back later."
+Security Vulnerabilities,Open Vulnerabilities; Critical Vulnerabilities; Vulnerability Count,lower,The number of known security weaknesses in systems or software that have not yet been fixed.
+Mean Time to Patch,Patch Time; Time to Remediate; Vulnerability Remediation Time,lower,The average time taken to fix a security weakness after it was found.
+Patch Compliance,Patching Compliance; Patched Systems; Patch Coverage,higher,The share of systems that have the latest security updates installed.
+Security Incidents Technology,Security Breaches; Cyber Incidents; Data Breaches,lower,The number of events in which security was breached or threatened.
+Phishing Click Rate,Phishing Failure Rate; Phish-Prone Percentage; Phishing Simulation Click Rate,lower,The share of staff who clicked a link in a test phishing email.
+Access Review Completion,User Access Review Completion; Access Recertification; Access Review Rate,higher,The share of planned reviews of who has access to which systems that were completed.
+Backup Success Rate,Backup Completion; Successful Backups; Backup Compliance,higher,The share of planned backups that finished successfully.
+Recovery Time Objective,RTO; Recovery Time; Disaster Recovery Time,lower,The target for how quickly a system must be working again after a failure.
+Recovery Point Objective,RPO; Data Loss Window,lower,"The longest period of data loss that the business can accept after a failure, such as one hour of data."
+IT Service Desk Tickets,Help Desk Tickets; IT Tickets; Service Desk Volume,,The number of requests for help received by the IT service desk.
+Ticket Resolution Time IT,IT Resolution Time; Time to Resolve IT Ticket; Service Desk Resolution Time,lower,The average time taken for the IT service desk to close a ticket.
+First Call Resolution IT,Service Desk First Contact Resolution; IT FCR,higher,The share of IT requests that were solved at the first contact.
+IT Spend Percentage of Revenue,IT Spend to Revenue; IT Cost Ratio; Technology Spend Ratio,,The money spent on IT shown as a percentage of revenue.
+Project Delivery On Time,IT Project On-Time Delivery; Projects On Schedule; Schedule Performance Technology,higher,The share of IT projects delivered by their planned date.
+Software Licence Utilisation,Licence Usage; License Utilization; Unused Licences; Shelfware,higher,The share of bought software licences that are in use. Unused licences are wasted money.
+Application Adoption,Tool Adoption; User Adoption; Software Adoption Rate,higher,The share of intended users who actively use a new application.
+Net Revenue Retention SaaS,NDR SaaS; Dollar-Based Net Retention,higher,"The recurring revenue from existing customers a year later, including upgrades and losses, compared with the start of the period."
+Customer Support Cost per Ticket,Cost per Ticket; Support Cost per Ticket,lower,The cost of running the support team divided by the number of tickets handled.
+Feature Usage,Feature Usage Rate; Feature Engagement; Feature Utilisation,,The share of users who use a given feature in a period.
+API Calls,API Requests; API Usage; API Call Volume,,The number of times other programs called the product's interface in a period.
+Data Volume Processed,Data Processed; Data Ingested; Storage Used,,The amount of data stored or handled by the system in a period.
+Active Subscriptions,Live Subscriptions; Paying Subscriptions; Active Licences,higher,The number of subscriptions that are currently live and paid for.
+Seat Expansion,Seats Added; Licence Expansion; Seat Growth,higher,The growth in the number of user seats bought by existing customers.

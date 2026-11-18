@@ -1,0 +1,74 @@
+﻿Term,Also known as,Better,Definition
+Written Premium,Gross Written Premium; GWP,higher,"The total premium on policies issued in the period, whether or not the cover period has yet elapsed."
+Earned Premium,,higher,The part of the premium that covers the portion of the policy period that has already passed.
+Loss Ratio,Claims Ratio,lower,Claims costs as a share of premium: how much of each unit of premium is paid out in claims.
+Expense Ratio,,lower,Operating expenses as a share of premium.
+Combined Ratio,,lower,The loss ratio plus the expense ratio. Below 100% means the insurer earned an underwriting profit.
+Persistency,Persistency Rate; Policy Persistency,higher,The share of policies still in force after a given period.
+Lapse Rate,Policy Lapse Rate,lower,The share of policies that ended because premiums stopped being paid.
+Surrender Rate,,lower,"The share of contracts, such as life or annuity policies, that customers cashed in early."
+Policies in Force,In-Force Policies; PIF,higher,The number of policies that are active at a given date.
+Annualized Premium,Annual Premium Equivalent; APE,higher,A way to compare sales on one basis: premiums expressed as a yearly amount.
+Claim Frequency,,lower,"How often claims are made, usually per policy or per exposure period."
+Claim Severity,Average Claim Cost,lower,"The average cost of a claim, found by dividing the total cost of claims by the number of claims. It shows how big claims are when they happen."
+New Business,,higher,"Sales of new policies or contracts in the period, as opposed to renewals of existing ones."
+Net Written Premium,NWP; Net Premium Written,higher,The premium written after the part passed on to reinsurers has been taken off.
+Net Earned Premium,NEP; Net Premium Earned,higher,"The part of net premium that relates to the period in which cover was provided, after reinsurance."
+Unearned Premium,Unearned Premium Reserve; UPR,,The part of premium already received that relates to cover still to be given in the future.
+Premium Income,Premium Revenue; Total Premiums; Premiums Collected,higher,The money received from policyholders for insurance cover in a period.
+Premium Growth,Premium Growth Rate; GWP Growth,higher,"How much premium has grown or fallen compared with an earlier period, as a percentage."
+Average Premium,Average Premium per Policy; Premium per Policy,,The average premium charged per policy. It is a basic gauge of the price level and mix of business.
+Rate Change,Rate Increase; Price Change; Average Rate Change,,The average change in the price charged for the same cover compared with an earlier period.
+Renewal Premium,Renewal Premium Income; Renewals,higher,The premium collected on policies that were renewed rather than newly written.
+New Business Premium,New Business Premium Income; NBP; New Premium,higher,The premium written on policies sold to new customers in a period.
+Renewal Rate Insurance,Policy Renewal Rate; Policy Retention; Customer Retention Insurance,higher,The share of policies due for renewal that were actually renewed.
+Policy Count,Number of Policies; Policies Written; Total Policies,,The number of policies the insurer holds or sold in a period.
+Policy Cancellation Rate,Cancelled Policies; Cancellation Ratio; Mid-Term Cancellation,lower,The share of policies that were cancelled before the end of the cover period.
+Policy Issuance Time,Time to Issue Policy; Policy Turnaround Time; Quote to Bind Time,lower,The time between a customer accepting a quote and the policy being issued.
+Quote to Bind Ratio,Quote Conversion; Hit Ratio; Quote to Policy,higher,The share of quotes given that became policies.
+Claims Incurred,Incurred Claims; Total Claims Incurred; Incurred Losses,lower,The claims paid in a period plus the change in the amount set aside for claims not yet paid.
+Claims Paid,Paid Claims; Claims Payments; Paid Losses,,The money paid out to settle claims in a period.
+Claims Reserve,Outstanding Claims Reserve; Case Reserves; Loss Reserves,,The money set aside for claims that have been reported but not yet fully paid.
+Incurred but Not Reported,IBNR; IBNR Reserve,,An estimate of claims that have happened but have not yet been reported to the insurer.
+Claims Count,Number of Claims; Claims Reported; Claims Received,lower,The number of claims reported in a period.
+Open Claims,Outstanding Claims; Claims Backlog; Unsettled Claims,lower,The number of claims that have been reported and are not yet closed.
+Claims Closed,Settled Claims; Closed Claims; Claims Settled,higher,The number of claims finalised in a period.
+Large Claims,Large Loss; Major Claims; Large Loss Ratio,lower,"Claims above a set size, tracked separately because a few big claims can change the results."
+Pure Premium,Burning Cost; Loss Cost,,"The part of the premium needed to pay expected claims, without any allowance for costs or profit."
+Claims Settlement Ratio,Claim Settlement Ratio; Claims Paid Ratio; Settlement Rate,higher,The share of claims received that were settled and paid.
+Claims Rejection Rate,Claim Repudiation Ratio; Claims Declined; Rejected Claims,lower,The share of claims that the insurer refused to pay.
+Claims Settlement Time,Claim Turnaround Time; Claims Cycle Time; Time to Settle,lower,The average time taken to settle a claim from when it was reported.
+Claims Acknowledgement Time,First Notice of Loss Response; FNOL Response Time; Claim Acknowledgement,lower,The time taken to reply to a customer after a claim was first reported.
+Claims Leakage,Claims Overpayment; Leakage Rate; Overpaid Claims,lower,"Money paid out on claims that should not have been paid, or was paid at too high an amount, because of errors or weak controls."
+Claims Reopen Rate,Reopened Claims; Claim Reopen Ratio,lower,The share of closed claims that had to be opened again.
+Claims Adjuster Productivity,Claims per Adjuster; Adjuster Caseload; Claims Handler Productivity,higher,The number of claims handled by each claims adjuster in a period.
+Claims Handling Cost,Claims Expense; Claims Adjustment Expense; Loss Adjustment Expense,lower,"The cost of investigating, handling and settling claims, excluding the amounts paid to customers."
+Loss Adjustment Expense Ratio,LAE Ratio; ULAE Ratio,lower,The cost of handling claims shown as a percentage of earned premium.
+Subrogation Recovery,Subrogation; Recoveries; Salvage and Subrogation,higher,"Money recovered by the insurer from another party who was responsible for the loss, after the insurer paid the customer."
+Fraud Detection Rate,Fraud Rate; Fraudulent Claims; Suspected Fraud,,"The share of claims identified as fraudulent or suspicious, and the value saved by stopping them."
+Underwriting Profit,Underwriting Result; Underwriting Income; Underwriting Gain,higher,"The profit or loss from writing insurance, found by taking claims and costs away from earned premium, before any investment income."
+Underwriting Margin,Underwriting Profit Margin; Underwriting Result Margin,higher,The underwriting profit shown as a percentage of earned premium.
+Acquisition Cost Ratio,Acquisition Ratio; Commission Ratio; Acquisition Costs,lower,"The cost of winning new business, such as commission and marketing, shown as a percentage of premium."
+Commission Expense,Broker Commission; Agent Commission,lower,The money paid to agents and brokers for selling policies.
+Operating Expense Ratio,Administrative Expense Ratio; Management Expense Ratio; Opex Ratio,lower,"The running costs of the insurer, other than claims and commission, shown as a percentage of premium."
+Net Combined Ratio,Net Combined; Combined Ratio Net of Reinsurance,lower,The combined ratio worked out after reinsurance has been taken into account.
+Solvency Ratio,Solvency Margin; Solvency Coverage Ratio; Capital Adequacy,higher,"How far the insurer's capital exceeds what the regulator requires, showing whether it could meet its obligations in bad conditions."
+Reinsurance Ceded,Ceded Premium; Reinsurance Premium; Premium Ceded,,The premium passed to reinsurers in exchange for them taking on part of the risk.
+Reinsurance Recoveries,Reinsurance Recoverable; Reinsurance Recovered; Ceded Claims,,The part of claims that the reinsurers pay back to the insurer.
+Retention Ratio,Net Retention; Retention Rate Premium; Premium Retention,,The share of premium the insurer keeps for its own account after paying reinsurers.
+Investment Income,Investment Yield; Investment Return Insurance; Portfolio Yield,higher,"The income earned on the money the insurer holds in investments, such as from premiums not yet paid out."
+Return on Equity Insurance,Insurance ROE; Operating ROE,higher,The profit of the insurer shown as a percentage of shareholders' funds.
+Embedded Value,EV; Value of In-Force; VIF,higher,"An estimate of the value of a life insurer's existing business, including future profits from policies already sold."
+Value of New Business,VNB; New Business Value,higher,The present value of the profits expected from policies sold in a period.
+New Business Margin,VNB Margin; NBV Margin; New Business Profit Margin,higher,The value of new business shown as a percentage of the annual premium on new sales.
+Sum Assured,Sum Insured; Total Sum Insured; Insured Amount,,"The amount that will be paid if the insured event happens, such as a death or a loss of property."
+Exposure,Total Insured Value; TIV; Risk Exposure,,"The total amount of risk the insurer has taken on, usually shown as the total of the amounts insured."
+Loss Frequency,Frequency of Losses; Incidence Rate,lower,"How often claims happen, usually shown per hundred or thousand policies or per year of cover."
+Mortality Rate,Death Rate; Mortality Experience; Actual to Expected Mortality,,"The rate at which insured people die, compared with the expected rate, used to price and check life insurance."
+Morbidity Rate,Sickness Rate Insurance; Morbidity Experience; Incidence of Illness,,"The rate at which insured people fall ill or claim for sickness cover, compared with the expected rate."
+Agent Productivity,Sales per Agent; Policies per Agent; Advisor Productivity,higher,The number of policies or amount of premium sold by each agent or advisor in a period.
+Agent Persistency,Advisor Persistency; Agent Retention; Active Agents,higher,"The share of an agent's policies that remain in force, or the share of agents who stay active."
+Bancassurance Share,Bancassurance Premium; Bank Channel Share,,"The share of insurance sales made through bank branches, compared with other channels."
+Digital Sales Share,Online Sales Share; Digital Premium Share; Direct Online Sales,higher,The share of insurance sales made through websites and apps.
+Cost per Policy,Administration Cost per Policy; Servicing Cost per Policy; Policy Servicing Cost,lower,The cost of running the business divided by the number of policies in force.
+Regulatory Capital Requirement,Capital Requirement; SCR; Required Capital,,The amount of capital the regulator requires the insurer to hold given the risks it has taken on.

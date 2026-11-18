@@ -38,6 +38,11 @@ def normalize(term: str) -> str:
     return " ".join(words)
 
 
+def has_unit(name):
+    """True when a name says it is a ratio or percentage: '%', 'pct', 'percent', 'percentage', 'ratio'."""
+    return bool(re.search(r"%|\b(?:pct|percent|percentage|ratio)\b", name or "", re.I))
+
+
 @dataclass
 class Definition:
     text: str
@@ -79,17 +84,31 @@ class Glossary:
         self.csv_path = self.path.parent / CSV_NAME
         self._csv_extra = {}               # user rows for terms not used in this run (kept when the file is rewritten)
         self._load_csv()
-        self._seed = {}
+        self._seed = {}                    # normalised name -> entry
+        self._seed_unit = {}               # the same, for terms written with "%" / "ratio" (see _seed_match)
         for e in SEED:
-            for t in e["terms"]:
-                self._seed[normalize(t)] = e
+            self._index_seed(e)
         try:                                              # the team's shared list: fills gaps, never overrides a built-in term
             from glossary_export import read_shared
             for e in read_shared():
-                for t in e["terms"]:
-                    self._seed.setdefault(normalize(t), e)
+                self._index_seed(e, override=False)
         except Exception:
             pass
+
+    def _index_seed(self, e, override=True):
+        for t in e["terms"]:
+            table = self._seed_unit if has_unit(t) else self._seed
+            k = normalize(t)
+            if override or k not in table:
+                table[k] = e
+
+    def _seed_match(self, name):
+        """Built-in entry for a measure name, or None. A term written with '%' or 'ratio' ('Expense Ratio') is only matched by
+        a name that also says so ('Expense %'): a plain 'Expense' is an amount, not that ratio."""
+        k = normalize(name or "")
+        if has_unit(name) and k in self._seed_unit:      # 'Expense Ratio' / 'Expense %' -> the ratio, before the plain amount
+            return self._seed_unit[k]
+        return self._seed.get(k)
 
     # -------------------------------------------------------------- lookup
     def lookup(self, *names, **kw):
@@ -114,16 +133,15 @@ class Glossary:
             e = self.entries.get(k)
             if e and e.get("source") == "manual" and e.get("definition"):
                 return self._from_entry(e)
-        for k in keys:                                    # 2. seed
-            if k in self._seed:
-                s = self._seed[k]
+        for n in names:                                   # 2. seed
+            s = self._seed_match(n)
+            if s:
                 return Definition(s["definition"], "seed", s.get("origin", "built-in glossary"),
                                   category=s.get("category", ""), better=s.get("better"))
         for n in names:                                   # 2b. a seed term with a time window around it: '6 months TRIR'
             base, period = split_period(n or "")
-            bk = normalize(base) if period else ""
-            if bk and bk in self._seed:
-                sd = self._seed[bk]
+            sd = self._seed_match(base + (" %" if has_unit(n) else "")) if period else None
+            if sd:
                 return Definition(sd["definition"] + f" (Period shown: {period}.)", "seed", sd.get("origin", "built-in glossary"),
                                   category=sd.get("category", ""), better=sd.get("better"))
         for k in keys:                                    # 3. learned earlier

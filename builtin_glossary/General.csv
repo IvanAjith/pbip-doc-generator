@@ -1,0 +1,70 @@
+﻿Term,Also known as,Better,Definition
+KPI,Key Performance Indicator,,A metric chosen because it reflects how well the business (or a specific part of it) is performing against its goals.
+Benchmark,,,A reference point -- often an industry average or a past result -- used to judge whether a current number is good or not.
+Uptime,,higher,The share of time a system or piece of equipment was available and working.
+Target,Goal,,The level of performance the business aims to reach for a measure in a given period.
+Metric,Measure; Measures; Indicator,,"A number that is tracked to show how something is performing, such as sales, defects or hours worked."
+Key Result,OKR; Objective and Key Result; KR,,A measurable outcome used to show whether an objective has been reached.
+Baseline,Base Period; Starting Point; Reference Value,,The starting value that later results are compared with to see whether things have improved.
+Threshold,Limit; Trigger Level; Cut-Off,,"A set value which, when crossed, triggers an action or changes a status, for example from green to amber."
+Tolerance,Allowed Variation; Acceptable Range; Tolerance Band,,The amount by which a result may differ from the target before it is treated as a problem.
+Status,RAG Status; Traffic Light; Health Status,,"A simple label, often green, amber or red, showing how a measure is doing against its target."
+Trend,Trend Line; Direction of Travel; Movement,,"The general direction in which a measure is moving over time, such as up, down or flat."
+Rolling Average,Moving Average; Running Average; Rolling Mean,,"The average of the latest few periods, recalculated each period, which smooths out short-term ups and downs."
+Moving Total,Rolling Total; Running Total; Cumulative Total,,"The sum of the values over the latest few periods, or from the start up to now, updated each period."
+Prior Year,Previous Year; Last Year; PY; LY,,"The same measure for the previous year, used for comparison."
+Prior Period,Previous Period; Last Period; PP,,"The same measure for the period just before the one being shown, such as last month."
+Same Period Last Year,SPLY; Same Period Prior Year; Like for Like Period,,"The same measure for the same dates a year earlier, which avoids the effect of seasons."
+Month over Month,MoM; Month-on-Month; Monthly Change,,The change in a measure compared with the previous month.
+Quarter over Quarter,QoQ; Quarter-on-Quarter; Quarterly Change,,The change in a measure compared with the previous quarter.
+Week over Week,WoW; Week-on-Week; Weekly Change,,The change in a measure compared with the previous week.
+Percentage Change,Percent Change; Change Percentage; Growth Percentage,,The change between two values shown as a percentage of the earlier one.
+Absolute Change,Change; Difference; Delta,,"The plain difference between two values, not shown as a percentage."
+Variance to Target,Gap to Target; Target Variance; Difference to Target,,How far the actual result is above or below the target.
+Variance to Budget,Budget Variance; Gap to Budget; Over or Under Budget,,How far the actual result is above or below the budget.
+Variance to Prior Year,Year on Year Difference; Gap to Last Year,,How far the actual result is above or below the same period of the previous year.
+Run Rate,Annualised Run Rate; Current Run Rate,,The expected yearly total if the current level of results carried on for the whole year.
+Total,Grand Total; Sum; Overall Total,,The sum of all the values being shown. It is the simplest way to combine many values into one.
+Average,Mean; Average Value; Avg,,The sum of the values divided by how many there are.
+Median,Middle Value; 50th Percentile,,"The middle value when all the values are put in order, which is less affected by extreme values than the average."
+Minimum,Min; Lowest; Lowest Value,,The smallest value in a set. It shows the lowest level reached.
+Maximum,Max; Highest; Highest Value; Peak,,The largest value in a set. It shows the highest level reached.
+Count,Number of; Record Count; Row Count,,"The number of items or records, such as orders, people or events."
+Distinct Count,Unique Count; Number of Unique; Count of Unique,,"The number of different values, with repeats counted once, for example the number of different customers."
+Rate,Rate per Hour; Rate per Day,,"An amount measured against a unit of time or volume, such as per hour or per thousand."
+Index,Index Value; Indexed Value; Index Score,,"A number that shows a value relative to a base, normally set at 100."
+Score,Rating Score; Composite Score; Overall Score,,"A single number, often built from several measures, that sums up how something is doing."
+Weighted Average,Weighted Mean; Weighted Score,,"An average in which some values count for more than others, according to their size or importance."
+Share of Total,Percent of Total; Contribution; Proportion of Total,,A part shown as a percentage of the total of all the parts.
+Contribution Margin,Contribution to Profit,higher,"The money left from sales after the variable costs have been taken off, which goes towards covering fixed costs and profit."
+Pareto,Pareto Analysis; 80/20 Rule; Pareto Chart,,"The idea that a small number of causes, often about 20%, produce most of the effects, often about 80%."
+Top N,Top 10; Top Performers; Ranking,,"A list of the best or biggest items by a measure, such as the top 10 customers by sales."
+Rank,Ranking Position; Position; Rank Order,,The position of an item when all items are put in order by a measure.
+Percentile,Quartile; Decile; P90; P95,,"The value below which a given share of the observations fall, for example the 90th percentile."
+Outlier,Anomaly; Exception; Extreme Value,,A value that is far away from the normal pattern and may need to be checked.
+Seasonality,Seasonal Pattern; Seasonal Index; Seasonal Effect,,"A pattern that repeats at the same time each year, such as higher sales before a holiday."
+Lead Indicator,Leading Indicator; Predictive Measure,,"A measure that tends to change before the result it influences, so it gives an early warning."
+Lag Indicator,Lagging Indicator; Outcome Measure,,"A measure that shows results after they have happened, such as profit or sales."
+Reporting Period,Period; Fiscal Period; Reporting Month,,"The span of time that a report covers, such as a month or quarter."
+Fiscal Year,FY; Financial Year; Accounting Year,,"The twelve-month period used by a business for its accounts, which may not start in January."
+Calendar Year,CY; Calendar Year Total,,The twelve months from 1 January to 31 December.
+Last Refreshed,Data Refresh Date; Last Updated; As of Date,,The date and time when the data in the report was last updated.
+Data Quality,Data Accuracy; Data Completeness; Data Integrity,higher,"How accurate, complete and consistent the data is for the use it is put to."
+Data Source,Source System; Source of Data; Data Origin,,The system or file that the data in a report comes from.
+Dimension,Category; Attribute; Grouping,,"A way of splitting a measure into groups, such as by region, product or month."
+Slicer,Filter; Selector; Report Filter,,A control on a report that lets people choose which part of the data they want to see.
+Drill Through,Drill Down; Drill-Through Page; Detail Page,,Going from a summary figure to the page or table that shows the detail behind it.
+Tooltip,Hover Text; Pop-Up Detail,,Extra information that appears when the pointer is placed over a part of a chart.
+Bookmark,Saved View; Report Bookmark,,"A saved view of a report page, with its filters and settings, that can be returned to."
+Compliance,Regulatory Compliance; Policy Compliance,higher,"The share of cases where rules, standards or policies were followed."
+Risk Score,Risk Rating; Risk Level; Risk Index,lower,A score showing how likely and how serious a risk is. A higher score means more risk.
+Milestone,Project Milestone; Key Date,,"An important point in a project, such as the end of a stage, used to track progress."
+On Time,On-Time Rate; On-Time Completion; Timeliness,higher,The share of items finished or delivered by the date promised.
+Completion Percentage,Percent Complete; Progress; Percentage Complete,higher,"How much of a task or project is done, shown as a percentage of the whole."
+Overdue,Past Due; Late Items; Delayed Items,lower,The number of items that have passed their due date without being completed.
+Backlog Items,Work in Queue; Queue Length; Pending Items,lower,The number of items waiting to be dealt with.
+Turnaround Time,TAT; Processing Time; Time to Complete,lower,The time taken from receiving a request to completing it.
+Throughput Time,Total Elapsed Time; Elapsed Time; End to End Time,lower,The total time an item takes to pass through a process from start to finish.
+Return Rate General,Rate of Return; Proportion Returned,,The share of items that came back after being sent out.
+Accuracy,Accuracy Rate; Correctness; Error-Free Rate,higher,The share of results that were correct. It is shown as a percentage of all results checked.
+Error Count,Number of Errors; Errors; Mistakes,lower,The number of mistakes found in a period.

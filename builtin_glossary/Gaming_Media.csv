@@ -1,0 +1,70 @@
+﻿Term,Also known as,Better,Definition
+Theoretical Win,Theo Win; Theoretical Hold; Expected Win,,The win the house is expected to earn over time: the amount wagered multiplied by the game's built-in house edge.
+Actual Win,Actual Hold; Net Win; Win Amount,higher,What the house actually kept from wagering in the period: amounts wagered minus amounts paid out to players.
+Win Variance,Theo Variance; Actual vs Theoretical Variance; Actual vs Theo,,The difference between actual win and theoretical win. Over short periods it mostly reflects luck.
+Hold %,Hold Percentage; Hold Rate; Win %; Win Percentage,,The share of the amount wagered (or dropped) that the house kept: win divided by wagered amount.
+House Edge,House Advantage,,The built-in advantage a game gives the house: the share of each wager the house is expected to keep over time.
+RTP,Return to Player; Payback %; Payback Percentage,,The share of wagers a game is expected to pay back to players over time; it equals 100% minus the house edge.
+Coin-In,Coin In; Handle; Total Wagered; Wagers; Amount Wagered,higher,"The total amount players wagered in the period, before any winnings are deducted."
+Table Drop,,higher,"The total money players exchange for chips at a table game, used as the base for measuring table win."
+GGR,Gross Gaming Revenue; Gross Gaming Yield,higher,"Total amounts wagered minus winnings paid out to players, before bonuses, taxes and operating costs."
+NGR,Net Gaming Revenue,higher,"Gross gaming revenue after deducting items such as player bonuses, taxes and fees; the exact deductions vary by operator."
+Win per Unit per Day,WPUPD; Win Per Unit; Win per Machine per Day,higher,The average win earned per gaming machine (or other gaming unit) per day.
+ADT,Average Daily Theoretical; Average Daily Theo,higher,A player's theoretical win averaged per day of play: a measure of how valuable that player is expected to be.
+ARPDAU,Average Revenue Per Daily Active User,higher,Revenue divided by the number of daily active users: how much each active user brings in per day.
+ARPPU,Average Revenue Per Paying User,higher,Revenue divided by the number of users who paid: how much each paying user spends on average.
+Payer Conversion,Payer Conversion Rate; Paying User Rate,higher,The share of users who made at least one purchase.
+Stickiness,DAU/MAU; DAU MAU Ratio,higher,Daily active users divided by monthly active users: how often monthly users come back during the month.
+Day 1 Retention,D1 Retention; Day 7 Retention; D7 Retention; Day 30 Retention; D30 Retention,higher,"The share of new users who come back on the stated day (1, 7 or 30 days) after they first used the product."
+Session Length,Average Session Length; Average Session Duration,,The average time a user spends in a single visit or play session.
+Sessions,Session Count,,The number of separate visits or play sessions in the period.
+Slot Hold,Slot Hold Percentage; Slot Win Percentage; Slot Hold %,,The share of the money bet on slot machines that the casino keeps.
+Average Bet,Average Wager; Average Stake; Bet Size,,The average amount a player bets each time.
+Win per Seat,Win per Position; Win per Table Game Seat; Table Win per Seat,higher,The casino's win divided by the number of seats available at its tables.
+Win per Table per Day,Table Win per Day; Win per Table; Daily Win per Table,higher,The casino's win from a table game divided by the number of tables and days.
+Win per Slot per Day,Slot Win per Day; Net Win per Machine per Day,higher,The casino's win from slot machines divided by the number of machines and days.
+Machine Occupancy,Slot Occupancy; Floor Occupancy; Machine Utilisation Gaming,higher,"The share of time that machines or seats are being played, compared with the time they are available."
+Games per Hour,Hands per Hour; Spins per Hour; Game Speed,,"The number of games, hands or spins played in an hour at a table or machine."
+Theoretical Win per Day,Theo per Day; Daily Theoretical,,"The expected win from a player or game in a day, based on how much was bet and the house edge."
+Player Worth,Player Value; Customer Worth; Player Theoretical,higher,"The value of a player to the casino, based on how much they bet and play, and what the casino expects to earn from them."
+Active Players,Active Members; Carded Players; Rated Players,higher,The number of players who played in the period and were tracked on their loyalty card or account.
+New Player Sign-ups,New Members; Player Registrations; New Registrations,higher,The number of new players who joined the loyalty club or created an account in a period.
+Player Reinvestment Rate,Reinvestment; Comp Rate; Reinvestment Percentage,,"The value of free play, offers and comps given to players shown as a percentage of the money the casino expects to earn from them."
+Comp Expense,Complimentary Expense; Promotional Allowances; Comps,lower,"The cost of free rooms, meals, drinks and play given to players."
+Free Play,Free Play Redeemed; Promotional Credits; Free Bets,,Credits given to players to play without using their own money.
+Promotional Cost Ratio,Promo Cost to Revenue; Promotional Allowance Ratio; Marketing Cost to Win,lower,The cost of promotions shown as a percentage of the casino's win.
+Footfall Gaming,Visitor Count; Gaming Visitors; Admissions,higher,The number of people who entered the casino or venue in a period.
+Average Daily Rate,ADR; Average Room Rate; Daily Rate,higher,The average amount earned for each room that was sold per day.
+Revenue per Available Room,RevPAR,higher,"The room revenue divided by the number of rooms available, found by multiplying occupancy by the average daily rate."
+Revenue per Available Seat,RevPAS; Revenue per Seat,higher,"The revenue divided by the number of seats available, used for restaurants, venues and theatres."
+Seat Occupancy,Seat Utilisation; Capacity Fill,higher,The share of available seats that were filled at an event or screening.
+Average Ticket Price,Average Admission Price; Ticket Yield; Average Seat Price,higher,The average price paid for a ticket to an event or show.
+Tickets Sold,Ticket Sales; Admissions Sold; Attendance,higher,The number of tickets sold for events or screenings in a period.
+Box Office Revenue,Box Office; Ticket Revenue; Gross Box Office,higher,"The money taken from ticket sales for films, shows or events."
+Food and Beverage Revenue,F&B Revenue; Concession Revenue; Food and Drink Sales,higher,The revenue from food and drink sales at a venue or property.
+Per Capita Spend,Spend per Head; Spend per Visitor; Per Cap,higher,"The average spending by each visitor, found by dividing total spending by the number of visitors."
+Daily Active Payers,DAP; Daily Paying Users,higher,The number of players who made a purchase in a day.
+Lifetime Value Player,Player LTV; Player Lifetime Value; Game LTV,higher,The total revenue that a player is expected to bring over the whole time they play.
+Player Churn Rate,Player Churn; Player Attrition; Lapsed Players,lower,The share of players who stopped playing in a period.
+Install Count,Downloads; App Installs; Game Downloads,higher,The number of times an app or game was installed in a period.
+Cost per Install,CPI; Install Cost; Acquisition Cost per Install,lower,The marketing spend divided by the number of installs it produced.
+Average Session Count,Sessions per User; Sessions per Day; Session Frequency,higher,The average number of times each player starts the game in a day.
+Playtime,Time Played; Play Time per User; Engagement Time,higher,The total or average time that players spend in the game.
+Concurrent Users,Peak Concurrent Users; PCU; CCU,,"The number of players who are online at the same moment, normally shown as the peak for the day."
+In-App Purchase Revenue,IAP Revenue; In-Game Purchases; Microtransaction Revenue,higher,The money players spend on items and upgrades bought inside the game.
+Ad Revenue,In-Game Ad Revenue; Advertising Revenue Gaming; Ad Monetisation,higher,The money earned from showing adverts to players or viewers.
+eCPM,Effective CPM; Effective Cost per Mille,higher,"The ad revenue earned for every thousand times ads were shown, used to compare how well different ad spaces earn."
+Fill Rate Ads,Ad Fill Rate; Ad Request Fill Rate,higher,The share of ad requests that were filled with an ad.
+Streams,Stream Count; Plays; Streaming Plays,higher,"The number of times a song, show or video was played."
+Listening Hours,Hours Streamed; Hours Listened,higher,The total hours that audiences spent listening to or watching content.
+Average Viewership,Average Audience; Average Viewers; Viewers per Episode,higher,The average number of people who watched each programme or episode.
+Audience Share,Viewing Share; Share of Viewing; Ratings Share,higher,"The share of all people watching TV, or using a medium, at a time that were watching a particular channel or programme."
+Content Cost per Hour,Programming Cost per Hour; Cost per Hour of Content; Production Cost per Hour,lower,The cost of making or buying content divided by the hours of content produced.
+Library Size,Catalogue Size; Content Library; Titles Available,,The number of titles or hours of content available on a service.
+Subscriber Churn,Subscription Churn; Monthly Churn Media; Cancellations Media,lower,The share of subscribers who cancelled in a period.
+Gross Adds,Subscriber Gross Adds; Gross Additions; New Subscribers,higher,"The number of new subscribers who joined in a period, before cancellations are taken off."
+Net Adds,Net Subscriber Additions; Net Additions; Subscriber Net Adds,higher,The number of new subscribers minus the number who left in a period.
+Free to Paid Conversion,Freemium Conversion; Free-to-Paid Rate,higher,The share of free users who go on to buy a paid plan.
+Hotel Occupancy Rate,Room Occupancy; Occupancy Percentage; Hotel Occupancy,higher,The share of available hotel rooms that were occupied in a period.
+Total Amount Bet,Total Bets Placed; Gross Wagers; Wagering Volume,higher,"The total value of the bets placed in a period, shown before any winnings are paid out."
+Net Gaming Revenue Share,Revenue Share; Gaming Tax Base; Operator Share,,"The share of net gaming revenue that goes to a partner, operator or tax authority under an agreement or law."
