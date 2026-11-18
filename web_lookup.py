@@ -37,7 +37,7 @@ import urllib.request
 from pathlib import Path
 
 USER_AGENT = "pbip-doc-generator/2.0 (local documentation tool)"
-CACHE_VERSION = 2
+CACHE_VERSION = 3
 _NOISE_WORDS = {"html", "card", "pill", "status", "table", "title", "hdr", "header"}
 _STOP = {"the", "a", "an", "of", "and", "or", "per", "to", "in", "on", "for", "by", "vs", "rate", "total",
          "is", "are", "with", "from", "this", "that", "what"}
@@ -82,6 +82,20 @@ def _stem(w):
 
 def _significant(term):
     return [_stem(w) for w in _words(term) if w not in _STOP and len(w) > 1]
+
+
+def _has_terms(text, sig, n=3):
+    """True when the first n significant words of the term all appear in text as whole words (a plural is fine).
+    Whole words matter: the old substring test found 'cy' and 'ly' inside 'policy' and 'only', so a made-up name like
+    'CY vs LY Quarter1 sales' matched an unrelated page about comparable-store sales."""
+    low = (text or "").lower()
+    return bool(sig) and all(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"s?(?![a-z0-9])", low) for w in sig[:n])
+
+
+def _report_specific(term):
+    """A name with a number glued to a word ('Quarter1 sales', 'Top80% Dealers') is one of the report's own variants of a
+    measure; the web cannot know it, and a search only finds a look-alike. It is described from its formula instead."""
+    return any(re.fullmatch(r"[A-Za-z]{3,}\d+", t) for t in re.findall(r"[A-Za-z0-9]+", term or ""))
 
 
 def _vocab_hits(text):
@@ -166,6 +180,9 @@ class WebLookup:
         """-> {'text','source','url'} or None."""
         key = " ".join(_words(clean_term(term)))
         if not key:
+            return None
+        if _report_specific(term):
+            self._note(term, "skipped", "a report-specific name (a number inside a word) - described from its formula")
             return None
         if key in self.cache:
             return self.cache[key] or None
@@ -350,7 +367,7 @@ class WebLookup:
             url = r.get("href") or r.get("url") or ""
             host = urllib.parse.urlparse(url).netloc.replace("www.", "")
             blow = full.lower()
-            if not all(w in blow for w in sig[:2]):
+            if not _has_terms(blow, sig):
                 fallback_pages.append((url, host))
                 continue
             text = _first_sentences(body)
@@ -380,7 +397,7 @@ class WebLookup:
         text = _html.unescape(re.sub(r"(?s)<[^>]+>", " ", raw))
         for s in _sentences(text):
             low = s.lower()
-            if (60 <= len(s) <= 320 and all(w in low for w in sig[:2]) and _DEFN_RE.search(s[:160])
+            if (60 <= len(s) <= 320 and _has_terms(low, sig) and _DEFN_RE.search(s[:160])
                     and not _MARKETING_RE.search(s) and _vocab_hits(s) >= 1 and s[:1].isupper()):
                 return _strip_question(s)
         return None

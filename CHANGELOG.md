@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.14.1 - 18/11/2026
+- Fixed wrong web definitions on report-specific names. On a Timex report, "CY vs LY Quarter1 sales" and "CY vs LY Quarter2 sales" received a
+  comparable-store paragraph from a web page, while Quarter3 and Quarter4 did not. Cause: the web check looked for the first two words of the name as
+  plain text, so "cy" and "ly" were found inside words such as "policy" and "only". Now the words must match as whole words, and the first
+  three words of the name must all be present.
+- A name with a number glued to a word ("Quarter1 sales", "Total Top80% Dealers") is the report's own variant of a measure. It is no longer searched
+  on the web; it is described from its formula (and by the AI in AI mode, with the cross-check).
+- "YTD %", "MTD %" and "QTD %" no longer receive the running-total definition of YTD / MTD / QTD. They are ratios, so they are described from the formula
+  ("YTD as a percentage of YTD Target."). Plain "YTD", "MTD" and "QTD" are unchanged.
+- Web results saved by earlier versions are dropped once and looked up again with the stricter check (your own definitions are never touched).
+
 ## 1.14.0 - 18/11/2026
 - The standard flow is now one command, `python run.py`, for both modes. It asks offline or AI once. If the last run left clarification
   questions waiting, the next `python run.py` does not ask again: it carries on in the same mode (AI mode with the saved key) and rebuilds all three

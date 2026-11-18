@@ -114,17 +114,19 @@ gpath = tmp / "g.json"
 gpath.write_text(json.dumps({"terms": {
     "nps status": {"term": "NPS Status", "definition": "Network Policy ...", "source": "web", "origin": "Wikipedia", "url": "u"},
     "my kpi": {"term": "My KPI", "definition": "Mine.", "source": "manual"},
-    "good web": {"term": "Good Web", "definition": "Fine.", "source": "web", "wv": 2}}}))
+    "good web": {"term": "Good Web", "definition": "Fine.", "source": "web", "wv": 3},
+    "cy vs ly quarter1 sales": {"term": "CY vs LY Quarter1 sales", "definition": "Comparable stores.", "source": "web", "wv": 2}}}))
 g = Glossary(gpath, web=WebLookup(cache_path=None, delay=0, fetch_json=fetch, search_fn=lambda q: [], verbose=False))
 assert g.lookup("NPS Status", web=False) is None, "stale (v1) web entries must be discarded"
 assert g.lookup("My KPI").text == "Mine."
 assert g.lookup("Good Web").text == "Fine."
+assert g.lookup("CY vs LY Quarter1 sales", web=False) is None, "web text saved by an older version is dropped"
 assert g.lookup("Churn Rate", "Gross Margin") is not None or True
 assert g.lookup("Zeta Metric").source == "web"
 assert g.lookup("Some Status Badge", web=False) is None and g.entries["some status badge"]["source"] == "unresolved"
 g.save()
 saved = json.loads(gpath.read_text())["terms"]
-assert saved["zeta metric"]["wv"] == 2 and saved["my kpi"]["source"] == "manual"
+assert saved["zeta metric"]["wv"] == 3 and saved["my kpi"]["source"] == "manual"
 print("ok: manual > seed > fresh web; stale web entries dropped; web=False honoured; placeholders saved")
 # 12. a generic "What is a KPI?" paragraph is not a definition of an unrelated term (seen on a real run)
 def search3(q):
@@ -134,5 +136,26 @@ w4 = WebLookup(cache_path=None, delay=0, fetch_json=lambda u: (_ for _ in ()).th
 assert w4.define("Month Forecast") is None
 assert w4.log and w4.log[-1][0] == "Month Forecast", w4.log
 print("ok: generic KPI article not used; the attempt is logged")
+
+# 13. the Timex mix-up: 'CY vs LY Quarter1 sales' matched a comparable-store page because 'cy' and 'ly' were found INSIDE other
+#     words (policy, only). Whole words only, and a name like 'Quarter1 ...' is the report's own, so it is never searched.
+calls = []
+def search4(q):
+    calls.append(q)
+    return [{"href": "https://learn.example/comparable-sales", "body": "This field enables you to select either comparable stores, non-comparable stores, or both that the report will include. It is a store's sales data in a specified period this year, that is compared to the sales data in an identical period last year, and only the policy of the company decides."}]
+w6 = WebLookup(cache_path=None, delay=0, fetch_json=lambda u: (_ for _ in ()).throw(http404(u)), search_fn=search4,
+               fetch_text=lambda u: "", verbose=False)
+assert w6.define("CY vs LY Quarter1 sales") is None and not calls and w6.log[-1][1] == "skipped", (calls, w6.log)
+assert w6.define("CY vs LY Sales") is None, "'cy' / 'ly' inside other words is not a match"
+from web_lookup import _has_terms, _report_specific
+assert not _has_terms("a policy that is only about stores", ["cy", "ly"]) and _has_terms("CY and LY sales", ["cy", "ly"])
+assert _has_terms("Gemba walks are a completion check", ["gemba", "completion"]) and not _has_terms("Gemba walks", ["gemba", "completion"])
+assert _report_specific("Total Top80% Dealers") and not _report_specific("5S Audit Score")
+print("ok: short names are matched as whole words; report-specific names are not searched")
+# 14. 'YTD %' / 'MTD %' are ratios, not the YTD / MTD running total
+g2 = Glossary(tmp / "g2.json")
+assert g2.lookup("YTD").source == "seed" and g2.lookup("MTD", web=False).source == "seed"
+assert g2.lookup("YTD %", web=False) is None and g2.lookup("MTD %", web=False) is None
+print("ok: percent forms of to-date terms do not get the running-total definition")
 
 print("ALL WEB/GLOSSARY TESTS PASSED")

@@ -27,7 +27,7 @@ from formula_draft import formula_draft, ORIGIN as ORIGIN_DRAFT
 from name_lead import name_lead, ORIGIN as ORIGIN_NAME
 
 _UNIT_TOKENS = {"pct", "percent", "percentage", "ratio"}
-WEB_VERSION = 2
+WEB_VERSION = 3
 CSV_NAME = "my_definitions.csv"
 CSV_COLS = ["Term", "Your definition (type here)", "Suggested definition", "Where the suggestion came from", "Page", "Report formula (for reference)"]
 
@@ -44,6 +44,9 @@ def exact_key(name):
     t = (name or "").lower().replace("%", " percent ")
     t = re.sub(r"\bpercentage\b", "percent", t)
     return " ".join(re.sub(r"[^a-z0-9]+", " ", t).split())
+
+
+_TO_DATE = {"mtd", "ytd", "qtd", "wtd"}      # running totals; written with '%' they become a ratio of that total
 
 
 def has_unit(name):
@@ -128,6 +131,8 @@ class Glossary:
             x = exact_key(name)
             if x in self._seed_exact:
                 return self._seed_exact[x]
+        if has_unit(name) and k in _TO_DATE:              # 'YTD %' is a ratio of YTD to something, not the YTD running total
+            return None
         if k in self._seed:
             return self._seed[k]
         if has_unit(name) and k in self._seed_unit:
