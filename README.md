@@ -55,6 +55,26 @@ A refused draft keeps the exact formula-based draft. Abbreviations the AI had to
 run again: the AI then receives your meanings and the refused terms are redrafted. Abbreviations the report spells out itself
 (for example "Direct Labour (DL)") need no entry. AI drafts saved by an older run are checked again on every run.
 
+## The glossary on paper, and how it grows
+
+`python run.py --export-glossary` writes **Built_in_KPI_Glossary.xlsx**: every built-in definition, by domain (Overview, All terms, one
+sheet per domain). A copy of the current list is in `docs/`. The tool matches the names it reads from the Power BI file against this list
+(exact name or alternative name; a time window such as "6 months" or "YTD" is ignored); the domain is only a label.
+
+Definitions an AI or the web found, or that you typed, stay on your computer in `glossary\`. To share them so that everyone (and offline
+mode) benefits, with a person checking first:
+```
+python run.py --export-shared            # writes shared_candidates.csv: what is on your computer but not shared yet
+# a reviewer opens it in Excel and writes Y in the first column of the rows that are correct AND generic
+# (remove anything that names a client, a person or an internal system)
+python run.py --merge-shared shared_candidates.csv
+git add shared_glossary.csv
+git commit -m "Add reviewed glossary definitions"
+git push
+```
+`shared_glossary.csv` is read like the built-in list, works offline, and never overrides a built-in term. It is never filled automatically: an AI
+or web sentence is a draft, and a client's own measure names should not travel to every colleague.
+
 ## Keys from other services ("Other")
 The tool must know which service a key belongs to because each service has its own web address and message format. You do not have to pick it: it is guessed from the key, and **Other** covers everything else that works like OpenAI's service: Azure OpenAI, Mistral, Groq, DeepSeek, OpenRouter, Together, a company AI gateway, a local Ollama. Ask IT for two things:
 * the **web address** of the service (e.g. `https://api.groq.com/openai/v1`, or the full `.../chat/completions` address, or an Azure deployment address)
@@ -126,6 +146,7 @@ python tests/test_tmdl_variants.py      # TMDL files with BOM / CRLF / descripti
 python tests/test_menu.py               # the start-up question (AI / offline)
 python tests/test_custom_service.py     # key recognition, 'Other' services, web-address checks
 python tests/test_checks.py             # the checks on AI sentences + context.txt
+python tests/test_shared_glossary.py    # Excel export + shared glossary (export / review / merge)
 python tests/test_secrets.py            # key storage, masking, guided setup
 python tests/test_secret_scan.py        # no key-like text in files Git would publish
 ```

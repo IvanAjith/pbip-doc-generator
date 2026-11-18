@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.7.0 - 18/11/2026
+- New: `python run.py --export-glossary` writes the built-in glossary to Excel: an Overview (how the tool uses it, terms per domain),
+  an "All terms" sheet with filters, and one sheet per domain. No project needed.
+- New: a shared glossary the team grows with review. `shared_glossary.csv` (in the repo) is read like the built-in list, works offline,
+  and never overrides a built-in term. Steps: `--export-shared` lists definitions learned on this computer (AI, online, or typed by you)
+  that are not shared yet; a reviewer writes Y next to the correct, generic ones; `--merge-shared FILE` adds them to shared_glossary.csv;
+  then `git add / commit / push` shares them. At the end of a run the tool says how many are waiting.
+- The glossary document says "Shared glossary" for those rows.
+- requirements.txt: openpyxl (for the Excel file; a CSV is written if it is missing).
+
 ## 1.6.0 - 18/11/2026
 - New: a time window in a name no longer hides a standard term. "6 months TRIR", "NPS By Quarter", "YTD Revenue",
   "Turnover % (12M)" are looked up in the built-in glossary as TRIR / NPS / Revenue / Turnover, and the definition ends with

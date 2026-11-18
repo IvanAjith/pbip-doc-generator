@@ -4,7 +4,7 @@ glossary.py -- definitions for the terms a report uses.
 Where a definition comes from, in priority order:
 
   1. glossary/glossary.json, entries marked "manual" -- yours; always wins.
-  2. The small built-in seed list (seed_glossary.py) -- exact term matches only.
+  2. The built-in list (seed_glossary.py) and the team's shared list (shared_glossary.csv) -- exact term matches only.
   3. glossary/glossary.json, entries found online earlier -- reused on re-runs.
   4. A fresh web lookup (web_lookup.py) -- saved to glossary.json as
      "web", unverified, with its source URL.
@@ -83,6 +83,13 @@ class Glossary:
         for e in SEED:
             for t in e["terms"]:
                 self._seed[normalize(t)] = e
+        try:                                              # the team's shared list: fills gaps, never overrides a built-in term
+            from glossary_export import read_shared
+            for e in read_shared():
+                for t in e["terms"]:
+                    self._seed.setdefault(normalize(t), e)
+        except Exception:
+            pass
 
     # -------------------------------------------------------------- lookup
     def lookup(self, *names, **kw):
@@ -110,14 +117,14 @@ class Glossary:
         for k in keys:                                    # 2. seed
             if k in self._seed:
                 s = self._seed[k]
-                return Definition(s["definition"], "seed", "built-in glossary",
+                return Definition(s["definition"], "seed", s.get("origin", "built-in glossary"),
                                   category=s.get("category", ""), better=s.get("better"))
         for n in names:                                   # 2b. a seed term with a time window around it: '6 months TRIR'
             base, period = split_period(n or "")
             bk = normalize(base) if period else ""
             if bk and bk in self._seed:
                 sd = self._seed[bk]
-                return Definition(sd["definition"] + f" (Period shown: {period}.)", "seed", "built-in glossary",
+                return Definition(sd["definition"] + f" (Period shown: {period}.)", "seed", sd.get("origin", "built-in glossary"),
                                   category=sd.get("category", ""), better=sd.get("better"))
         for k in keys:                                    # 3. learned earlier
             e = self.entries.get(k)

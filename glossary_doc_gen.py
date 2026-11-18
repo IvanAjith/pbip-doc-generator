@@ -37,6 +37,8 @@ def _source_text(item):
             return "AI draft — please verify." + (f"\nCheck: {d.note}" if getattr(d, "note", "") else "")
         if d.source == "draft":
             return "Draft from the formula — please verify."
+        if d.origin == "shared glossary":
+            return "Shared glossary — added and reviewed by your team."
         return "Built-in glossary"
     return "Needs your definition"
 
@@ -91,7 +93,7 @@ def build_glossary_doc(project_name, analysis, page_items, output_path, meta, gl
                      "Each entry shows what the indicator means, how the report calculates it (taken from the "
                      "report’s own formulas), and where the definition came from.", size=10.5)
     H.bullets(document, [
-        "Built-in glossary — a standard definition that ships with the tool.",
+        "Built-in glossary — a standard definition that ships with the tool (also: Shared glossary — added and reviewed by your team).",
         "Your own definition — typed by you in this document (or in glossary\\my_definitions.csv) and kept on every later run.",
         "Draft from the formula — built automatically from the report’s own formula (pale yellow). It says how the "
         "figure is calculated; please check it also says what it means to the business.",

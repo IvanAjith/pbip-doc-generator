@@ -136,9 +136,38 @@ def main():
     ap.add_argument("--ai-dax-for-unknown", action="store_true",
                     help="send a measure's DAX text to the AI ONLY for terms it could not answer without it (nothing else "
                          "carries DAX); check your client allows it")
+    ap.add_argument("--export-glossary", nargs="?", const="Built_in_KPI_Glossary.xlsx", metavar="FILE.xlsx",
+                    help="write the built-in + shared glossary, by domain, to an Excel file (no project needed)")
+    ap.add_argument("--export-shared", nargs="?", const="shared_candidates.csv", metavar="FILE.csv",
+                    help="list the definitions learned on this computer that are not in the shared glossary yet (for review)")
+    ap.add_argument("--merge-shared", metavar="FILE.csv",
+                    help="add the rows a reviewer marked Y in --export-shared's file to shared_glossary.csv")
     ap.add_argument("--skip-html", action="store_true"); ap.add_argument("--skip-docx", action="store_true")
     ap.add_argument("--skip-glossary", action="store_true")
     args = ap.parse_args()
+
+    if args.export_glossary or args.export_shared or args.merge_shared:
+        import glossary_export as GE
+        if args.export_glossary:
+            path, n = GE.export_xlsx(args.export_glossary)
+            print(f"Wrote {path} -- {n} definitions, by domain.")
+        if args.export_shared:
+            from glossary import Glossary
+            n = GE.export_candidates(Glossary(args.glossary), args.export_shared)
+            print(f"Wrote {args.export_shared} -- {n} definition(s) learned here that the shared glossary does not have.")
+            print("  Give it to a reviewer: write Y in the first column for the rows that are correct AND generic.\n"
+                  "  Take out anything that names a client, a person or an internal system. Then run:\n"
+                  f"    python run.py --merge-shared {args.export_shared}")
+        if args.merge_shared:
+            added, known, unfinished = GE.merge_candidates(args.merge_shared)
+            print(f"Added {added} definition(s) to shared_glossary.csv"
+                  + (f"; {known} already existed" if known else "") + (f"; {unfinished} marked Y had no term or definition" if unfinished else "") + ".")
+            if added:
+                print("  Share them with your colleagues:\n"
+                      "    git add shared_glossary.csv\n"
+                      '    git commit -m "Add reviewed glossary definitions"\n'
+                      "    git push")
+        return
 
     if args.setup_ai or args.ai_status or args.forget_ai_key:
         import ai_setup
@@ -295,6 +324,14 @@ def main():
     if ai is not None:
         print(f"* AI drafts ({ai.provider}): {ai.drafted} written in {ai.calls} calls" + (f"; stopped: {ai.dead_reason}" if ai.dead else "")
               + ". Marked 'AI draft - please verify' in the documents.")
+    try:
+        import glossary_export as GE
+        n_new = len(GE.candidates(glossary))
+        if n_new:
+            print(f"* {n_new} definition(s) on this computer are not in the shared glossary yet. To let colleagues (and offline "
+                  "mode) benefit after a review:  python run.py --export-shared")
+    except Exception:
+        pass
     if ai is not None and ai.dax_sent_for:
         print(f"* The DAX text was sent to the AI for {len(ai.dax_sent_for)} measure(s) (--ai-dax-for-unknown): "
               + ", ".join(ai.dax_sent_for[:10]) + (" ..." if len(ai.dax_sent_for) > 10 else ""))
