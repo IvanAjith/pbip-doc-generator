@@ -85,7 +85,7 @@ def main():
     check("expected to earn over time" in gm["glossary"] or "wagered multiplied by the game" in gm["glossary"],
           "gaming: 'Theoretical Win' defined from the built-in gaming terms")
     check("Actual Win minus Theoretical Win" in gm["glossary"], "gaming: a custom measure is drafted from its formula")
-    check("Draft from the formula" in gm["glossary"], "gaming: drafts are labelled")
+    check("Draft from the formula" not in gm["glossary"] and "Also shown on" not in gm["glossary"], "gaming: the glossary has no Source column")
     check("3%" in gm["manual"] and "0.03" not in gm["manual"], "gaming: colour threshold shown as 3%")
     for word in ("Gemba", "TRIR", "Mold", "Dayforce"):
         check(word not in gm["manual"] + gm["glossary"], f"gaming: no '{word}' leaked")

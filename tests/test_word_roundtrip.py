@@ -53,7 +53,6 @@ def main():
     console = run(src, out, g)
     assert "picked up 1 definition" in console, console
     assert mine in text(next(out.glob("*KPI_Glossary.docx"))), "edit lost in the glossary"
-    assert "Your own definition" in text(next(out.glob("*KPI_Glossary.docx")))
     manual_txt = text(next(out.glob("*User_Manual.docx")))
     assert mine in manual_txt, "the edited definition did not reach the user manual"
     third = run(src, out, g)
