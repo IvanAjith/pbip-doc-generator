@@ -76,13 +76,13 @@ def go(answers, secret=KEY, http=None):
     return buf.getvalue(), out
 
 text, out = go(["2"])
-assert "Offline mode" in text and len(list(out.glob("*"))) == 3, text[-500:]
+assert "Offline mode" in text and len(list(out.glob("*"))) == 4, text[-500:]
 calls = []
 def http(url, headers, payload, key, provider=None, timeout=40):
     calls.append(key); return GOOD(url, headers, payload, key)
 ai_draft._http_real = ai_draft._http
 text, out = go(["1", "n"], http=lambda u, h, p, k, *a, **kw: http(u, h, p, k))
-assert len(list(out.glob("*"))) == 3 and calls and set(calls) == {KEY}, text[-600:]
+assert len(list(out.glob("*"))) == 4 and calls and set(calls) == {KEY}, text[-600:]
 assert KEY not in text and S.get_key("gemini")[0] == "", "key leaked or saved"
 assert "AI mode on" in text
 # the whole program with a wrong key and "no": exit code 1, no documents

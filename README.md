@@ -55,6 +55,18 @@ A refused draft keeps the exact formula-based draft. Abbreviations the AI had to
 run again: the AI then receives your meanings and the refused terms are redrafted. Abbreviations the report spells out itself
 (for example "Direct Labour (DL)") need no entry. AI drafts saved by an older run are checked again on every run.
 
+## The clarification loop (offline and AI mode work the same way)
+Every run writes the three documents **and** `Needs_Your_Clarification.csv` in the output folder. It lists the indicators nobody could define
+(the yellow cells in the glossary), with the page and the report's formula for reference.
+1. Run `python run.py` (offline or AI).
+2. Open `Needs_Your_Clarification.csv` in Excel, type each meaning in the last column, save and close it.
+3. Run the same command again. Your answers are stored in the glossary file (`glossary\glossary.json`) and used from then on, the three
+   documents are rebuilt with them, and the file comes back empty. The terminal says **No clarification needed** and the three documents
+   can go to the client.
+
+Add `--clarify-drafts` to also list every formula/AI/web draft: type `ok` to accept a draft, or write your own wording.
+(You can still type over the yellow cells in the glossary Word file instead; both ways are read.)
+
 ## Comparing offline and AI mode
 Run the same report twice into separate folders, then compare. `--offline` keeps the web out of both runs, so the only difference is the AI.
 ```
@@ -158,6 +170,7 @@ python tests/test_menu.py               # the start-up question (AI / offline)
 python tests/test_custom_service.py     # key recognition, 'Other' services, web-address checks
 python tests/test_checks.py             # the checks on AI sentences + context.txt
 python tests/test_shared_glossary.py    # Excel export + shared glossary (export / review / merge)
+python tests/test_clarification.py     # the clarification loop (run -> answer -> run again)
 python tests/test_compare_modes.py      # offline vs AI comparison
 python tests/test_builtin_glossary.py   # every domain has 50+ terms with definitions; no name used twice
 python tests/test_secrets.py            # key storage, masking, guided setup

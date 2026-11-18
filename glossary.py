@@ -201,6 +201,21 @@ class Glossary:
             self.generated[key] = text
             self.dirty = True
 
+    def absorb_answers(self, answers):
+        """Definitions typed into the clarification file: kept in the glossary file as the user's own (manual) wording."""
+        n = 0
+        for term, text in answers:
+            k = normalize(term) or term.lower()
+            cur = self.entries.get(k)
+            if cur and cur.get("source") == "manual" and cur.get("definition") == text:
+                continue
+            self.entries[k] = {"term": term, "definition": text, "source": "manual", "from_clarification": True}
+            if k in self._csv_extra:
+                self._csv_extra[k]["mine"] = text
+            self.dirty = True
+            n += 1
+        return n
+
     def absorb_word_edits(self, docx_path, needs_mark="\u26A0"):
         """Read the glossary document written by the previous run. Any 'What it means' cell that now differs from what
         the tool wrote is the user's own definition: keep it as a manual entry."""

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.0 - 18/11/2026
+- New: `Needs_Your_Clarification.csv` is written next to the three documents on every run (offline or AI). It lists the indicators with no
+  definition, with their page and formula. Type the meanings in the last column and run the same command again: the answers are stored in
+  the glossary file, the documents are rebuilt with them, and the file comes back empty. The terminal then says "No clarification needed".
+- New: `--clarify-drafts` also lists the formula / AI / web drafts for confirmation (type ok to accept).
+- Definitions you typed are labelled "Your own definition" in the Source column.
+
 ## 1.8.1 - 18/11/2026
 - New: `python run.py --compare-glossaries gl_offline gl_ai [FILE.xlsx]` puts two runs side by side (Summary, Changed, All terms).
 

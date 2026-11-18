@@ -32,7 +32,7 @@ def _source_text(item):
         if d.source == "web":
             return f"Found online — {d.origin}" + (f" ({d.url})" if d.url else "") + ". Please verify."
         if d.source == "manual":
-            return "Your own definition (my_definitions.csv)"
+            return "Your own definition"
         if d.source == "ai":
             return "AI draft — please verify." + (f"\nCheck: {d.note}" if getattr(d, "note", "") else "")
         if d.source == "draft":

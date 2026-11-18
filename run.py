@@ -144,6 +144,9 @@ def main():
                     help="add the rows a reviewer marked Y in --export-shared's file to shared_glossary.csv")
     ap.add_argument("--compare-glossaries", nargs="+", metavar="FOLDER",
                     help="compare two runs side by side: the two glossary folders (e.g. gl_offline gl_ai) and, optionally, the Excel file name")
+    ap.add_argument("--clarify-drafts", action="store_true",
+                    help="also list every formula / AI / web draft in Needs_Your_Clarification.csv for you to confirm "
+                         "(type ok to accept a draft, or write your own wording)")
     ap.add_argument("--skip-html", action="store_true"); ap.add_argument("--skip-docx", action="store_true")
     ap.add_argument("--skip-glossary", action="store_true")
     args = ap.parse_args()
@@ -280,6 +283,11 @@ def main():
         n_edits = 0
     if n_edits:
         print(f"  picked up {n_edits} definition(s) you edited in the previous glossary document")
+    import clarify
+    clar_path = output / clarify.NAME
+    n_ans = glossary.absorb_answers(clarify.read(clar_path))
+    if n_ans:
+        print(f"  picked up {n_ans} definition(s) you typed in {clarify.NAME}; they are kept in {Path(args.glossary).name}")
     print("Building page content" + (" (web lookups on)" if web else " (offline)") + " ...")
     page_items = kpis.build_all_items(analysis, glossary, primary)
     page_items["_extra"] = kpis.build_extra_items(analysis, glossary, primary, page_items)
@@ -320,6 +328,31 @@ def main():
                 and not it.get("label_logic") and it["display"] not in unresolved:
             unresolved.append(it["display"])
     all_items = [i for p in primary for i in page_items[p["id"]]] + page_items["_extra"]
+    # ---- the clarification file: what only a person can supply
+    from glossary import normalize as _norm
+    def _row(it, page, draft=""):
+        u = glossary.used.get(_norm(it["display"]), {})
+        return {"term": it["display"], "page": page or u.get("page", ""), "calc": u.get("calc", ""), "draft": draft}
+    pages_of = {}
+    for p in primary:
+        for it in page_items[p["id"]]:
+            pages_of.setdefault(it["display"], p["displayName"].strip())
+    needed = [_row(it, pages_of.get(it["display"], "")) for it in all_items if it["display"] in unresolved]
+    seen_needed, needed_rows = set(), []
+    for r in needed:
+        if r["term"] not in seen_needed:
+            seen_needed.add(r["term"]); needed_rows.append(r)
+    draft_rows, seen_d = [], set(seen_needed)
+    if args.clarify_drafts:
+        for it in all_items:
+            d = it.get("definition")
+            if it["kind"] in ("card", "value") and d and d.source in ("draft", "ai", "web") and it["display"] not in seen_d:
+                seen_d.add(it["display"]); draft_rows.append(_row(it, pages_of.get(it["display"], ""), d.text))
+    try:
+        n_clar = clarify.write(clar_path, needed_rows, draft_rows)
+    except PermissionError:
+        n_clar = None
+        print(f"  could NOT write {clarify.NAME} -- it is open in Excel. Close it and run again.")
     from collections import Counter
     src = Counter(i["definition"].source for i in all_items if i.get("definition"))
     n_rows = len(glossary.used)
@@ -381,16 +414,16 @@ def main():
                   "CB = chargeback), save, and run again.")
         else:
             print(f"  Add their meanings to {context.path} (one line each, like CB = chargeback) and run again.")
-    if unresolved:
-        print(f"* {len(unresolved)} indicator(s) have no definition yet: " + ", ".join(unresolved[:12]) +
-              (" ..." if len(unresolved) > 12 else ""))
-        print(f"  They are the yellow cells in {safe}_KPI_Glossary.docx. Type your definition over the yellow text in that")
-        print("  file (replace the whole cell) and save it. Run the tool again only if you also want the wording in the")
-        print("  manual and the HTML reference; it is read back from that file and kept for later runs.")
+    if n_clar:
+        print(f"* CLARIFICATION NEEDED for {n_clar} indicator(s): " + ", ".join(r["term"] for r in (needed_rows + draft_rows)[:12]) +
+              (" ..." if n_clar > 12 else ""))
+        print(f"  Open {clar_path}, type each meaning in the last column (type ok to accept a shown draft), save, and run the")
+        print("  same command again: your answers are stored in the glossary and all three documents are rebuilt with them.")
     for n in notes:
         print("* " + n)
-    if not notes and not unresolved:
-        print("* Nothing needs attention.")
+    if n_clar == 0:
+        print("* No clarification needed. All three documents are complete"
+              + ("" if not notes else " (the notes above are for your information)") + f"; {clarify.NAME} is empty.")
 
 
 if __name__ == "__main__":
