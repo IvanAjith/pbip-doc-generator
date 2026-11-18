@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.12.2 - 18/11/2026
+- Found by comparing a real offline run with a real AI run on Standex:
+  - A report that writes "InDirect Labour (IDL)" gave IDL the meaning "In Direct Labour" (and so "in direct labour"). It is now kept as written: "InDirect Labour".
+  - Offline mode no longer builds a lead from an abbreviation alone ("Net rev per direct labour (DL) hr.", "Average (AVG) average SET score ...").
+    That added nothing; the formula wording plus "Here, DL means direct labour." reads better. A lead is now written only when the name has a
+    negative word ("% Unscheduled Jobs") or a standard abbreviation with a plain meaning (FTE).
+  - A negative lead is followed by the formula when the formula is short, so "Unaccounted Hours" reads "Hours that are not accounted for.
+    DL Clocked Hours minus Scanned Labor Hours." A long formula stays in the "How it is calculated" column.
+- `--compare-glossaries` prints the full path of the files it writes.
+
 ## 1.12.1 - 18/11/2026
 - KPI Glossary document: the "About This Glossary" section (yellow legend, how-to-edit text, missing count) is replaced by a short
   "What This Glossary Contains" paragraph: how many KPIs, how they are grouped, and what the two columns give.

@@ -33,7 +33,7 @@ def meanings(tag):
 
 run("offline")
 a = meanings("offline")
-assert a["% Unscheduled Jobs"] == "The percentage of jobs that are not scheduled.", a["% Unscheduled Jobs"]
+assert a["% Unscheduled Jobs"].startswith("The percentage of jobs that are not scheduled."), a["% Unscheduled Jobs"]
 assert a["Admin FTE"].startswith("Admin full-time equivalent (FTE)"), a["Admin FTE"]
 
 # second run: its own folder, its own answer in its own clarification file

@@ -12,6 +12,7 @@ cases = [
     ("% UNSCHEDULED JOBS", M, None, "The percentage of jobs that are not scheduled."),
     ("Jobs Unscheduled %", M, None, None),                       # word order we do not rewrite: formula wording is used
     ("Unscheduled Jobs", M, None, "Jobs that are not scheduled."),
+    ("Unaccounted Hours", M, None, "Hours that are not accounted for."),
     ("Unscheduled Jobs By Week", M, "percent", "The percentage of jobs that are not scheduled. (Period shown: by week.)"),
     ("Unplanned Downtime", M, None, "Downtime that is not planned."),
     ("Non Billable Hours", M, None, "Hours that are not billable."),
@@ -19,6 +20,8 @@ cases = [
     ("Admin FTE", M, None, "Admin full-time equivalent (FTE): staff time expressed as a number of full-time employees."),
     ("FTE DL", M, None, "Full-time equivalent (FTE) direct labour (DL): staff time expressed as a number of full-time employees."),
     ("FTE IDL", M, None, "Full-time equivalent (FTE) indirect labour (IDL): staff time expressed as a number of full-time employees."),
+    # spelling out an abbreviation alone adds nothing the formula wording plus "Here, X means ..." does not
+    ("Net Rev per DL Hr", M, None, None), ("AVG SET", M, None, None), ("CB", M, None, None), ("Avg PO Value", M, None, None),
     # never guess: an abbreviation nobody explained, or nothing to add
     ("FTE DL", {}, None, None),
     ("WO Headcount", M, None, None),
@@ -36,7 +39,10 @@ d = Path(tempfile.mkdtemp())
 g = Glossary(d / "glossary.json")
 g.context = Context(d / "context.txt")
 x = g.lookup("% Unscheduled Jobs", draft={"calc": "Number of unscheduled jobs ÷ Total jobs", "unit": "percent"})
-assert x.source == "draft" and x.text == "The percentage of jobs that are not scheduled." and "name" in x.origin
+assert x.source == "draft" and x.text == "The percentage of jobs that are not scheduled. Number of unscheduled jobs as a percentage of Total jobs." and "name" in x.origin
+long_calc = "number of distinct DOC Entry (counting only rows where Document Type is “Sales Order” and Open QTY > 0 and 1 further condition) ÷ number of distinct DOC Entry"
+x2 = Glossary(d / "other" / "glossary.json").lookup("% Unscheduled Jobs", draft={"calc": long_calc, "unit": "percent"})      # a long formula stays in its own column
+assert x2.text == "The percentage of jobs that are not scheduled.", x2.text
 y = g.lookup("Late Orders %", draft={"calc": "Late ÷ Total", "unit": "percent"})
 assert y.text == "Late as a percentage of Total."                 # no lead -> formula wording, as before
 g.context.set_meanings({"DL": "direct labour"})
@@ -44,9 +50,10 @@ z = g.lookup("FTE DL", draft={"calc": "x", "unit": None})
 assert z.text.startswith("Full-time equivalent (FTE) direct labour (DL)") and "Here, DL" not in z.text   # not said twice
 w = g.lookup("DL Hours Lost Custom", draft={"calc": "Lost Hours ÷ Total Hours", "unit": "percent"})
 assert w.text.endswith("Here, DL means direct labour.")
-v = g.lookup("Zorp DL Hours Custom", draft={"calc": "Lost Hours ÷ Total Hours", "unit": None})   # spelled-out lead + the formula wording
-assert v.text == "Zorp direct labour (DL) hours custom. Lost Hours divided by Total Hours.", v.text           # formula wording still gets the note
-g.context.set_meanings({"FTE": "my own words for FTE"})
-assert g.lookup("Admin FTE Extra", draft={"calc": "x"}).text.startswith("Admin my own words for FTE (FTE)")  # your meaning wins
+v = g.lookup("Unaccounted Hours", draft={"calc": "DL Clocked Hours − Scanned Labor Hours", "unit": None})   # short formula follows a negative lead
+assert v.text == "Hours that are not accounted for. DL Clocked Hours minus Scanned Labor Hours.", v.text
+u = g.lookup("Net Rev per DL Hr Custom", draft={"calc": "Net Revenue ÷ DL Hours", "unit": None})
+assert u.text == "Net Revenue divided by DL Hours. Here, DL means direct labour.", u.text
+assert Context(d / "none.txt").unknown_in(["Admin FTE"]) == {}
 assert g.lookup("Revenue", draft={"calc": "A ÷ B"}).source == "seed"
 print("name lead tests passed")

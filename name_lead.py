@@ -32,6 +32,8 @@ GLOSS = {"FTE": "staff time expressed as a number of full-time employees"}
 _PERCENT = {"%", "percent", "percentage", "pct"}
 _NOT_NEGATIVE = {"unit", "units", "union", "unions", "unique", "united", "unified", "uniform", "universal", "university",
                  "unity", "under", "undue", "until", "unicode", "unilateral", "unload", "unloading"}
+_NEEDS_FOR = {"accounted": "accounted for"}                 # "hours that are not accounted for"
+SHORT_FORMULA = 90                                          # a negative lead is followed by the formula when it is this short or shorter
 _NON_ADJ = re.compile(r".{3,}(ed|ing|able|ible)$", re.I)
 _TOKEN = re.compile(r"%|[A-Za-z0-9&/]+(?:-[A-Za-z0-9]+)*")
 
@@ -66,8 +68,8 @@ def _plural(word):
 def name_lead(name, meanings=None, unit=None, formula_text=None):
     """-> one plain sentence built from the name, or None when the name adds nothing beyond the formula.
     meanings: {'CB': 'comeback'} -- the user's / the report's own explanations.
-    formula_text: the formula wording; added after a lead that only spells out an abbreviation, because "Work order (WO)
-    headcount." alone says no more than the name does."""
+    formula_text: the formula wording; added after a negative lead when it is short, because "Hours that are not accounted
+    for." is clearer with "DL Clocked Hours minus Scanned Labor Hours." behind it. A long formula stays in its own column."""
     from checks import split_period                       # imported here: checks imports nothing from this module
     base, period = split_period(name or "")
     toks = _TOKEN.findall(base.replace("%", " % "))
@@ -104,10 +106,10 @@ def name_lead(name, meanings=None, unit=None, formula_text=None):
         return tok if (tok.isupper() and len(tok) > 1 and not shouting) else tok.lower()
 
     phrase = " ".join(expand(t) for t in words)
-    if root is None and (not spelled or percent):          # nothing to rewrite (a percentage name that only needs
-        return None                                         # abbreviations spelled out reads better from the formula)
+    if root is None and (not gloss or percent):            # spelling out an abbreviation alone ("Net rev per direct labour (DL) hr.")
+        return None                                         # adds nothing: the formula wording plus "Here, DL means ..." reads better
     if root is not None:
-        phrase += (" that are not " if _plural(words[-1]) else " that is not ") + root
+        phrase += (" that are not " if _plural(words[-1]) else " that is not ") + _NEEDS_FOR.get(root, root)
     if percent:
         text = "The percentage of " + phrase
     else:
@@ -116,8 +118,8 @@ def name_lead(name, meanings=None, unit=None, formula_text=None):
         text += ": " + gloss[0]
     text = text.rstrip(".")
     text = text[0].upper() + text[1:] + "."
-    if root is None and not gloss and formula_text:
-        text += " " + formula_text
+    if root is not None and formula_text and len(formula_text) <= SHORT_FORMULA:
+        text += " " + formula_text                        # "Hours that are not accounted for. DL Clocked Hours minus Scanned Labor Hours."
     if period:
         text += f" (Period shown: {period}.)"
     return text

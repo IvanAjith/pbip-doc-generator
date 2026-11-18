@@ -35,7 +35,7 @@ assert not r.ok and r.guessed == ["CB"] and "CB" in ck.guessed
 ctx = Context(); ctx.abbr["CB"] = "chargeback"
 r = Checker(ctx).validate("30D Claims", "The 30-day raw chargeback cost per labour hour.", F("30D Claims", "30 Days Raw CB Cost divided by DL Hours"))
 assert r.ok, r.hard                                      # defined in the context file -> not a guess
-assert initials_definitions(["Labour Classification is “Direct Labour (DL) FT” and “InDirect Labour (IDL) FT”"]) == {"DL": "Direct Labour", "IDL": "In Direct Labour"}
+assert initials_definitions(["Labour Classification is “Direct Labour (DL) FT” and “InDirect Labour (IDL) FT”"]) == {"DL": "Direct Labour", "IDL": "InDirect Labour"}
 c2 = Context(); c2.learn_from_report(['x = "Direct Labour (DL) FT"'])
 r = Checker(c2).validate("Net Rev per DL", "Net revenue per direct labour hour.", F("Net Rev per DL", "Net Total Revenue divided by DL Clocked Hours"))
 assert r.ok, r.hard                                      # the report itself spells DL out
@@ -144,3 +144,4 @@ ai = AIDrafter("openai", api_key="K", post=ok_server, verbose=False, dax_for_unk
 assert ai.draft("Headcount", calc="count", dax="COUNTROWS(T)") and seen == [False] and not ai.dax_sent_for    # answered at once: no DAX sent
 print("ok: DAX only for unknown terms")
 print("checks tests passed (2)")
+print("initials: InDirect kept as written")

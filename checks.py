@@ -61,15 +61,17 @@ def facts_text(term, calc="", basis="", page="", rules=(), **_):
 
 
 def initials_definitions(texts):
-    """'Direct Labour (DL) FT' -> {'DL': 'Direct Labour'}: abbreviations the report itself spells out."""
+    """'Direct Labour (DL) FT' -> {'DL': 'Direct Labour'}: abbreviations the report itself spells out.
+    'InDirect Labour (IDL)' -> {'IDL': 'InDirect Labour'}: a joined word counts once for its letters, and is kept as written."""
     out = {}
     for t in texts:
         for m in re.finditer(r"((?:[A-Za-z][A-Za-z]+\s+){1,4})\(([A-Z]{2,6})\)", t or ""):
             abbr = m.group(2)
-            words = [h for w in m.group(1).split() for h in re.findall(r"[A-Z][a-z]*|[a-z]+", w)]   # InDirect -> In Direct
-            tail = words[-len(abbr):]
-            if len(tail) == len(abbr) and all(w[0].upper() == a for w, a in zip(tail, abbr)):
-                out.setdefault(abbr, " ".join(tail))
+            words = m.group(1).split()
+            parts = [(i, h) for i, w in enumerate(words) for h in re.findall(r"[A-Z][a-z]*|[a-z]+", w)]
+            tail = parts[-len(abbr):]
+            if len(tail) == len(abbr) and all(h[0].upper() == a for (_, h), a in zip(tail, abbr)):
+                out.setdefault(abbr, " ".join(words[tail[0][0]:]))
     return out
 
 

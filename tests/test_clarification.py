@@ -57,7 +57,7 @@ saved = json.loads((t / "gl" / "glossary.json").read_text(encoding="utf-8"))["te
 assert any(v.get("definition") == "The share of jobs that came back as claims." and v["source"] == "manual" for v in saved.values())
 txt = glossary_text()
 assert "The share of jobs that came back as claims." in txt
-assert "Work order (WO) headcount." in txt                                        # drafts that use an explained abbreviation spell it out
+assert "Here, WO means work order." in txt                                        # drafts that use an explained abbreviation say so
 assert yellow(next((t / "out").glob("*KPI_Glossary.docx"))) == 0 and yellow(next((t / "out").glob("*User_Manual.docx"))) == 0, "yellow left over"
 assert "No clarification needed" in run()                                         # stays quiet on the next run
 

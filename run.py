@@ -168,7 +168,7 @@ def main():
             print(f"  {k:30}{ca.get(k, 0):>8}{cb.get(k, 0):>8}")
         print("\nWrote:")
         for pth in paths:
-            print(f"  {pth}")
+            print(f"  {Path(pth).resolve()}")
         print("Open the .docx first: it lists the KPIs that differ at the top, with what each run says.")
         return
 
