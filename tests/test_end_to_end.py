@@ -78,7 +78,7 @@ def main():
           or "No targets, thresholds or colour rules" in st["manual"], "streaming: no colour text without evidence")
     check("No targets, thresholds or colour rules are defined" in st["manual"], "streaming: says so when there are none")
     check("Tip" in hr["console"] and "tooltip" in hr["console"], "HR: tooltip page left out")
-    check("navigation buttons" not in hr["manual"].split("5.2")[1].split("5.3")[0], "HR: no navigation claim without buttons")
+    check("navigation buttons" not in hr["manual"].split("6.2")[1].split("6.3")[0], "HR: no navigation claim without buttons")
     gm = res["gaming"]
     check("2 pages (2 in the main navigation)" in gm["console"], "gaming: a two-page report keeps both pages")
     # a domain term gets its standard definition; a custom measure gets a draft rephrased from its own formula
