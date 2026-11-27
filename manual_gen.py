@@ -412,185 +412,80 @@ def _meaning(item):
     return " ".join(parts)
 
 
-from design_language import _words as _words_, _top, name_of
-
-
-def _col(h):
-    return f"{h} ({name_of(h)})"
+from design_language import summary as _design_summary, name_of
 
 
 def _size_txt(v):
+    if isinstance(v, str):
+        return v
     return f"{v:g} pt" if isinstance(v, (int, float)) else "\u2014"
 
 
 def build_design_language(document, project_name, design, section_no):
-    """The look of the report, read from its theme and formatting (design_language.py). Written only from what was found."""
+    """The overall look of the report (colours, fonts, canvas, card style), read from its files. High level on purpose:
+    no page-by-page or visual-by-visual detail."""
     H.h1(document, f"{section_no}. Design Language")
-    H.para(document, f"This section records how the {project_name} report looks, so that a new page or a new report can be built to match "
-                     "it. Everything here was read from the report's own files; where the report sets nothing, Power BI's defaults apply "
-                     "and nothing is invented.", size=10.5)
-    design = design or {}
-    if design.get("error") or not design:
+    H.para(document, f"This section gives the overall look of the {project_name} report: its main colours, fonts, canvas and card style. "
+                     "It is read from the report's own files, so a new page or report can be built to match.", size=10.5)
+    if not design or design.get("error"):
         H.para(document, "The report's formatting could not be read, so this section is empty.", size=10.5)
         return
-    th, k = design["theme"], 1
-
-    # ---- theme and colours
-    H.h2(document, f"{section_no}.{k}  Theme and colour palette"); k += 1
-    cf, bf = th.get("custom_file"), th.get("base_file")
-    if th.get("custom"):
-        H.para(document, f"The report uses the custom theme \u201c{th['custom']}\u201d"
-                         + (f" on top of the built-in Power BI theme {th['base']}" if th.get("base") else "") + ". "
-                         "The custom theme file is stored inside the report, in StaticResources\\RegisteredResources.", size=10.5)
-    elif th.get("base"):
-        H.para(document, f"The report uses the built-in Power BI theme {th['base']} and has no custom theme file.", size=10.5)
+    sm = _design_summary(design)
+    if sm["theme_name"]:
+        H.para(document, f"Theme: the custom theme \u201c{sm['theme_name']}\u201d" + (f" on top of Power BI's {sm['base_name']}" if sm["base_name"] else "") + ".", size=10.5)
+    elif sm["base_name"]:
+        H.para(document, f"Theme: Power BI's built-in {sm['base_name']}; the report has no custom theme.", size=10.5)
     else:
-        H.para(document, "The report files name no theme, so Power BI's default theme applies.", size=10.5)
-    use = cf or bf
-    notes = OrderedDict()
-    def add(h, text):
-        if h:
-            notes.setdefault(h, [])
-            if text not in notes[h]:
-                notes[h].append(text)
-    if use:
-        for i, h in enumerate(use["data"], 1):
-            add(h, f"Theme chart colour {i}")
-        for key, h in use["colours"].items():
-            add(h, EV_THEME_ROLE.get(key, key))
-    for h, n, roles in design["colours"]:
-        add(h, f"Set directly on {n} visual{'s' if n != 1 else ''}: " + ", ".join(roles))
-    html = design["html"]
-    for h, n in html["colours"][:8]:
-        add(h, f"Inside HTML visuals ({n} measure{'s' if n != 1 else ''})")
-    if notes:
-        rows = [[h, name_of(h).title(), "; ".join(v[:3])] for h, v in list(notes.items())[:28]]
-        H.swatch_table(document, ["Swatch", "Colour", "Used for"], rows, [0.16, 0.18, 0.66])
+        H.para(document, "Theme: the report files name no theme, so Power BI's default theme applies.", size=10.5)
+    k = 1
+    if sm["colours"]:
+        H.h2(document, f"{section_no}.{k}  Colours"); k += 1
+        H.swatch_table(document, ["Swatch", "Role", "Colour", "Taken from"],
+                       [[h, role, name_of(h).title(), src] for role, h, src in sm["colours"]], [0.16, 0.2, 0.2, 0.44])
         document.add_paragraph()
+        if sm.get("more_series"):
+            H.para(document, "Further chart colours, in order: " + ", ".join(f"{h} ({name_of(h)})" for h in sm["more_series"]) + ".", size=10.5)
     else:
-        H.para(document, "No colours are set in the theme or typed into the visuals.", size=10.5)
-    extra = []
-    if design["theme_refs"]:
-        extra.append(f"{design['theme_refs']} formatting settings pick a theme colour by number, so they follow the theme if it is changed")
-    if design["rule_colours"]:
-        extra.append(f"{design['rule_colours']} settings take their colour from a rule or a measure; those rules are described under "
-                     "Value & Display Conventions and on each page")
-    if th.get("images"):
-        extra.append("images stored in the report: " + ", ".join(th["images"][:6]))
-    if extra:
-        H.bullets(document, [e[0].upper() + e[1:] + "." for e in extra])
-
-    # ---- typography
-    rows = []
-    if use:
-        for t in use["text"]:
-            rows.append([TEXT_LABEL.get(t["class"], f"Theme: {t['class']}"), t["font"] or "\u2014", _size_txt(t["size"]), "Theme"])
-    for t in design["typography"]:
-        fonts = " / ".join(f for f, _ in t["fonts"]) or "(theme font)"
-        sizes = _size_txt(t["size"]) + (f" (range {min(t['sizes']):g}\u2013{max(t['sizes']):g})" if len(t["sizes"]) > 1 else "")
-        rows.append([t["element"], fonts, sizes, f"{t['n']} setting{'s' if t['n'] != 1 else ''} in visuals"])
-    if html["measures"] and (html["fonts"] or html["sizes"]):
-        rows.append(["Text inside HTML visuals", " / ".join(f for f, _ in html["fonts"]) or "\u2014",
-                     ", ".join(s for s, _ in html["sizes"]) or "\u2014", f"{html['measures']} HTML measure{'s' if html['measures'] != 1 else ''}"])
-    if rows:
+        H.para(document, "No colours are set in the theme or in the visuals, so Power BI's default colours apply.", size=10.5)
+    if sm["type"]:
         H.h2(document, f"{section_no}.{k}  Fonts and text sizes"); k += 1
-        H.data_table(document, ["Where", "Font", "Size", "Set in"], rows, [0.34, 0.26, 0.22, 0.18])
+        H.data_table(document, ["Text", "Font", "Size", "Taken from"],
+                     [[a, b or "(theme font)", _size_txt(c), d] for a, b, c, d in sm["type"]], [0.32, 0.28, 0.2, 0.2])
         document.add_paragraph()
-
-    # ---- canvas
-    H.h2(document, f"{section_no}.{k}  Canvas and page layout"); k += 1
-    if design["sizes"]:
-        (w, h), n = design["sizes"][0]
-        g = _ratio(w, h)
-        same = len(design["sizes"]) == 1
-        H.para(document, f"{'All' if same else 'Most'} pages use a canvas of {w} \u00D7 {h} pixels" + (f" ({g})" if g else "")
-               + ("" if same else f" ({n} of {sum(c for _, c in design['sizes'])} pages)") + ".", size=10.5)
-    gr = design["grid"]
-    if "margin_left" in gr:
-        H.para(document, f"Content starts about {gr['margin_left']} px from the left edge and {gr['margin_top']} px from the top.", size=10.5)
+    lay = []
+    cv = sm["canvas"]
+    if cv:
+        g = _ratio(cv["w"], cv["h"])
+        lay.append(f"{'All pages use' if cv['all'] else 'Most pages use'} a canvas of {cv['w']} \u00D7 {cv['h']} pixels" + (f" ({g})" if g else "") + ".")
+    gr = sm["grid"]
     if "gap_h" in gr or "gap_v" in gr:
-        gaps = []
-        if "gap_h" in gr:
-            gaps.append(f"{gr['gap_h']} px apart side to side")
-        if "gap_v" in gr:
-            gaps.append(f"{gr['gap_v']} px apart top to bottom")
-        H.para(document, "Neighbouring visuals are usually " + " and ".join(gaps) + ".", size=10.5)
-    rows = [[p["name"], f"{p['width']} \u00D7 {p['height']}" if p["width"] and p["height"] else "\u2014", p["display"] or "\u2014",
-             p["background"] or "Theme default", p["wallpaper"] or "\u2014"] for p in design["pages"]]
-    if rows:
-        H.data_table(document, ["Page", "Canvas (px)", "Fit option", "Page background", "Behind the page"], rows, [0.27, 0.15, 0.14, 0.26, 0.18])
-        document.add_paragraph()
-
-    # ---- cards
-    st = design["style"]
-    H.h2(document, f"{section_no}.{k}  Visual and card style"); k += 1
-    lines = []
-    if st["n"]:
-        def share(x):
-            return f"{x} of {st['n']}"
-        if st["background"]:
-            lines.append(f"Background set on {share(st['background'])} visuals.")
-        if st["border"]:
-            r = st["radius"]
-            lines.append(f"Border on {share(st['border'])} visuals" + (f", corner radius {_top(r)[0]:g} px" + (" (most common)" if len(r) > 1 else "") if r else "") + ".")
-        if st["shadow"]:
-            lines.append(f"Shadow on {share(st['shadow'])} visuals.")
-        if st["title"]:
-            lines.append(f"Title switched on for {share(st['title'])} visuals.")
-        if st["header_hidden"]:
-            lines.append(f"The visual header icons are hidden on {share(st['header_hidden'])} visuals.")
-        if st["padding"]:
-            t_, r_, b_, l_ = _top(st["padding"])[0]
-            lines.append(f"Inner padding, most common: top {t_:g}, right {r_:g}, bottom {b_:g}, left {l_:g} px.")
-    dfl = (use or {}).get("defaults") or {}
-    if dfl:
-        bits = []
-        for obj, info in dfl.items():
-            part = ", ".join(f"{_words_(key)} {v}" for key, v in info.items() if key != "show" or v is not True)
-            bits.append(f"{_words_(obj)}: {part}")
-        lines.append("Default style set by the theme for every visual \u2013 " + "; ".join(bits) + ".")
-    if html["measures"] and (html["radii"] or html["shadows"]):
-        s = []
-        if html["radii"]:
-            s.append("rounded corners (" + ", ".join(r for r, _ in html["radii"]) + ")")
-        if html["shadows"]:
-            s.append(f"shadows in {html['shadows']} measure{'s' if html['shadows'] != 1 else ''}")
-        lines.append("HTML visuals draw their own cards with " + " and ".join(s) + ".")
-    if lines:
-        H.para(document, "Counted from what the report sets explicitly:", size=10.5)
-        H.bullets(document, lines)
-    else:
-        H.para(document, "The visuals do not override Power BI's default card style (no background, border, shadow or title is set).", size=10.5)
-
-    # ---- how to match
+        lay.append("Visuals sit about " + " and ".join(x for x in (f"{gr['gap_h']} px apart side to side" if 'gap_h' in gr else "",
+                                                                 f"{gr['gap_v']} px apart top to bottom" if 'gap_v' in gr else "") if x) + ".")
+    if "margin_left" in gr:
+        lay.append(f"Content starts about {gr['margin_left']} px from the left edge and {gr['margin_top']} px from the top.")
+    if sm["cards"]:
+        lay.append("Cards and visuals mostly have " + ", ".join(sm["cards"][:-1]) + (" and " if len(sm["cards"]) > 1 else "") + sm["cards"][-1] + ".")
+    elif design["style"]["n"]:
+        lay.append("Visuals keep Power BI's default card style.")
+    if lay:
+        H.h2(document, f"{section_no}.{k}  Layout and cards"); k += 1
+        H.bullets(document, lay)
     tips = []
-    if th.get("custom"):
-        tips.append(f"Apply the theme \u201c{th['custom']}\u201d (View > Themes > Browse for themes, using the file in the report's StaticResources folder).")
-    elif th.get("base"):
-        tips.append(f"Start from the built-in Power BI theme {th['base']}.")
-    if design["sizes"]:
-        (w, h), _n_ = design["sizes"][0]
-        tips.append(f"Set the page canvas to {w} \u00D7 {h} pixels (Format page > Canvas settings).")
-    if use and use["data"]:
-        tips.append("Colour chart series in the theme order: " + ", ".join(_col(h) for h in use["data"][:6]) + ("." if len(use["data"]) <= 6 else ", and so on."))
-    if design["typography"]:
-        t0 = design["typography"][0]
-        tips.append(f"Use {' / '.join(f for f, _ in t0['fonts']) or 'the theme font'} for text; {t0['element'].lower()} are "
-                    f"{_size_txt(t0['size'])}.")
-    if "gap_h" in gr:
-        tips.append(f"Leave about {gr['gap_h']} px between visuals and keep content about {gr.get('margin_left', 0)} px from the edge.")
+    if sm["theme_name"]:
+        tips.append(f"Apply the theme \u201c{sm['theme_name']}\u201d (View > Themes > Browse for themes; the file is in the report's StaticResources folder).")
+    elif sm["base_name"]:
+        tips.append(f"Start from Power BI's built-in {sm['base_name']} theme.")
+    if cv:
+        tips.append(f"Set the page canvas to {cv['w']} \u00D7 {cv['h']} pixels.")
+    cols = {r: h for r, h, _s in sm["colours"]}
+    if "Primary" in cols:
+        tips.append("Use " + ", ".join(f"{cols[r]} ({name_of(cols[r])}) as the {r.lower()} colour" for r in ("Primary", "Secondary", "Accent") if r in cols) + ".")
+    if sm["type"] and sm["type"][0][1]:
+        tips.append(f"Use {sm['type'][0][1]} for titles" + (f" at {_size_txt(sm['type'][0][2])}" if sm["type"][0][2] else "") + ".")
     if tips:
-        H.para(document, "To build a new page or report in the same style:", size=10.5, bold=True)
+        H.para(document, "To build a new page in the same style:", size=10.5, bold=True)
         H.bullets(document, tips)
     document.add_paragraph()
-
-
-EV_THEME_ROLE = {"background": "Page and card background (theme)", "secondaryBackground": "Second background (theme)",
-                 "foreground": "Text (theme)", "tableAccent": "Table accent (theme)", "good": "Good (theme)",
-                 "neutral": "Neutral (theme)", "bad": "Bad (theme)", "minimum": "Colour scale: lowest (theme)",
-                 "center": "Colour scale: middle (theme)", "maximum": "Colour scale: highest (theme)"}
-TEXT_LABEL = {"title": "Theme: title text", "callout": "Theme: big card numbers", "label": "Theme: labels", "header": "Theme: headers",
-              "largeTitle": "Theme: large title", "smallLabel": "Theme: small labels", "boldLabel": "Theme: bold labels"}
 
 
 def _ratio(w, h):

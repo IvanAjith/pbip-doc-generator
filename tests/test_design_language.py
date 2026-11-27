@@ -58,13 +58,26 @@ r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--no-prompt", "--offl
 assert r.returncode == 0, r.stderr[-1000:]
 doc = Document(str(next(out.glob("*User_Manual.docx"))))
 text = "\n".join(p.text for p in doc.paragraphs)
-cells = "\n".join(c.text for tb in doc.tables for row in tb.rows for c in row.cells)
-assert "Design Language" in text and "BrandTheme.json" in text.replace("“", "").replace("”", "") or "BrandTheme" in text, text[-3000:]
-for must in ("#0B3C5D", "#328CC1", "#D9B310", "#2E8B57", "#C0392B", "#FAFAFA", "#F3F2F1"):
-    assert must in cells, (must, cells[cells.index("Where"):][:900])
-assert "Segoe UI Semibold" in cells and "1280 × 720" in text + cells and "16:9" in text and "DIN" in cells
-assert "corner radius 12" in text and "logo.png" in text and "Inside HTML visuals" in cells and "box-shadow" not in text
-assert "shadows in 1 measure" in text and "Apply the theme" in text
+tables = ["\n".join(c.text for row in tb.rows for c in row.cells) for tb in doc.tables]
+cells = "\n".join(tables)
+paras = doc.paragraphs
+i0 = next(i for i, p in enumerate(paras) if p.style.name.startswith("Heading 1") and p.text.endswith("Design Language"))
+i1 = next(i for i in range(i0 + 1, len(paras)) if paras[i].style.name.startswith("Heading 1"))
+sec = "\n".join(p.text for p in paras[i0:i1])
+assert "BrandTheme.json" in sec.replace("\u201c", "").replace("\u201d", ""), sec[:800]
+# the overall picture: primary, secondary, accent, background, text, good / neutral / bad
+roles = {}
+for tb in doc.tables:
+    if [c.text for c in tb.rows[0].cells][:2] == ["Swatch", "Role"]:
+        roles = {r.cells[1].text: r.cells[0].text for r in tb.rows[1:]}
+assert roles == {"Primary": "#0B3C5D", "Secondary": "#328CC1", "Accent": "#D9B310", "Background": "#FFFFFF", "Text": "#252423",
+                 "Good": "#2E8B57", "Neutral": "#D9B310", "Bad": "#C0392B"}, roles
+assert "Segoe UI Semibold" in cells and "DIN" in cells and "16 pt" in cells and "28 pt" in cells
+assert "1280 \u00D7 720" in sec and "16:9" in sec and "rounded corners (12 px)" in sec and "Apply the theme" in sec and "#0B3C5D (dark blue) as the primary colour" in sec
+# high level only: no page-by-page table, no visual-by-visual counts, no long colour lists
+assert "Behind the page" not in cells and "Page background" not in cells and not re.search(r"\d+ of \d+ visuals", sec) and "Set directly on" not in cells
+assert sum(len(tb.rows) for tb in doc.tables if [c.text for c in tb.rows[0].cells][:1] == ["Swatch"]) <= 10
+assert len([l for l in sec.splitlines() if l.strip()]) <= 22, sec
 
 # ---- the headings keep their numbers in order, and a report with no formatting still gets an honest section
 heads = [p.text for p in doc.paragraphs if p.style.name.startswith("Heading 1")]
@@ -72,6 +85,14 @@ nums = [int(m.group(1)) for h in heads if (m := re.match(r"(\d+)\.\s", h))]
 assert nums == list(range(1, len(nums) + 1)), heads
 shutil.rmtree(rep / "StaticResources")
 (rep / "definition" / "report.json").write_text("{}", encoding="utf-8")
+r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--no-prompt", "--offline", "--skip-drafts", "--source", str(t / "syn" / "hr"), "--output", str(t / "out1"),
+                    "--glossary", str(t / "gl1" / "glossary.json")], capture_output=True, text=True, encoding="utf-8")
+assert r.returncode == 0, r.stderr[-1000:]
+d1 = Document(str(next((t / "out1").glob("*User_Manual.docx"))))
+sw = next(tb for tb in d1.tables if [c.text for c in tb.rows[0].cells][:2] == ["Swatch", "Role"])
+got = {r.cells[1].text: (r.cells[0].text, r.cells[3].text) for r in sw.rows[1:]}
+assert {got["Primary"][0], got["Secondary"][0]} == {"#0B3C5D", "#328CC1"} and "most used colour" in got["Primary"][1], got
+assert "no custom theme" not in "\n".join(p.text for p in d1.paragraphs) and "default theme applies" in "\n".join(p.text for p in d1.paragraphs)
 for vf in (rep / "definition" / "pages").glob("*/visuals/*/visual.json"):
     vj = json.loads(vf.read_text(encoding="utf-8")); vj["visual"].pop("visualContainerObjects", None); vj["visual"].pop("objects", None)
     vf.write_text(json.dumps(vj), encoding="utf-8")
@@ -82,7 +103,9 @@ r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--no-prompt", "--offl
 assert r.returncode == 0, r.stderr[-1000:]
 doc = Document(str(next((t / "out2").glob("*User_Manual.docx"))))
 text = "\n".join(p.text for p in doc.paragraphs)
-assert "Design Language" in text and "no theme, so Power BI's default theme applies" in text and "do not override Power BI's default" in text, text[-2500:]
+assert "Design Language" in text and "no theme, so Power BI's default theme applies" in text and "keep Power BI's default card style" in text, text[-2500:]
+h2s = [p.text for p in doc.paragraphs if p.style.name.startswith("Heading 2") and re.match(r"5\.\d", p.text)]
+assert [h.split()[0] for h in h2s] == [f"5.{i}" for i in range(1, len(h2s) + 1)], h2s
 d = DL.collect(t / "does_not_exist", [], [])
 assert d.get("found") is False or d.get("pages") == [], d
 print("design language tests passed")

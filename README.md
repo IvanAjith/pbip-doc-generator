@@ -74,14 +74,12 @@ run again: the AI then receives your meanings and the refused terms are redrafte
 (for example "Direct Labour (DL)") need no entry. AI drafts saved by an older run are checked again on every run.
 
 ## Design language in the User Manual
-Every User Manual has a **Design Language** section (after Value & Display Conventions) that records how the report looks, so a new page or a new report can
-be built to match it. It is read from the report files only (nothing is guessed, nothing is sent to an AI) and has five parts:
-**Theme and colour palette** (the theme in use, its chart colours, background, text, good/neutral/bad colours, and every colour typed straight into visuals or
-written inside HTML measures, each shown as a swatch with its hex code), **Fonts and text sizes** (theme text classes, fonts and sizes set on titles, labels,
-axes, legends, tables, and the fonts written in HTML measures), **Canvas and page layout** (pixel size and ratio, fit option, page and wallpaper colours,
-the usual edge margin and gap between visuals), **Visual and card style** (how many visuals set a background, border with corner radius, shadow, title,
-padding; the theme's default card style), and a short **To build a new page in the same style** list. Where the report sets nothing, the section says
-that Power BI's defaults apply. Colours chosen by a rule or a measure are only counted; the rules are described under Value & Display Conventions.
+Every User Manual has a **Design Language** section (after Value & Display Conventions): a one-page, high-level picture of how the report looks, so a new
+page or report can be built to match. It is read from the report files only (nothing is guessed, nothing is sent to an AI) and is deliberately overall,
+never page by page or visual by visual: the **theme** in use; the main **colours** (primary, secondary and accent, background, text, and good/neutral/bad,
+each as a swatch with its hex code; from the theme's chart colours, or from the colours the report uses most when it has no theme); **fonts and text sizes**
+(titles, labels, big card numbers, text inside HTML visuals); **layout and cards** (canvas size and ratio, the usual gap and edge margin, and the card style most
+visuals share); and a short list for building a new page in the same style. Where the report sets nothing, it says Power BI's defaults apply.
 
 ## Logo and glossary layout
 The company logo (`assets/logo.png`) is on the cover and the top right of every page of the User Manual and the KPI Glossary, and in the header of the

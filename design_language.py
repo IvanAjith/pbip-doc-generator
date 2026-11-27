@@ -237,7 +237,7 @@ def _html_design(measures):
 # ---------------------------------------------------------------- pages and visuals
 
 def _page_look(pj):
-    """-> (description of the page colour, description of the wallpaper behind the page)"""
+    """-> (description of the page colour, description of the wallpaper behind the page, page colour hex or None)"""
     def one(name):
         arr = (pj.get("objects") or {}).get(name)
         if not isinstance(arr, list) or not arr or not isinstance(arr[0], dict):
@@ -258,7 +258,13 @@ def _page_look(pj):
         if isinstance(t, (int, float)) and t >= 100:
             return "none (fully transparent)"
         return txt + (f", {int(t)}% transparent" if isinstance(t, (int, float)) and t > 0 else "")
-    return one("background"), one("outspace")
+    hx = None
+    try:
+        c = _colour(((pj.get("objects") or {}).get("background") or [{}])[0].get("properties", {}).get("color"))
+        hx = c[1] if c and c[0] == "hex" else None
+    except (AttributeError, IndexError, TypeError):
+        pass
+    return one("background"), one("outspace"), hx
 
 
 def _visual(vj, acc, content):
@@ -361,7 +367,7 @@ def _collect(report_dir, pages, measures):
     for p in use:
         pdir = report_dir / "definition" / "pages" / p["id"]
         pj = _load(pdir / "page.json")
-        bg, wall = _page_look(pj)
+        bg, wall, bg_hex = _page_look(pj)
         w, h = pj.get("width") or p.get("width"), pj.get("height") or p.get("height")
         if w and h:
             sizes[(int(w), int(h))] += 1
@@ -383,7 +389,7 @@ def _collect(report_dir, pages, measures):
                         pass
         rect_pages.append(rects)
         page_rows.append({"name": (p.get("displayName") or p["id"]).strip(), "width": w, "height": h,
-                          "display": pj.get("displayOption"), "background": bg, "wallpaper": wall})
+                          "display": pj.get("displayOption"), "background": bg, "wallpaper": wall, "background_hex": bg_hex})
     theme = _theme(report_dir)
     html = _html_design(measures)
     fonts = {o: c for o, c in acc["fonts"].items() if c}
@@ -405,3 +411,95 @@ def _collect(report_dir, pages, measures):
     d["found"] = bool(colours or typography or html["measures"] or cf or bf or theme.get("base") or theme.get("custom")
                       or acc["style"]["background"] or acc["style"]["border"] or acc["style"]["shadow"])
     return d
+
+
+# ---------------------------------------------------------------- the high-level picture for the manual
+
+def _neutral(h):
+    c = h.lstrip("#")
+    r, g, b = (int(c[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    return max(r, g, b) - min(r, g, b) < 0.12
+
+
+def _light(h):
+    c = h.lstrip("#")
+    r, g, b = (int(c[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    return (max(r, g, b) + min(r, g, b)) / 2
+
+
+def summary(design):
+    """Boil collect()'s result down to the overall picture: main colours, main fonts, canvas and card style, in a few lines."""
+    th = design["theme"]
+    use = th.get("custom_file") or th.get("base_file")
+    out = {"theme_name": th.get("custom"), "base_name": th.get("base"), "colours": [], "type": [], "cards": [], "canvas": None,
+           "grid": design.get("grid") or {}, "theme_found": bool(use)}
+    # ---- colours: the theme's chart colours when there is a theme, else the colours the report uses most
+    chroma = [h for h, _n, _r in design["colours"] if not _neutral(h)] + [h for h, _n in design["html"]["colours"] if not _neutral(h)]
+    chroma = list(OrderedDict.fromkeys(chroma))
+    if use and use["data"]:
+        order, src = use["data"], "theme chart colour"
+    else:
+        order, src = chroma, "most used colour in the report"
+    for name, h, i in (("Primary", None, 0), ("Secondary", None, 1), ("Accent", None, 2)):
+        if i < len(order):
+            out["colours"].append((name, order[i], f"{src} {i + 1}" if use and use["data"] else src))
+    if use and use["data"] and len(use["data"]) > 3:
+        out["more_series"] = use["data"][3:6]
+    bg = use["colours"].get("background") if use else None
+    if bg:
+        out["colours"].append(("Background", bg, "theme"))
+    else:
+        bgs = Counter(p["background_hex"] for p in design["pages"] if p.get("background_hex"))
+        if bgs:
+            out["colours"].append(("Page background", bgs.most_common(1)[0][0], "most common page colour"))
+    fg = use["colours"].get("foreground") if use else None
+    if fg:
+        out["colours"].append(("Text", fg, "theme"))
+    else:
+        dark = [h for h, _n, _r in design["colours"] if _neutral(h) and _light(h) < 0.4]
+        if dark:
+            out["colours"].append(("Text", dark[0], "most used dark neutral colour"))
+    if use:
+        for key, label in (("good", "Good"), ("neutral", "Neutral"), ("bad", "Bad")):
+            if use["colours"].get(key):
+                out["colours"].append((label, use["colours"][key], "theme status colour"))
+    # ---- fonts: the theme's text classes, else the most used element settings
+    tc = {t["class"]: t for t in (use or {}).get("text", [])}
+    ty = {t["element"]: t for t in design["typography"]}
+    def pick(*names):
+        return next((ty[n] for n in names if n in ty), None)
+    for label, cls, el in (("Titles", "title", pick("Visual titles")), ("Labels and body text", "label",
+                                                                     pick("Data labels and card numbers", "Table and matrix values", "Category axis labels", "Legends")),
+                           ("Big card numbers", "callout", None)):
+        t = tc.get(cls)
+        if t and (t["font"] or t["size"]):
+            out["type"].append((label, t["font"], t["size"], "theme"))
+        elif el:
+            out["type"].append((label, " / ".join(f for f, _ in el["fonts"]) or None, el["size"], "visual settings"))
+    h = design["html"]
+    if h["measures"] and (h["fonts"] or h["sizes"]):
+        out["type"].append(("Text inside HTML visuals", " / ".join(f for f, _ in h["fonts"]) or None,
+                            ", ".join(s for s, _ in h["sizes"][:2]) or None, "HTML measures"))
+    # ---- canvas
+    if design["sizes"]:
+        (w, hh), n = design["sizes"][0]
+        out["canvas"] = {"w": w, "h": hh, "all": len(design["sizes"]) == 1}
+    # ---- cards: only what most visuals share
+    st, dfl = design["style"], (use or {}).get("defaults") or {}
+    half = lambda x: st["n"] and x * 2 >= st["n"]
+    radius = (dfl.get("border") or {}).get("radius")
+    if st["radius"] and half(sum(st["radius"].values())):
+        radius = _top(st["radius"])[0]
+    if half(st["background"]) or dfl.get("background"):
+        out["cards"].append("a filled background")
+    if half(st["border"]) or (dfl.get("border") or {}).get("show"):
+        out["cards"].append("a thin border")
+    if radius:
+        out["cards"].append(f"rounded corners ({radius:g} px)")
+    if half(st["shadow"]):
+        out["cards"].append("a shadow")
+    if half(st["title"]):
+        out["cards"].append("a title on each visual")
+    if h["measures"] and h["radii"]:
+        out["cards"].append(f"HTML cards with rounded corners ({h['radii'][0][0]})")
+    return out

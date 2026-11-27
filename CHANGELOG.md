@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.19.1 - 27/11/2026
+- The Design Language section is now a one-page overall picture instead of a detailed one: a table of primary, secondary and accent colours with background, text and
+  good/neutral/bad (taken from the theme, or from the colours used most when there is no theme), a short table of fonts and sizes, and three lines on canvas, spacing and card
+  style. The page-by-page canvas table, the visual-by-visual counts and the long colour list are gone. New `design_language.summary()`.
+
 ## 1.19.0 - 27/11/2026
 - The User Manual has a new **Design Language** section for every report. New `design_language.py` reads the theme (`report.json`, the theme files in `StaticResources`),
   every `page.json` and `visual.json`, and the HTML written inside measures, and the manual shows: the theme and a colour palette (swatch, hex, plain name, what it is used for),
