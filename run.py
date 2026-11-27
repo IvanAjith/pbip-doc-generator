@@ -330,6 +330,14 @@ def main():
     if n_edits:
         print(f"  picked up {n_edits} definition(s) you edited in the previous glossary document")
     glossary.context = context
+    if not context.domain:                               # nobody typed a Domain: line -> read it from the report itself
+        import domain_detect
+        _names = [project_name] + [p["displayName"].strip() for p in analysis["pages"]] + [t["name"] for t in analysis["realTables"]] \
+            + [m["name"] for m in analysis["allMeasures"]]
+        _cat = lambda n: (glossary._seed_match(n) or {}).get("category")
+        context.domain, _ev = domain_detect.detect(_names, _cat)
+        print(f"  Domain: {context.domain} (found automatically from the report's page, table and KPI names)"
+              if context.domain != "General" else "  Domain: not clear from the names, so General (type a Domain: line in context.txt to say it)")
     glossary.domain = context.domain                     # answers are kept in glossary\domains\<Domain>.csv
     glossary.cross_check = not args.no_cross_check
     n_ans = glossary.absorb_answers(def_ans)

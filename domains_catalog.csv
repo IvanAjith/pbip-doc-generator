@@ -1,0 +1,126 @@
+Domain,Keywords
+Healthcare,patient;hospital;clinic;clinical;admission;readmission;discharge;length of stay;bed;ward;physician;doctor;nurse;diagnosis;treatment;medication;appointment;no show;outpatient;inpatient;surgery;emergency department;triage;encounter;icd;care plan
+Pharmaceuticals,drug;prescription;pharmacy;formulary;clinical trial;dosage;batch release;api;generic;brand;pharmacovigilance;adverse event;regulatory submission;compound;rx
+Medical Devices,device;implant;udi;recall;510k;sterilization;complaint;installed base;service call;calibration;fda
+Life Sciences & Biotech,assay;sample;specimen;lab;laboratory;genomic;sequencing;cohort;protocol;study;reagent;biobank
+Health Insurance,member;claim;premium;provider;network;deductible;copay;authorization;enrollment;medical loss ratio;utilization;payer
+Dental & Optical Care,dentist;dental;orthodontic;optical;lens;frame;eye exam;chair time;hygienist
+Veterinary & Animal Health,veterinary;vet;pet;animal;livestock;breed;vaccination;kennel
+Fitness & Wellness,gym;membership;trainer;class;workout;wellness;spa;yoga;check in;visit
+Insurance,policy;policyholder;claim;premium;underwriting;loss ratio;combined ratio;reinsurance;actuarial;endorsement;renewal;lapse;persistency;agent;broker;exposure;reserve;incurred
+Banking & Investments,loan;deposit;mortgage;credit;npa;nim;net interest margin;branch;casa;portfolio;aum;fund;nav;trading;securities;brokerage;card;delinquency;charge off;wealth;asset under management
+Fintech & Payments,transaction;payment;merchant;wallet;gateway;chargeback;settlement;interchange;fraud;kyc;remittance;tpv;authorization rate
+Finance,revenue;expense;profit;ebitda;margin;budget;forecast;cash flow;working capital;receivable;payable;balance sheet;capex;opex;variance;gross margin;net income;dso;dpo
+Accounting & Audit,audit;ledger;journal;reconciliation;general ledger;gl;month end close;accrual;tax;depreciation;intercompany;trial balance
+Sales,sales;quota;pipeline;lead;opportunity;win rate;deal;bookings;order;revenue;territory;account executive;conversion;forecast
+Marketing,campaign;impression;click;ctr;cpc;cpl;roas;channel;engagement;reach;brand;seo;newsletter;open rate;funnel;attribution
+Customer,customer;nps;csat;churn;retention;ticket;complaint;support;satisfaction;first contact resolution;ces;loyalty;feedback
+Operations,throughput;cycle time;utilization;capacity;downtime;oee;backlog;sla;productivity;efficiency;work order;schedule;rework
+Supply Chain & Inventory,inventory;stock;warehouse;sku;reorder;lead time;fill rate;stockout;days of supply;replenishment;turnover;shipment;purchase order;safety stock;backorder;carrying cost
+Procurement,supplier;vendor;purchase order;spend;sourcing;rfq;contract;savings;po;requisition;three way match;category management
+Quality,defect;nonconformance;ncr;scrap;yield;first pass yield;audit;capa;ppm;complaint;inspection;rejection;rework;sigma
+Safety,incident;injury;trir;ltifr;near miss;hazard;ppe;osha;lost time;fatality;safety observation;permit to work;accident
+HR & People,employee;headcount;attrition;turnover;recruitment;hire;onboarding;absenteeism;leave;payroll;training;engagement;performance;appraisal;compensation;fte;vacancy;time to hire;tenure
+Technology & SaaS,mrr;arr;subscription;churn;saas;uptime;incident;deployment;latency;tickets;bug;sprint;velocity;api;user;dau;mau;license;cloud;cac;ltv;seat
+IT Services & Consulting,utilization;billable;bench;project;resource;timesheet;realization;engagement;consultant;sow;billing;rate card;delivery
+Telecom,subscriber;arpu;churn;network;tower;bandwidth;sim;recharge;roaming;call drop;data usage;postpaid;prepaid;spectrum;base station
+Cybersecurity,vulnerability;threat;incident;patch;malware;phishing;alert;soc;endpoint;mttr;mttd;exploit;compliance
+Gaming & Media,streaming;viewing;viewer;watch hours;audience;player;dau;mau;arpu;arppu;session;level;in game;stream;viewer;subscriber;watch time;content;episode;playtime;retention;monetization
+Entertainment & Events,ticket;attendance;event;box office;screening;concert;venue;footfall;show;audience
+Publishing & News,article;pageview;readership;subscriber;circulation;editor;byline;ad impression;newsletter
+Advertising & Agencies,campaign;media plan;billing;client;creative;impression;grp;reach;frequency;agency;placement;cpm
+Sports,match;player;league;fan;season;athlete;team;score;stadium;tournament;club;fixture
+Retail,store;basket;footfall;same store sales;sku;shrinkage;markdown;planogram;pos;sell through;average transaction value;loyalty;merchandise;assortment;comp sales
+E-commerce,cart;checkout;abandonment;gmv;aov;conversion;marketplace;sellers;returns;add to cart;fulfilment;storefront;sessions;catalog
+Consumer Goods (FMCG),fmcg;distributor;outlet;secondary sales;primary sales;sell in;sell out;trade promotion;market share;shelf;brand;sku;route to market;van sales
+Fashion & Apparel,apparel;garment;fabric;collection;season;size;style;sell through;markdown;fashion;textile;merchandising
+Footwear & Accessories,footwear;shoe;sole;last;accessory;watch;bag;leather;pair;lifestyle
+Food & Beverage Manufacturing,recipe;batch;shelf life;yield;ingredient;brew;bottling;production line;haccp;allergen;packaging;formulation;beverage;dairy
+Restaurants & Food Service,restaurant;covers;table turn;menu;kitchen;food cost;plate;reservation;order;delivery;dine in;waiter;chef;tip
+Hospitality & Hotels,occupancy;adr;revpar;room;guest;booking;check in;housekeeping;rate;hotel;stay;night;resort;concierge
+Travel & Tourism,booking;itinerary;passenger;destination;tour;package;visa;traveller;fare;trip;tourist;excursion
+Airlines & Aviation,flight;passenger;load factor;asm;rpm;yield;aircraft;turnaround;crew;otp;on time performance;airport;seat;runway;cargo
+Logistics & Transportation,shipment;freight;fleet;route;delivery;pod;otif;driver;tonnage;last mile;consignment;lane;dispatch;haul;trip;vehicle
+Shipping & Maritime,vessel;voyage;port;container;teu;bunker;charter;berth;demurrage;cargo;draft;dwt
+Railways & Public Transit,train;station;ridership;route;timetable;platform;fare;commuter;rail;bus;metro;headway
+Automotive,vehicle;dealer;test drive;vin;warranty;recall;model;trim;showroom;aftersales;service bay;spare parts;units sold;oem;fleet
+Automotive Components,tier 1;component;assembly;oem;ppm;fitment;mould;casting;forging;line rejection;supplier quality
+Manufacturing,production;plant;line;oee;scrap;yield;work order;bom;shop floor;machine;shift;downtime;cycle time;tooling;setup;throughput;mold;engraving
+Heavy Engineering & Machinery,machine;equipment;fabrication;welding;crane;turbine;engineering;project;installation;commissioning;order book;spares
+Electronics & Semiconductors,wafer;die;chip;fab;yield;pcb;component;test;assembly;semiconductor;node;lot;bin
+Aerospace & Defense,aircraft;mission;defense;contract;program;maintenance;sortie;airworthiness;missile;platform;procurement
+Chemicals,chemical;reactor;batch;purity;solvent;polymer;specialty;resin;process;catalyst;blend;formulation
+Plastics & Packaging,packaging;polymer;resin;extrusion;molding;film;bottle;carton;pallet;corrugated;label
+Paper & Pulp,pulp;paper;mill;tonne;newsprint;gsm;board;recycled;fibre
+Metals & Mining,ore;mine;grade;tonnes;smelter;steel;aluminium;copper;concentrate;blast furnace;recovery;strip ratio;drilling;coal;iron
+Oil & Gas,barrel;boe;rig;well;refinery;crude;pipeline;upstream;downstream;drilling;lifting cost;reserve;wellhead;lng;fuel
+Energy & Utilities,megawatt;mwh;kwh;grid;load;tariff;outage;meter;transmission;distribution;substation;generation;demand;billing;consumer
+Renewable Energy,solar;wind;turbine;panel;capacity factor;mw;irradiance;inverter;ppa;battery;renewable;kwp
+Water & Waste Management,water;wastewater;sewage;treatment;leak;non revenue water;waste;landfill;recycling;pickup;collection;effluent
+Construction,project;site;contractor;boq;tender;progress;rfi;subcontractor;concrete;schedule;cost to complete;variation;milestone;crane
+Real Estate & Property,property;lease;tenant;occupancy;rent;square feet;listing;broker;unit;valuation;vacancy;noi;cam;building;sqft
+Facilities Management,facility;maintenance;work order;asset;cleaning;hvac;ppm;reactive;building;caretaker;helpdesk;inspection
+Agriculture,crop;yield;acre;hectare;harvest;farm;irrigation;seed;fertilizer;soil;livestock;mandi;farmer;season;produce
+Food Processing & Agri-Trade,commodity;procurement;mandi;grain;silo;milling;warehouse;agri;pulses;edible oil;spice
+Fisheries & Forestry,fish;catch;vessel;aquaculture;timber;forest;hectare;logging;pond;hatchery
+Education,student;enrollment;attendance;course;teacher;grade;semester;faculty;admission;graduation;dropout;learner;curriculum;exam;campus;pass rate
+E-learning & Training,learner;course;completion;module;certification;lms;enrolment;quiz;instructor;training hours
+Government & Public Sector,citizen;permit;application;department;ministry;grant;scheme;budget;beneficiary;service delivery;tax collection;municipal;program
+Non-profit & NGO,donor;donation;fundraising;beneficiary;grant;volunteer;campaign;program;impact;pledge;charity
+Legal Services,case;matter;billable;attorney;lawyer;client;docket;litigation;contract;hearing;paralegal;realization
+Professional Services,engagement;billable;utilization;proposal;client;partner;pursuit;realisation;fees;wip;consultant
+Telecom Infrastructure,tower;site;rollout;fiber;uptime;ofc;cell;mast;node;lease;tenancy
+Media Production,production;shoot;episode;render;frame;studio;post production;edit;script;crew;vfx;animation
+Music & Audio,track;stream;royalty;artist;album;listener;playlist;label;podcast;download
+Photography & Design Studios,shoot;client;portfolio;booking;design;creative;project;brief;revision;studio;print
+Beauty & Personal Care,salon;skincare;cosmetic;beauty;stylist;appointment;product;fragrance;haircut;service ticket;spa
+Home & Furniture,furniture;showroom;interior;home;decor;appliance;delivery;installation;mattress;kitchen
+Jewellery & Luxury,jewellery;gold;diamond;carat;karat;making charge;luxury;boutique;hallmark;gemstone
+Toys & Baby Products,toy;baby;kids;children;diaper;stroller;play;infant;nursery
+Pet Care,pet;pet food;grooming;kennel;breeder;adoption;vet;treats
+Automotive Services & Dealers,workshop;service;job card;spares;technician;bay;repair;test drive;used car;trade in;warranty
+Car Rental & Mobility,rental;fleet;ride;trip;driver;booking;utilization;mobility;scooter;cab;fare;kilometre
+Banking Operations & Collections,collections;recovery;dpd;bucket;delinquency;promise to pay;agent;dialer;arrears;write off;legal
+Microfinance & Lending,borrower;microfinance;group;loan officer;disbursement;par;repayment;center;portfolio at risk;mfi;collection efficiency
+Stock Broking & Capital Markets,trade;client;brokerage;equity;derivative;turnover;demat;order;market;exchange;ipo;clearing;margin
+Asset & Wealth Management,aum;client;advisor;portfolio;fund;fee;nav;sip;investor;redemption;mandate;flow
+Cryptocurrency & Web3,token;wallet;blockchain;defi;nft;staking;gas;exchange;validator;onchain;mining;hashrate
+Gambling & Lotteries,bet;wager;stake;odds;casino;lottery;jackpot;ggr;ngr;player;payout;sportsbook
+Call Centers & BPO,call;agent;aht;handle time;abandon;occupancy;queue;shrinkage;service level;asa;fcr;contact;bpo;adherence;shift
+Staffing & Recruitment,candidate;requisition;placement;vacancy;recruiter;submission;interview;time to fill;offer;bench;contractor;client
+Printing & Publishing Houses,print;press;impression;ream;title;edition;binding;proof;copies;run
+Textiles & Yarn,yarn;spindle;loom;fabric;weaving;spinning;denier;count;mill;dyeing;knitting;thread;bale
+Leather & Footwear Manufacturing,hide;tannery;leather;shoe;last;sole;pair;cutting;stitching;upper
+Wood & Furniture Manufacturing,timber;plywood;carpentry;panel;veneer;cabinet;furniture;sawmill;laminate
+Glass & Ceramics,glass;ceramic;tile;kiln;firing;float;bottle;porcelain;sanitaryware
+Cement & Building Materials,cement;clinker;concrete;brick;aggregate;tonne;kiln;ready mix;plant;block;dispatch
+Steel & Foundry,steel;foundry;casting;ingot;billet;rolling;tmt;furnace;heat;pour;pattern;melt
+Tools & Hardware,tool;hardware;fastener;bolt;drill;dealer;catalog;spares
+Packaging Machinery & Industrial Automation,plc;scada;automation;panel;drive;sensor;integration;commissioning;robot;conveyor
+Elevators & Building Systems,elevator;lift;escalator;hvac;installation;service contract;unit;maintenance;modernisation
+Engraving & Mold Making,engraving;mold;mould;texture;etching;tool;die;toolmaker;surface finish;grain;steel;pattern;cavity
+Waste Recycling & Environment,recycling;scrap;emission;carbon;esg;sustainability;waste;compliance;footprint;energy use;co2
+Insurance Brokerage,broker;placement;commission;carrier;client;renewal;coverage;endorsement;policy;premium
+Space & Satellite,satellite;launch;orbit;payload;ground station;telemetry;mission;transponder;constellation
+Marine & Offshore,offshore;platform;subsea;vessel;crew;rig;mooring;pipeline;dive
+Postal & Courier,parcel;courier;awb;delivery;consignment;pincode;pickup;cod;rto;hub;sortation
+Parking & Smart Cities,parking;bay;vehicle;toll;smart city;traffic;sensor;violation;occupancy;citizen
+Telehealth & Digital Health,telehealth;teleconsult;remote;patient;app;wearable;consultation;e prescription;digital health
+Diagnostics & Pathology,test;sample;lab;pathology;report;turnaround time;phlebotomy;specimen;radiology;scan;diagnostic
+Pharmacy Retail,pharmacy;prescription;drug store;generic;dispensing;refill;otc;stock;chemist
+Elder & Child Care,resident;caregiver;nursing home;daycare;child;elder;care hours;enrolment;care home;occupancy
+Religious & Community Organisations,member;congregation;temple;church;donation;community;volunteer;event;trust
+Research & Development,experiment;prototype;patent;r&d;trial;innovation;hypothesis;study;lab;publication;grant
+Data & Analytics Services,dataset;pipeline;etl;dashboard;report;model;data quality;refresh;warehouse;lake;schema
+Software Development,sprint;velocity;story point;bug;release;pull request;commit;defect;backlog;cycle time;deployment frequency;build
+Project Management Office,milestone;project;portfolio;risk;issue;baseline;earned value;cpi;spi;resource;deliverable;rag
+Customer Experience & Contact Strategy,journey;touchpoint;omnichannel;voice of customer;nps;sentiment;experience;cx
+Subscription Boxes & Memberships,subscriber;box;renewal;churn;membership;cohort;plan;pause;ltv
+Wholesale & Distribution,distributor;wholesale;route;van;outlet;credit;secondary;dispatch;beat;salesman;collection
+Import & Export Trade,import;export;customs;duty;hs code;bill of entry;shipping bill;incoterm;lc;forex;consignee
+Auctions & Marketplaces,auction;bid;lot;seller;buyer;listing;reserve;hammer price;gmv;commission
+Telecom Retail & Distribution,recharge;retailer;activation;sim;distributor;commission;dealer;handset;top up
+Cloud & Hosting,instance;vm;storage;bandwidth;uptime;region;cluster;node;billing;tenant;cpu;container
+Artificial Intelligence & Machine Learning,model;training;inference;accuracy;precision;recall;f1;dataset;prompt;token;drift;feature;gpu
+Smart Home & IoT,iot;device;sensor;gateway;firmware;telemetry;connected;hub;battery;pairing;edge
+Wind & Hydro Power Plants,penstock;turbine;dam;reservoir;mw;head;plant load factor;plf;generation;hydro;wind farm

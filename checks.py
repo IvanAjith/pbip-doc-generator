@@ -184,7 +184,7 @@ class Context:
             lines = self.path.read_text(encoding="utf-8-sig").splitlines() if self.path.exists() else [
                 "# What your company's abbreviations mean. One line each:   CB = comeback",
                 "# Filled in for you from Needs_Your_Clarification.txt; you can also edit it by hand. Lines starting with # are ignored.",
-                "", "Domain: ", ""]
+                "", "# The domain is optional: the tool finds it from the report by itself. Fill in the line below only to override it.", "Domain: ", ""]
             done = set()
             for i, line in enumerate(lines):
                 m = re.match(r"^\s*([A-Za-z][A-Za-z0-9&/]{0,7})\s*(=|:|-)\s*(.*)$", line)
@@ -255,7 +255,7 @@ class Context:
             lines = ["# Optional. Tells the AI (and the tool's checks) what your company means, so it stops guessing.",
                      "# One line per abbreviation:   CB = chargeback      Leave blank the ones you do not know.",
                      "# Then run the tool again. Lines starting with # are ignored.",
-                     "", "Domain: ", ""]
+                     "", "# The domain is optional: the tool finds it from the report by itself. Fill in the line below only to override it.", "Domain: ", ""]
             lines += [f"{t} = " for t in sorted(tokens)]
             self.path.write_text("\n".join(lines) + "\n", encoding="utf-8")
             return True

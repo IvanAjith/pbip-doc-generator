@@ -1,8 +1,15 @@
 # Changelog
 
+## 1.16.0 - 27/11/2026
+- The domain is found automatically. New `domain_detect.py` and `domains_catalog.csv` (125 industries and the words their reports use) read the report's page, table and KPI
+  names, add a vote from every KPI that matches a built-in glossary term, and name the domain (an industry beats a business function such as Finance unless the function has
+  more than twice its evidence; too little evidence gives General). The result is printed on every run and decides which `glossary\domains\<Domain>.csv` file keeps your answers.
+  Nobody has to type a `Domain:` line any more; a typed line in `context.txt` still overrides it, and the generated context.txt template now says so.
+- New `tests/test_domain_detect.py`.
+
 ## 1.15.0 - 27/11/2026
 - Your own dictionary: every definition you type in `Needs_Your_Clarification.txt` (and every draft you accept with OK) is now also saved to `glossary\domains\<Domain>.csv`,
-  in the same four columns as the built-in files. The `Domain:` line of `context.txt` names the file (`Domain: healthcare` -> `Healthcare.csv`; none -> `General.csv`).
+  in the same four columns as the built-in files. The `Domain:` line of `context.txt` names the file (from 1.16.0 the domain is found automatically).
   Every later run reads these files together with the built-in glossary (your own words win), offline and in AI mode, so a project in a domain the built-in list does not
   cover builds up its own dictionary. The built-in CSVs and the shared list are still changed only by a reviewer.
 - Drafts are asked by default: every KPI the built-in glossary and your dictionary do not know is listed in the clarification file with its draft (type OK to keep it).

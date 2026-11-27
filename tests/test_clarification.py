@@ -71,10 +71,11 @@ f.write_text(body.replace("Type OK to keep this draft, or write your own wording
 run(skip=False)
 saved = json.loads((t / "gl" / "glossary.json").read_text(encoding="utf-8"))["terms"]
 assert any(v.get("definition") == draft and v["source"] == "manual" for v in saved.values()), (term, draft)
-# every answer is also kept in my own dictionary, by domain (no Domain line in context.txt -> General)
+# every answer is also kept in my own dictionary, in the domain file the tool picked by itself (HR report -> HR_People.csv)
 import csv as _csv
-dom = t / "gl" / "domains" / "General.csv"
+dom = t / "gl" / "domains" / "HR_People.csv"
 assert dom.exists(), list((t / "gl").rglob("*"))
+assert "Domain: HR & People (found automatically" in out1, out1[-1500:]
 rows = list(_csv.DictReader(open(dom, newline="", encoding="utf-8-sig")))
 assert list(rows[0].keys()) == ["Term", "Also known as", "Better", "Definition"], rows[0].keys()
 assert any(r["Definition"] == "The share of jobs that came back as claims." for r in rows), rows
