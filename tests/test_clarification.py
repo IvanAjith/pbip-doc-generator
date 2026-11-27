@@ -20,9 +20,9 @@ for f in (t / "syn" / "hr").rglob("*.json"):
     if "Attrition %" in x or "Headcount" in x:
         f.write_text(x.replace("Attrition %", "Zorp CB %").replace("Headcount", "WO Headcount"), encoding="utf-8")
 
-def run(*extra):
+def run(*extra, skip=True):
     r = subprocess.run([sys.executable, str(ROOT / "run.py"), "--no-prompt", "--offline", "--source", str(t / "syn" / "hr"),
-                        "--output", str(t / "out"), "--glossary", str(t / "gl" / "glossary.json"), *extra],
+                        "--output", str(t / "out"), "--glossary", str(t / "gl" / "glossary.json"), *(["--skip-drafts"] if skip else []), *extra],
                        capture_output=True, text=True, encoding="utf-8")
     assert r.returncode == 0, r.stderr[-800:]
     return r.stdout
@@ -61,16 +61,24 @@ assert "Here, WO means work order." in txt                                      
 assert yellow(next((t / "out").glob("*KPI_Glossary.docx"))) == 0 and yellow(next((t / "out").glob("*User_Manual.docx"))) == 0, "yellow left over"
 assert "No clarification needed" in run()                                         # stays quiet on the next run
 
-# --clarify-drafts lists the drafts too, and OK keeps one
-run("--clarify-drafts")
+# the default (no --skip-drafts) asks about the drafts too, and OK keeps one
+run(skip=False)
 body = f.read_text(encoding="utf-8")
 assert "draft:" in body and "[K1]" in body, body
 m = re.search(r"\[K1\] (.+)\n.*\n.*\n     draft: (.+)\n", body)
 term, draft = m.group(1), m.group(2)
 f.write_text(body.replace("Type OK to keep this draft, or write your own wording.\n>>> ", "Type OK to keep this draft, or write your own wording.\n>>> OK\n", 1), encoding="utf-8")
-run("--clarify-drafts")
+run(skip=False)
 saved = json.loads((t / "gl" / "glossary.json").read_text(encoding="utf-8"))["terms"]
 assert any(v.get("definition") == draft and v["source"] == "manual" for v in saved.values()), (term, draft)
+# every answer is also kept in my own dictionary, by domain (no Domain line in context.txt -> General)
+import csv as _csv
+dom = t / "gl" / "domains" / "General.csv"
+assert dom.exists(), list((t / "gl").rglob("*"))
+rows = list(_csv.DictReader(open(dom, newline="", encoding="utf-8-sig")))
+assert list(rows[0].keys()) == ["Term", "Also known as", "Better", "Definition"], rows[0].keys()
+assert any(r["Definition"] == "The share of jobs that came back as claims." for r in rows), rows
+assert any(r["Definition"] == draft for r in rows), (draft, rows)
 print("clarification loop tests passed")
 # an older 1.9 csv with typed answers is still read
 import csv

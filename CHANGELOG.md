@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.15.0 - 27/11/2026
+- Your own dictionary: every definition you type in `Needs_Your_Clarification.txt` (and every draft you accept with OK) is now also saved to `glossary\domains\<Domain>.csv`,
+  in the same four columns as the built-in files. The `Domain:` line of `context.txt` names the file (`Domain: healthcare` -> `Healthcare.csv`; none -> `General.csv`).
+  Every later run reads these files together with the built-in glossary (your own words win), offline and in AI mode, so a project in a domain the built-in list does not
+  cover builds up its own dictionary. The built-in CSVs and the shared list are still changed only by a reviewer.
+- Drafts are asked by default: every KPI the built-in glossary and your dictionary do not know is listed in the clarification file with its draft (type OK to keep it).
+  `--skip-drafts` gives the older behaviour (ask only when no definition exists); `--clarify-drafts` is still accepted and does nothing extra.
+- New `tests/test_personal_glossary.py`; the clarification and last-run tests use `--skip-drafts` for the old flow and test the new default.
+
 ## 1.14.3 - 18/11/2026
 - Fixed "% Unsched Jobs" being written as "The percentage of jobs that are not sched." A name that starts with Un- is only rewritten as "not ..." when the rest is a real
   word (scheduled, accounted, billed, paid ...). An abbreviation such as "Unsched" now falls back to the formula wording.

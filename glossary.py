@@ -30,6 +30,8 @@ from name_lead import name_lead, ORIGIN as ORIGIN_NAME
 _UNIT_TOKENS = {"pct", "percent", "percentage", "ratio"}
 WEB_VERSION = 3
 CSV_NAME = "my_definitions.csv"
+DOMAINS_DIR = "domains"                  # my own dictionary: glossary\domains\<Domain>.csv, same columns as builtin_glossary
+PERSONAL_COLS = ["Term", "Also known as", "Better", "Definition"]
 CSV_COLS = ["Term", "Your definition (type here)", "Suggested definition", "Where the suggestion came from", "Page", "Report formula (for reference)"]
 
 
@@ -110,6 +112,72 @@ class Glossary:
                 self._index_seed(e, override=False)
         except Exception:
             pass
+        self.domain = ""                                  # set by run.py from the Domain: line in context.txt
+        self.domains_dir = self.path.parent / DOMAINS_DIR
+        for e in self._read_personal():                   # my own dictionary: what I answered in earlier projects, by domain
+            self._index_seed(e)
+
+    # ------------------------------------------------ my own dictionary (glossary\domains\<Domain>.csv)
+    @staticmethod
+    def domain_slug(domain):
+        d = re.sub(r"\([^)]*\)", " ", domain or "")          # 'manufacturing (engraving ...)' -> manufacturing
+        words = re.findall(r"[A-Za-z0-9]+", d)
+        return "_".join(w[:1].upper() + w[1:] for w in words)[:40] or "General"
+
+    def personal_file(self, domain=None):
+        return self.domains_dir / (self.domain_slug(self.domain if domain is None else domain) + ".csv")
+
+    def _read_personal(self):
+        out = []
+        if not self.domains_dir.is_dir():
+            return out
+        for p in sorted(self.domains_dir.glob("*.csv")):
+            domain = p.stem.replace("_", " ")
+            try:
+                with open(p, newline="", encoding="utf-8-sig") as f:
+                    for r in csv.DictReader(f):
+                        term, text = (r.get("Term") or "").strip(), (r.get("Definition") or "").strip()
+                        if not term or not text:
+                            continue
+                        aliases = [a.strip() for a in (r.get("Also known as") or "").replace("|", ";").split(";") if a.strip()]
+                        better = (r.get("Better") or "").strip().lower()
+                        out.append({"terms": [term] + aliases, "category": domain, "definition": text,
+                                    "better": better if better in ("higher", "lower") else None,
+                                    "origin": "My glossary - " + domain})
+            except Exception:
+                continue
+        return out
+
+    def remember(self, term, text):
+        """Keep an answer in my own dictionary for this domain, so the next project in any domain starts with it."""
+        path = self.personal_file()
+        rows, hit = [], False
+        if path.exists():
+            try:
+                with open(path, newline="", encoding="utf-8-sig") as f:
+                    rows = [dict(r) for r in csv.DictReader(f)]
+            except Exception:
+                rows = []
+        for r in rows:
+            names = [r.get("Term") or ""] + [a for a in (r.get("Also known as") or "").replace("|", ";").split(";")]
+            if normalize(term) in {normalize(n) for n in names if n.strip()}:
+                if (r.get("Definition") or "").strip() == text:
+                    return False
+                r["Definition"], hit = text, True
+                break
+        if not hit:
+            rows.append({"Term": term, "Also known as": "", "Better": "", "Definition": text})
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with open(path, "w", newline="", encoding="utf-8-sig") as f:
+                w = csv.DictWriter(f, fieldnames=PERSONAL_COLS)
+                w.writeheader()
+                for r in sorted(rows, key=lambda r: (r.get("Term") or "").lower()):
+                    w.writerow({c: r.get(c, "") for c in PERSONAL_COLS})
+        except OSError:
+            print(f"  (could not write {path.name} -- is it open in Excel? Close it and run again.)")
+            return False
+        return True
 
     def _index_seed(self, e, override=True):
         for t in e["terms"]:
@@ -311,6 +379,7 @@ class Glossary:
             self.entries[k] = {"term": term, "definition": text, "source": "manual", "from_clarification": True}
             if k in self._csv_extra:
                 self._csv_extra[k]["mine"] = text
+            self.remember(term, text)
             self.dirty = True
             n += 1
         return n

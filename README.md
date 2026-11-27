@@ -88,7 +88,9 @@ Every run writes the three documents **and** `Needs_Your_Clarification.txt` in t
    needed**, the terminal says so too, and the three documents can go to the client.
 
 Yellow in the documents appears only on KPIs that are still waiting for a definition. After you answer, nothing is yellow.
-Add `--clarify-drafts` to also have every formula/AI/web draft listed for you: type `OK` to keep a draft, or write your own wording.
+Since 1.15.0 every KPI that the built-in glossary and your own dictionary do not know is listed, with its draft: type `OK` to keep the draft, or write your own wording. Use `--skip-drafts` to be asked only about KPIs that have no definition at all.
+
+**Your own dictionary.** Every answer you type is also written to `glossary\domains\<Domain>.csv` (same columns as `builtin_glossary\`: Term, Also known as, Better, Definition). The file is named after the `Domain:` line in `glossary\context.txt` (for example `Domain: healthcare` gives `Healthcare.csv`; no line gives `General.csv`). On every later run, in offline and in AI mode, the tool reads those files together with the built-in list, so a project in a new domain starts from what you answered before. Open the files in Excel to correct them; copy one into `builtin_glossary\` to make it part of the shared list after review.
 (You can still type over a cell in the glossary Word file instead, and an older `Needs_Your_Clarification.csv` from version 1.9 is still read.)
 
 ## One-command test: offline, AI and comparison together (temporary)

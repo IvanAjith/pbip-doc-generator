@@ -2,9 +2,9 @@
 
 Every run writes  Needs_Your_Clarification.txt  next to the three documents. It asks, in plain words, for what only a person can supply:
   PART 1  what an abbreviation in a KPI name stands for (CB, EOL ...)
-  PART 2  what a KPI means, when no definition could be built or found (and, with --clarify-drafts, to confirm drafts)
+  PART 2  what a KPI means, when no definition could be built or found and, unless you run with --skip-drafts, to confirm every draft (type OK to keep one)
 You type each answer after ">>>", save, and run the same command again: abbreviations go to context.txt, definitions go into the
-glossary file (so the glossary grows), the three documents are rebuilt, and the file comes back saying nothing is needed.
+glossary file and into your own dictionary, glossary/domains/<Domain>.csv (so it grows with every project), the three documents are rebuilt, and the file comes back saying nothing is needed.
 (An older Needs_Your_Clarification.csv from version 1.9 is still read.)
 """
 import csv

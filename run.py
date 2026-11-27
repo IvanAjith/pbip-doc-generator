@@ -149,8 +149,10 @@ def main():
                     help="company logo shown on the cover and every page of the Word documents and in the HTML header "
                          "(default: assets/logo.png; use --logo none to leave it out)")
     ap.add_argument("--clarify-drafts", action="store_true",
-                    help="also list every formula / AI / web draft in Needs_Your_Clarification.csv for you to confirm "
-                         "(type ok to accept a draft, or write your own wording)")
+                    help="(now the default) every KPI the built-in glossary and your own dictionary do not know is listed in "
+                         "Needs_Your_Clarification.txt with its draft: type ok to accept the draft, or write your own wording")
+    ap.add_argument("--skip-drafts", action="store_true",
+                    help="do not ask about drafts: only KPIs with no definition at all are listed (the older behaviour)")
     ap.add_argument("--ask-mode", action="store_true",
                     help="always ask offline or AI, even when the last run left clarification questions waiting (normally it carries on in the same mode)")
     ap.add_argument("--answers", nargs="+", default=[], metavar="FILE",
@@ -328,10 +330,12 @@ def main():
     if n_edits:
         print(f"  picked up {n_edits} definition(s) you edited in the previous glossary document")
     glossary.context = context
+    glossary.domain = context.domain                     # answers are kept in glossary\domains\<Domain>.csv
     glossary.cross_check = not args.no_cross_check
     n_ans = glossary.absorb_answers(def_ans)
     if n_ans or n_abbr:
-        print(f"  picked up from {clarify.NAME}: {n_ans} definition(s) (kept in {Path(args.glossary).name}) and "
+        print(f"  picked up from {clarify.NAME}: {n_ans} definition(s) (kept in {Path(args.glossary).name} and in your dictionary "
+              f"domains\\{glossary.personal_file().name}) and "
               f"{n_abbr} abbreviation(s) (kept in {Path(context.path).name if context.path else 'context'})")
     print("Building page content" + (" (web lookups on)" if web else " (offline)") + " ...")
     page_items = kpis.build_all_items(analysis, glossary, primary)
@@ -393,7 +397,7 @@ def main():
         if it["kind"] not in ("card", "value") or not d or it["display"] in seen_d:
             continue
         doubtful = d.source == "ai" and d.note.startswith("The AI used words that are not in the report")
-        if args.clarify_drafts and d.source in ("draft", "ai", "web") or doubtful:
+        if (not args.skip_drafts and d.source in ("draft", "ai", "web")) or doubtful:
             seen_d.add(it["display"])
             draft_rows.append(_row(it, pages_of.get(it["display"], ""), d.text, d.note if doubtful else ""))
     from seed_glossary import SEED as _SEED
@@ -481,7 +485,7 @@ def main():
             parts.append(f"{len(draft_rows)} draft(s) to confirm")
         print("* CLARIFICATION NEEDED -- " + "; ".join(parts) + ".")
         print(f"  Open {clar_path}, type your answers after the >>> marks, save, and run the same command again.")
-        print("  Your answers are kept (definitions in the glossary file, abbreviations in context.txt) and all three documents are rebuilt.")
+        print("  Your answers are kept (definitions in the glossary file and in your own dictionary, abbreviations in context.txt) and all three documents are rebuilt.")
     last_run.write(last_path, "ai" if ai is not None else "offline", args.ai if ai is not None else "", n_clar or 0)
     for n in notes:
         print("* " + n)

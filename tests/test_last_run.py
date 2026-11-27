@@ -48,7 +48,7 @@ for f in list((t / "syn" / "hr").rglob("*.tmdl")) + list((t / "syn" / "hr").rglo
 
 def tty_run(typed):
     m, s = pty.openpty()
-    cmd = [sys.executable, str(ROOT / "run.py"), "--source", str(t / "syn" / "hr"), "--output", str(t / "out"), "--glossary", str(t / "gl" / "glossary.json")]
+    cmd = [sys.executable, str(ROOT / "run.py"), "--source", str(t / "syn" / "hr"), "--output", str(t / "out"), "--glossary", str(t / "gl" / "glossary.json"), "--skip-drafts"]
     proc = subprocess.Popen(cmd, stdin=s, stdout=s, stderr=s, close_fds=True, env=dict(os.environ))
     os.close(s)
     for line in typed:
