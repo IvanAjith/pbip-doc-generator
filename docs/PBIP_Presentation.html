@@ -2,7 +2,7 @@
 <title>PBIP Documentation Generator</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="author" content="Ajith Khan, Systech, Employee ID IN1661">
-<!-- Created by Ajith Khan (Employee ID IN1661), Systech. PBIP Documentation Generator presentation, version 1.14.3. -->
+<!-- Created by Ajith Khan (Employee ID IN1661), Systech. PBIP Documentation Generator presentation, version 1.17.0. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: sticky Systech header with progress bar; six slides (overview, how it works, clarification and glossary, developers, impact, security and limits) swapped with a directional slide-in.
@@ -380,6 +380,35 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 .pairs .good { color: var(--mint); font-family: var(--font-mono); font-weight: 500; }
 .score { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 .nav-hint { font-size: .78rem; color: var(--muted); }
+
+/* ---------- v1.17: flowchart with folders, domain examples ---------- */
+.fc { display: grid; gap: 0; margin-top: 12px; }
+.fcn { position: relative; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 2px 12px; background: var(--surface-2); border: 1px solid transparent; border-radius: 14px; padding: 10px 14px; transition: border-color .25s, background .25s, box-shadow .25s, opacity .25s; }
+.fcn .nb { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--blue); color: #fff; font-family: var(--font-mono); font-size: .85rem; grid-row: 1 / span 3; }
+.fcn b { font-family: var(--font-display); }
+.fcn p { font-size: .86rem; color: var(--muted); }
+.fcn .fl { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.fcn.on { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 24%, var(--surface)); box-shadow: inset 5px 0 0 var(--amber); }
+.fcn.on .nb { background: var(--amber); color: var(--amber-ink); }
+.fcn.dim { opacity: .55; }
+.fcn.dec { border: 2px dashed var(--amber); }
+.fcn.dec .nb { background: var(--amber); color: var(--amber-ink); border-radius: 8px; }
+.fca { height: 20px; display: grid; place-items: center; color: var(--muted); font-size: .95rem; line-height: 1; }
+.fcb { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 6px; }
+@media (max-width: 640px) { .fcb { grid-template-columns: minmax(0, 1fr); } }
+.fcb > div { border-radius: 12px; padding: 10px 14px; font-size: .88rem; display: grid; gap: 3px; }
+.fcb .yes { background: color-mix(in srgb, var(--coral) 14%, var(--surface)); border: 1px solid color-mix(in srgb, var(--coral) 45%, transparent); }
+.fcb .no { background: color-mix(in srgb, var(--mint) 16%, var(--surface)); border: 1px solid color-mix(in srgb, var(--mint) 50%, transparent); }
+.fcb b { font-family: var(--font-display); }
+.tree { min-height: 0; font-size: .78rem; }
+.tree .in { color: #4EE0AE; } .tree .out { color: #FFB81C; }
+.extab { display: grid; gap: 8px; margin-top: 12px; }
+.exrow { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 4px 14px; background: var(--surface-2); border-radius: 12px; padding: 10px 14px; }
+.exrow b { font-family: var(--font-display); color: var(--blue-text); }
+.exrow span { font-size: .9rem; }
+@media (max-width: 640px) { .exrow { grid-template-columns: minmax(0, 1fr); } }
+.exstat { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-top: 10px; }
+.exstat b { font-family: var(--font-display); font-size: 2rem; color: var(--amber); }
 </style>
 
 <div class="glow a"></div><div class="glow b"></div>
@@ -391,11 +420,13 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     <div class="brand">PBIP Documentation Generator<small>Power BI documentation, automated</small></div>
     <div class="tabs" role="tablist" aria-label="Slides">
       <button class="tab" role="tab" id="tab-any" data-go="any" aria-selected="true">1 · Overview</button>
-      <button class="tab" role="tab" id="tab-how" data-go="how" aria-selected="false">2 · How it works</button>
-      <button class="tab" role="tab" id="tab-loop" data-go="loop" aria-selected="false">3 · Clarify &amp; glossary</button>
-      <button class="tab" role="tab" id="tab-dev" data-go="dev" aria-selected="false">4 · For developers</button>
-      <button class="tab" role="tab" id="tab-impact" data-go="impact" aria-selected="false">5 · Impact</button>
-      <button class="tab" role="tab" id="tab-security" data-go="security" aria-selected="false">6 · Security &amp; limits</button>
+      <button class="tab" role="tab" id="tab-flow" data-go="flow" aria-selected="false">2 · Flow &amp; folders</button>
+      <button class="tab" role="tab" id="tab-how" data-go="how" aria-selected="false">3 · How it works</button>
+      <button class="tab" role="tab" id="tab-ex" data-go="ex" aria-selected="false">4 · Two domains</button>
+      <button class="tab" role="tab" id="tab-loop" data-go="loop" aria-selected="false">5 · Clarify &amp; glossary</button>
+      <button class="tab" role="tab" id="tab-dev" data-go="dev" aria-selected="false">6 · For developers</button>
+      <button class="tab" role="tab" id="tab-impact" data-go="impact" aria-selected="false">7 · Impact</button>
+      <button class="tab" role="tab" id="tab-security" data-go="security" aria-selected="false">8 · Security &amp; limits</button>
     </div>
     <div class="nav"><button id="prev" aria-label="Previous slide">←</button><button id="next" aria-label="Next slide">→</button></div>
   </div>
@@ -457,6 +488,8 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
       <div class="w"><div class="ic">{ }</div><div><b>Nothing hardcoded</b><p>Pages, tables, measures and filters are discovered from the PBIP files themselves.</p></div></div>
       <div class="w"><div class="ic">1k</div><div><b>A ready-made glossary dump</b><p>1,052 standard business terms in 15 domains (finance, sales, HR, safety, quality, supply chain, insurance, banking, SaaS and more) ship with the tool and work with no internet connection.</p></div></div>
       <div class="w"><div class="ic">2</div><div><b>Offline or AI, same loop</b><p>No key: definitions come from the glossary dump, the KPI name and the formula. With a key from IT: an AI fills the gaps and the tool checks its sentence against the offline wording.</p></div></div>
+      <div class="w"><div class="ic">DM</div><div><b>Finds the domain by itself</b><p>It reads the page, table and KPI names, names the business domain (insurance, healthcare, retail and more) and files your answers in your own dictionary for that domain. Nothing to type.</p></div></div>
+      <div class="w"><div class="ic">KD</div><div><b>Uses your KPI document first</b><p>If the company's KPI document (Excel, CSV or Word, any layout) is in the source folder, its definitions come first, and the run ends with a check of the document against the report.</p></div></div>
       <div class="w"><div class="ic">RO</div><div><b>Read-only and local</b><p>It reads definition files only. It never connects to your data or your warehouse.</p></div></div>
       <div class="w"><div class="ic">?</div><div><b>Honest about unknowns</b><p>What it cannot define goes into Needs_Your_Clarification.txt. You answer once and the tool remembers. Drafts are marked "please verify". Nothing is passed off as final.</p></div></div>
     </div>
@@ -474,17 +507,41 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   </div>
 </section>
 
-<!-- ================= SLIDE 2: HOW IT WORKS ================= -->
+<!-- ================= SLIDE 2: FLOW AND FOLDERS ================= -->
+<section class="slide" id="s-flow" aria-labelledby="tf" hidden>
+  <div class="head">
+    <div class="kicker rv" style="--i:0">The flow of one run, with the folders it uses</div>
+    <h1 class="title rv" style="--i:1" id="tf">From <mark>source\</mark> to three documents.</h1>
+    <p class="lede rv" style="--i:2">Follow the arrows. Each box says what the tool does and which folder or file it reads or writes. Every folder sits inside <span class="cmdline">pbip-doc-generator\</span>. The loop at the bottom repeats until there is nothing left to ask.</p>
+  </div>
+  <div class="row two">
+    <div class="panel rv" style="--i:3">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="font-size:1.25rem">The flowchart</h2>
+        <button class="btn" id="fc-play">▶ Trace a run</button>
+      </div>
+      <div class="fc" id="fc"></div>
+    </div>
+    <div class="panel rv" style="--i:4">
+      <h2 style="font-size:1.25rem">Where everything lives</h2>
+      <p class="note">The folder of the tool. Green is what you put in, amber is what you get back.</p>
+      <div class="filebox tree" id="tree"></div>
+      <p class="note" style="margin-top:10px">The <span class="cmdline">glossary\</span> folder is your own memory. It stays on your computer and is kept out of Git.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 3: HOW IT WORKS ================= -->
 <section class="slide" id="s-how" aria-labelledby="t2" hidden>
   <div class="head">
     <div class="kicker rv" style="--i:0">The flow, step by step</div>
     <h1 class="title rv" style="--i:1" id="t2">Read. Translate. Define. <mark>Ask</mark> once.</h1>
-    <p class="lede rv" style="--i:2">One command runs six stages. Click a stage to see what it does, what it uses and what it never does. The fourth stage, finding a definition, follows a fixed order that you can see and test below.</p>
+    <p class="lede rv" style="--i:2">One command runs seven stages. Click a stage to see what it does, what it uses and what it never does. The fifth stage, finding a definition, follows a fixed order that you can see and test below.</p>
   </div>
 
   <div class="panel rv" style="--i:3">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-      <h2 style="font-size:1.25rem">The six stages of one run</h2>
+      <h2 style="font-size:1.25rem">The seven stages of one run</h2>
       <span class="dir nn">python run.py</span>
     </div>
     <div class="xp">
@@ -496,7 +553,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   <div class="row two">
     <div class="panel rv" style="--i:4">
       <h2 style="font-size:1.25rem">Where a definition comes from</h2>
-      <p class="note">The tool tries these in order and stops at the first one that has an answer. Steps 4 and 5 run only in AI mode.</p>
+      <p class="note">The tool tries these in order and stops at the first one that has an answer. The web lookup and the AI draft run only in AI mode.</p>
       <div class="lad" id="lad"></div>
     </div>
     <div class="panel rv" style="--i:5">
@@ -523,12 +580,34 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   </div>
 </section>
 
-<!-- ================= SLIDE 3: CLARIFY AND GLOSSARY DUMP ================= -->
+<!-- ================= SLIDE 4: TWO DOMAINS ================= -->
+<section class="slide" id="s-ex" aria-labelledby="te" hidden>
+  <div class="head">
+    <div class="kicker rv" style="--i:0">The same tool on two domains</div>
+    <h1 class="title rv" style="--i:1" id="te">Insurance has a head start. <mark>Healthcare</mark> builds its own.</h1>
+    <p class="lede rv" style="--i:2">The tool names the domain from the report itself. Insurance already has 73 built-in terms, so most KPIs match at once. Healthcare has none yet, so you answer more questions once and the tool keeps the answers. Pick a domain to follow one run.</p>
+  </div>
+  <div class="panel rv" style="--i:3">
+    <div class="seg" role="tablist" aria-label="Domain">
+      <button role="tab" id="ex-ins" aria-selected="true" data-x="ins">Insurance report</button>
+      <button role="tab" id="ex-hc" aria-selected="false" data-x="hc">Healthcare report</button>
+    </div>
+    <p class="note" id="ex-kpis" style="margin-top:12px"></p>
+    <div class="exstat"><b id="ex-stat"></b><span class="note" id="ex-statl"></span></div>
+    <div class="extab" id="extab" aria-live="polite"></div>
+  </div>
+  <div class="panel rv" style="--i:4">
+    <h2 style="font-size:1.25rem">What stays behind for the next report</h2>
+    <p class="note">Your answers are saved in <span class="cmdline">glossary\domains\&lt;Domain&gt;.csv</span>, one file per domain, and read together with the built-in list on every run, in both modes. They reach the team's shared glossary only after a reviewer approves them.</p>
+  </div>
+</section>
+
+<!-- ================= SLIDE 5: CLARIFY AND GLOSSARY DUMP ================= -->
 <section class="slide" id="s-loop" aria-labelledby="t3b" hidden>
   <div class="head">
     <div class="kicker rv" style="--i:0">Clarification file and the glossary dump</div>
     <h1 class="title rv" style="--i:1" id="t3b">Answer once. The tool <mark>remembers</mark>.</h1>
-    <p class="lede rv" style="--i:2">Whatever you type into the clarification file is stored automatically in the glossary folder on your computer and reused by every later run, in both modes. Behind it sits a ready-made glossary dump of standard terms that works offline, across 15 domains.</p>
+    <p class="lede rv" style="--i:2">Whatever you type into the clarification file is stored automatically in the glossary folder on your computer, filed under the domain the tool found, and reused by every later run, in both modes. Behind it sits a ready-made glossary dump of standard terms that works offline, across 15 domains.</p>
   </div>
 
   <div class="cnt3 rv" style="--i:3">
@@ -562,7 +641,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
       <p class="note">Nothing to export or copy. The tool files each answer itself.</p>
       <div class="stack3">
         <div class="layer l1"><b>Your answers: abbreviations</b><span class="st amber">Automatic</span><p><span class="cmdline">glossary\context.txt</span> keeps meanings such as CB = comeback. Every KPI that uses the abbreviation is redrafted, and a draft ends with &ldquo;Here, CB means comeback.&rdquo;</p></div>
-        <div class="layer l1"><b>Your answers: KPI meanings</b><span class="st amber">Automatic</span><p><span class="cmdline">glossary\glossary.json</span> is your glossary dump. A meaning you type is stored as your own wording and always wins. <span class="cmdline">my_definitions.csv</span> is the same list as an Excel-friendly table.</p></div>
+        <div class="layer l1"><b>Your answers: KPI meanings</b><span class="st amber">Automatic</span><p><span class="cmdline">glossary\glossary.json</span> is your glossary dump and <span class="cmdline">glossary\domains\Insurance.csv</span> is the same answer filed by domain, in the built-in format. A meaning you type is your own wording and always wins. <span class="cmdline">my_definitions.csv</span> is an Excel-friendly table.</p></div>
         <div class="layer l2"><b>Shared glossary (team)</b><span class="st blue">Reviewed by a person</span><p><span class="cmdline">shared_glossary.csv</span> works offline for everyone. Your definitions reach it only after a reviewer approves them, so client names stay out.</p></div>
         <div class="layer l3"><b>Built-in glossary</b><span class="st mint">Ships with the tool</span><p>1,052 standard terms in 15 CSV files. Offline mode looks here before it writes its own wording, so a known KPI is defined instantly with no internet.</p></div>
       </div>
@@ -834,7 +913,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   function playCounters(scope) { if (REDUCED) return; $$("[data-to]", scope).forEach(function (b) { countUp(b, +b.dataset.to, 1300); }); }
 
   /* ---------- slides ---------- */
-  var order = ["any", "how", "loop", "dev", "impact", "security"], cur = null;
+  var order = ["any", "flow", "how", "ex", "loop", "dev", "impact", "security"], cur = null;
   function show(id, fromHash) {
     if (order.indexOf(id) < 0) id = "any";
     var dir = cur === null ? "" : (order.indexOf(id) >= order.indexOf(cur) ? "from-right" : "from-left");
@@ -858,7 +937,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   document.addEventListener("keydown", function (e) {
     if (e.target && e.target.tagName === "INPUT") return;
     if (e.key === "ArrowRight") $("#next").click(); else if (e.key === "ArrowLeft") $("#prev").click();
-    else if (e.key >= "1" && e.key <= "6") show(order[+e.key - 1]);
+    else if (e.key >= "1" && e.key <= "8") show(order[+e.key - 1]);
   });
   addEventListener("hashchange", function () { var h = location.hash.slice(1); if (h !== cur) show(h, true); });
 
@@ -874,6 +953,8 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     ["", "Reading Name.Report + Name.SemanticModel ..."],
     ["d", "  N pages (N in the main navigation), N measures, N tables"],
     ["d", "    left out of the manual: 'Name' -- tooltip page"],
+    ["d", "  KPI document KPI_Library.xlsx: N KPIs read   (only when one is in source\\)"],
+    ["d", "  Domain: Insurance (found automatically from the report's page, table and KPI names)"],
     ["", "Building page content (MODE) ..."],
     ["ok", "  wrote Name_User_Manual.docx"],
     ["ok", "  wrote Name_KPI_Glossary.docx"],
@@ -882,6 +963,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     ["", ""],
     ["", "Coverage: N measures have a row in my_definitions.csv"],
     ["", "Review notes"],
+    ["d", "* KPI document: N definition(s) come from it; N KPI(s) missing from it. Details: output\\KPI_Document_Check.txt"],
     ["d", "* N drafts to verify (formula N, AI N, web N)"],
     ["", "* CLARIFICATION NEEDED -- N abbreviation(s) to explain; N KPI(s) without a definition."],
     ["d", "  Open output\\Needs_Your_Clarification.txt, type your answers after the >>> marks,"],
@@ -894,7 +976,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     ["d", "  Carrying on in offline mode. (To choose the mode again: python run.py --ask-mode)"],
     ["", "Reading Name.Report + Name.SemanticModel ..."],
     ["d", "  N pages (N in the main navigation), N measures, N tables"],
-    ["ok", "  picked up from Needs_Your_Clarification.txt: N definition(s) (kept in glossary.json) and N abbreviation(s) (kept in context.txt)"],
+    ["ok", "  picked up from Needs_Your_Clarification.txt: N definition(s) (kept in glossary.json and domains\\Insurance.csv) and N abbreviation(s) (kept in context.txt)"],
     ["", "Building page content (offline) ..."],
     ["ok", "  wrote Name_User_Manual.docx"],
     ["ok", "  wrote Name_KPI_Glossary.docx"],
@@ -1195,32 +1277,37 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 
   /* ---------- slide 2: stages, ladder, try-it ---------- */
   var STAGES = [
-    { k: "1 · Read the project", a: "Opens Name.Report and Name.SemanticModel (as folders or .zip files) and reads them as text: pages, visuals, filters, bookmarks, tables, measures, DAX, relationships and roles.", b: "Only the PBIP definition files.", c: "Connect to your data or warehouse, run DAX or Power Query, or open the cached data file (.pbi/cache.abf)." },
-    { k: "2 · Pick the real pages", a: "Finds the main pages from the navigation buttons between pages. Hidden, tooltip, drill-through and unlinked pages are left out of the manual but stay in the HTML reference. With no navigation buttons it falls back to page names such as test, copy or draft.", b: "Page names, navigation buttons and the visual definitions.", c: "Guess from data. The console lists every page it left out, so you can check." },
-    { k: "3 · Translate the formulas", a: "Reads each DAX measure and writes it in plain words, for example “(Sales − Sales LY) ÷ Sales LY” becomes “(Sales minus Sales LY) as a percentage of Sales LY”. A measure that only points at another follows the chain down to the named base measures.", b: "The DAX text and the format strings.", c: "Invent logic. A very complex formula gets a general description, and the full DAX sits next to it in the HTML." },
-    { k: "4 · Find a definition", a: "For each KPI the tool walks down the order shown below: your own words, the built-in glossary, earlier answers, the web and AI (AI mode only), then offline wording read from the KPI name or formula.", b: "Built-in glossary, your answers, the KPI name, the formula and, in AI mode, a one-sentence AI draft.", c: "Present a draft as final. Anything not taken from your own words or the built-in glossary is labelled “please verify”." },
-    { k: "5 · Write the files", a: "Builds the User Manual (Word), the KPI Glossary (Word), the KPI Documentation (HTML, with the full DAX) and Needs_Your_Clarification.txt. The glossary shows each definition’s source. Yellow marks only the KPIs that still wait for a definition.", b: "The facts from stages 1 to 4.", c: "Put DAX in the Word files or report data anywhere." },
-    { k: "6 · Ask what is missing", a: "Part 1 asks what abbreviations stand for. Part 2 asks what KPIs mean when nothing could be built, and in AI mode lists AI sentences it was unsure of, with a check line. You answer once and run the same command again.", b: "Plain-text answers after the >>> marks.", c: "Ask the same question twice. Answers are kept in the glossary folder for every later run." }
+    { k: "1 · Read the project", a: "Opens Name.Report and Name.SemanticModel in source\\ (as folders or .zip files) and reads them as text: pages, visuals, filters, bookmarks, tables, measures, DAX, relationships and roles. If a KPI document (.xlsx, .csv or .docx) lies in the same folder, it is read too, in whatever layout it has.", b: "Only the PBIP definition files and the KPI document.", c: "Connect to your data or warehouse, run DAX or Power Query, or open the cached data inside the semantic model." },
+    { k: "2 · Pick the real pages", a: "Finds the main pages from the navigation buttons between pages. Hidden, tooltip, drill-through and unlinked pages are left out of the manual but stay in the HTML reference. With no navigation buttons it falls back to page names such as test, copy or draft.", b: "Page names, navigation buttons and page settings.", c: "Guess a business meaning for a page." },
+    { k: "3 · Translate the formulas", a: "Reads each DAX measure and writes it in plain words, for example “(Sales − Sales LY) ÷ Sales LY” becomes “(Sales minus Sales LY) as a percentage of Sales LY”. A measure that only points at another follows the chain down to the named base measures.", b: "The DAX text and the names in the model.", c: "Change or run the DAX." },
+    { k: "4 · Name the domain", a: "Reads the page, table and KPI names, scores them against domains_catalog.csv (125 industries) and against the built-in glossary, and names the domain, for example Insurance or Healthcare. A typed Domain: line in glossary\\context.txt overrides it. Too little evidence gives General.", b: "Names in the report, domains_catalog.csv and builtin_glossary\\*.csv.", c: "Limit the lookup to one domain: all built-in files and your own dictionary are searched together. The domain only names the file for your answers and gives the AI and web search some context." },
+    { k: "5 · Find a definition", a: "For each KPI the tool walks down the order shown below: your own words, the KPI document, the built-in glossary and your own dictionary, earlier answers, the web and AI (AI mode only), then offline wording read from the KPI name or formula.", b: "KPI document, built-in glossary, your answers, the KPI name, the formula and, in AI mode, a one-sentence draft.", c: "Send your data or the KPI document to the AI. It sends only the KPI name, the formula wording, the page name and your abbreviation list." },
+    { k: "6 · Write the files", a: "Builds the User Manual (Word), the KPI Glossary (Word), the KPI Documentation (HTML, with the full DAX), Needs_Your_Clarification.txt and, when a KPI document was found, KPI_Document_Check.txt. Yellow marks only the KPIs that still wait for a definition.", b: "The facts from stages 1 to 5.", c: "Put Draft or AI wording in a document without marking it please verify." },
+    { k: "7 · Ask what is missing", a: "Part 1 asks what abbreviations stand for. Part 2 lists every KPI with no definition and every draft to confirm (type OK to keep a draft). You answer once, run the same command again, and your answers are saved in glossary\\glossary.json and glossary\\domains\\<Domain>.csv.", b: "Plain-text answers after the >>> marks.", c: "Ask the same question twice." }
   ];
-  explorer($("#stlist"), $("#std"), STAGES, function (x) { return dr("What happens", x.a) + dr("Uses", x.b) + dr("Never does", x.c); }, function (i) { if (i === 3) tryPick(tryCur); });
+  explorer($("#stlist"), $("#std"), STAGES, function (x) { return dr("What happens", x.a) + dr("Uses", x.b) + dr("Never does", x.c); }, function (i) { if (i === 4) tryPick(tryCur); });
 
   var LAD = [
     ["Your own words", "Both modes", "mint", "Typed over the Word glossary, in my_definitions.csv or in the clarification file. Always wins."],
-    ["Built-in glossary", "Both modes", "mint", "1,052 standard terms in 15 domains, plus the team’s reviewed shared glossary. Works with no internet."],
+    ["KPI document", "Both modes, when one is in source\\", "mint", "The company's own definitions from an Excel, CSV or Word file, in any layout. Only its definition column is used as the meaning."],
+    ["Built-in glossary and your dictionary", "Both modes", "mint", "1,052 standard terms in builtin_glossary\\*.csv, the team's reviewed shared_glossary.csv, and your own glossary\\domains\\*.csv. All searched together; works with no internet."],
     ["Learned earlier", "Both modes", "mint", "Definitions saved in glossary.json by earlier runs. Saved AI sentences are checked again every run."],
     ["Web lookup", "AI mode only", "amber", "Wikipedia and web search by KPI name, whole-word matches only. A report-specific name such as “Quarter1 sales” is never searched. Marked “found online, please verify”."],
     ["AI draft", "AI mode only", "amber", "One sentence from the name, the formula wording and the page, then compared with the offline wording (the four rules below)."],
-    ["Offline wording", "Both modes", "mint", "Read from the KPI name, from a known term plus a small change, or the formula reworded. Marked “draft, please verify”."],
+    ["Offline wording", "Both modes", "mint", "Read from the KPI name, from a known term plus a small change, or the formula reworded. Marked “draft, please verify” and listed in the clarification file for you to confirm."],
     ["Ask you", "Both modes", "coral", "Still nothing? The KPI is shaded yellow and listed in Needs_Your_Clarification.txt."]
   ];
   $("#lad").innerHTML = LAD.map(function (l, i) { return '<div class="lstep" id="lad-' + i + '"><b>' + esc(l[0]) + '</b><span class="st ' + l[2] + '">' + esc(l[1]) + "</span><p>" + esc(l[3]) + "</p></div>"; }).join("");
   var TRY = [
-    { n: "Total Recordable Incident Rate (TRIR)", s: [1], t: "How often work-related injuries serious enough to need medical treatment are happening, adjusted so plants or teams of different sizes can be compared fairly.", why: "A standard term: the built-in glossary answers at once, with no internet and no AI." },
-    { n: "Rate (USD/QTY)", s: [1], t: "An amount measured against a unit of time or volume, such as per hour or per thousand. Measured in US dollars per quantity.", why: "A built-in term plus the unit written in brackets in the name." },
-    { n: "% Unscheduled Jobs", s: [5], t: "The percentage of jobs that are not scheduled. Unscheduled Jobs as a percentage of Total Jobs.", why: "Not in the glossary. The tool reads the negative word in the name and puts it in plain English, then adds the formula wording." },
-    { n: "Previous year_actual", s: [5], t: "The actual figure for the previous year. Actual: the figure that really happened in the period, as opposed to the budget, target or forecast.", why: "A known term (Actual) with a time shift. The tool combines the built-in meaning with “previous year”. A name with any other word in it is left to the formula." },
-    { n: "CY vs LY Quarter1 sales", s: [5], t: "(Quarter1 sales minus Quarter1 Sales LY) as a percentage of Quarter1 Sales LY.", why: "Report-specific name: the web is not searched, so no look-alike definition can slip in. The wording comes from the formula. CY and LY are asked about in Part 1." },
-    { n: "WO Headcount", s: [5, 6], t: "Open Orders divided by Staff.", why: "The formula wording is used for now. “WO” is listed in Part 1 of the clarification file; once you answer, every KPI that uses it ends with “Here, WO means …”." }
+    { n: "Total Recordable Incident Rate (TRIR)", s: [2], t: "How often work-related injuries serious enough to need medical treatment are happening, adjusted so plants or teams of different sizes can be compared fairly.", why: "A standard term: the built-in glossary answers at once, with no internet and no AI." },
+    { n: "Gross Written Premium", s: [2], t: "The total premium on policies issued in the period, whether or not it has been earned yet.", why: "An insurance report: the built-in Insurance terms answer at once." },
+    { n: "Discount (in the KPI document)", s: [1], t: "Discount is a concession or deduction allowed from the price of goods or services.", why: "The company's KPI document has a definition for it, so that wording is used before anything else." },
+    { n: "Rate (USD/QTY)", s: [2], t: "An amount measured against a unit of time or volume, such as per hour or per thousand. Measured in US dollars per quantity.", why: "A built-in term plus the unit written in brackets in the name." },
+    { n: "% Unscheduled Jobs", s: [6], t: "The percentage of jobs that are not scheduled. Unscheduled Jobs as a percentage of Total Jobs.", why: "Not in the glossary. The tool reads the negative word in the name and puts it in plain English, then adds the formula wording." },
+    { n: "Readmission Rate", s: [6, 7], t: "Readmissions as a share of discharges. (Draft built from the formula, please verify.)", why: "A healthcare KPI with no built-in term yet. A draft is written from the formula and listed for you. Your answer is saved in glossary\\domains\\Healthcare.csv and used from then on." },
+    { n: "Previous year_actual", s: [6], t: "The actual figure for the previous year. Actual: the figure that really happened in the period, as opposed to the budget, target or forecast.", why: "A known term (Actual) with a time shift. The tool combines the built-in meaning with “previous year”. A name with any other word in it is left alone." },
+    { n: "CY vs LY Quarter1 sales", s: [6], t: "(Quarter1 sales minus Quarter1 Sales LY) as a percentage of Quarter1 Sales LY.", why: "Report-specific name: the web is not searched, so no look-alike definition can slip in. The wording comes from the formula. CY and LY are asked about in Part 1." },
+    { n: "WO Headcount", s: [6, 7], t: "Open Orders divided by Staff.", why: "The formula wording is used for now. “WO” is listed in Part 1 of the clarification file; once you answer, every KPI that uses it ends with “Here, WO means …”." }
   ];
   var tryCur = 0;
   function tryPick(i) {
@@ -1260,7 +1347,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   var T1 = [["p", "$ python run.py"], ["", ""],
     ["", "Your last run was in OFFLINE mode and 3 clarification question(s) were waiting."],
     ["d", "  Carrying on in offline mode. (To choose the mode again: python run.py --ask-mode)"],
-    ["ok", "  picked up from Needs_Your_Clarification.txt: 1 definition(s) (kept in glossary.json) and 1 abbreviation(s) (kept in context.txt)"],
+    ["ok", "  picked up from Needs_Your_Clarification.txt: 1 definition(s) (kept in glossary.json and domains\\Insurance.csv) and 1 abbreviation(s) (kept in context.txt)"],
     ["", "Building page content (offline) ..."],
     ["ok", "  wrote Name_User_Manual.docx"], ["ok", "  wrote Name_KPI_Glossary.docx"], ["ok", "  wrote Name_KPI_Documentation.html"], ["", ""],
     ["ok", "* No clarification needed. All three documents are complete; Needs_Your_Clarification.txt is empty."],
@@ -1374,12 +1461,90 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     $$(".slide").forEach(function (s) {
       if (!s.querySelector(".credit")) {
         var f = document.createElement("div"); f.className = "credit";
-        f.innerHTML = "<span>Created by <b>Ajith Khan</b>, Systech</span><span>Employee ID <b>IN1661</b></span><span>PBIP Documentation Generator \u00B7 v1.14.3</span>"; s.appendChild(f);
+        f.innerHTML = "<span>Created by <b>Ajith Khan</b>, Systech</span><span>Employee ID <b>IN1661</b></span><span>PBIP Documentation Generator \u00B7 v1.17.0</span>"; s.appendChild(f);
       }
     });
   }
   marks();
   try { new MutationObserver(marks).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+
+
+  /* ---------- v1.17: flowchart with folders ---------- */
+  var FLOW = [
+    { t: "Start", d: "python run.py (or double-click run_windows.bat). It asks Offline or AI, unless the last run left questions waiting and it carries on in the same mode.", f: ["run.py", "glossary\\last_run.json"] },
+    { t: "Read the report", d: "Finds the .Report and .SemanticModel folders (unzips a .zip first) and reads pages, KPIs and DAX as text. Never touches your data.", f: ["source\\*.Report", "source\\*.SemanticModel", "app.py"] },
+    { t: "Read the KPI document, if there is one", d: "Any Excel, CSV or Word file in source\\ is read in whatever layout it has: definitions, calculations and a legend of abbreviations. No document: this box is skipped.", f: ["source\\*.xlsx | *.csv | *.docx", "kpi_document.py"] },
+    { t: "Name the domain", d: "Scores the page, table and KPI names against 125 industries and the built-in terms, for example Insurance. Nothing to type; a Domain: line in context.txt overrides it.", f: ["domains_catalog.csv", "builtin_glossary\\*.csv", "domain_detect.py"] },
+    { t: "Pick up your answers", d: "Reads what you typed after >>> in the clarification file and files it: meanings by domain, abbreviations in context.txt.", f: ["output\\Needs_Your_Clarification.txt", "glossary\\glossary.json", "glossary\\domains\\<Domain>.csv", "glossary\\context.txt"] },
+    { t: "Define every KPI, first match wins", d: "Your own words, then the KPI document, then the built-in glossary and your dictionary, then earlier answers, then the web and an AI draft (AI mode only), then the formula wording, then a question for you.", f: ["builtin_glossary\\*.csv", "glossary\\domains\\*.csv", "shared_glossary.csv", "glossary\\web_cache.json", "glossary.py"] },
+    { t: "Write the documents", d: "Builds the User Manual, the KPI Glossary and the KPI Documentation, with the logo. Drafts are marked please verify and shaded yellow where a definition is still missing.", f: ["output\\<Project>_User_Manual.docx", "output\\<Project>_KPI_Glossary.docx", "output\\<Project>_KPI_Documentation.html"] },
+    { t: "Report back", d: "Writes the questions that only you can answer, a check of the KPI document against the report, and a short summary in the terminal.", f: ["output\\Needs_Your_Clarification.txt", "output\\KPI_Document_Check.txt"] }
+  ];
+  (function () {
+    var fc = $("#fc"), html = "";
+    FLOW.forEach(function (x, i) {
+      html += '<div class="fcn" data-i="' + i + '"><span class="nb">' + (i + 1) + "</span><b>" + esc(x.t) + "</b><p>" + esc(x.d) + '</p><div class="fl">' +
+        x.f.map(function (f) { return '<span class="cmdline">' + esc(f) + "</span>"; }).join("") + "</div></div>" + '<div class="fca" aria-hidden="true">↓</div>';
+    });
+    html += '<div class="fcn dec" data-i="' + FLOW.length + '"><span class="nb">?</span><b>Anything left to ask?</b><p>The tool looks at output\\Needs_Your_Clarification.txt.</p>' +
+      '<div class="fcb"><div class="yes"><b>Yes</b><span>You type the answers after the >>> marks, save, and run the same command again. The loop goes back to “Pick up your answers”.</span></div>' +
+      '<div class="no"><b>No</b><span>The file says “No clarification needed”. The three documents in output\\ are ready to share.</span></div></div></div>';
+    fc.innerHTML = html;
+    var tree = [
+      ["h", "pbip-doc-generator\\"],
+      ["a", "|-- run.py  run_windows.bat   START HERE"],
+      ["in", "|-- source\\                   IN: report + KPI document"],
+      ["out", "|-- output\\                   OUT: 3 documents + 2 notes"],
+      ["", "|-- builtin_glossary\\         15 CSV files, 1,052 terms"],
+      ["", "|-- domains_catalog.csv       125 industries"],
+      ["", "|-- shared_glossary.csv       team list (after review)"],
+      ["h", "|-- glossary\\                 YOUR memory (not in Git)"],
+      ["", "|     |-- glossary.json       answers, learned entries"],
+      ["", "|     |-- my_definitions.csv  same, as a table"],
+      ["", "|     |-- context.txt         abbreviations"],
+      ["a", "|     |-- domains\\Insurance.csv   one file per domain"],
+      ["", "|     |-- web_cache.json  last_run.json"],
+      ["d", "|-- assets\\logo.png  docs\\  tests\\"]
+    ];
+    $("#tree").innerHTML = tree.map(function (l) { return '<span class="' + l[0] + '">' + esc(l[1]) + "</span>"; }).join("\n");
+    var busy = 0;
+    $("#fc-play").addEventListener("click", async function () {
+      var btn = this, tk = ++busy, nodes = $$(".fcn", fc); btn.disabled = true;
+      for (var i = 0; i < nodes.length; i++) {
+        nodes.forEach(function (n, j) { n.classList.toggle("on", j === i); n.classList.toggle("dim", j !== i); });
+        await wait(REDUCED ? 0 : 900); if (tk !== busy) return;
+      }
+      nodes.forEach(function (n) { n.classList.remove("on", "dim"); }); btn.disabled = false; btn.textContent = "▶ Trace again";
+    });
+  })();
+
+  /* ---------- v1.17: two domains ---------- */
+  var EX = {
+    ins: { kpis: "An insurance report with 8 KPIs: Gross Written Premium, Loss Ratio, Combined Ratio, Lapse Rate, Claims TAT, Persistency Ratio (13M), Avg Claim Cost and Policy Count.", stat: "6 of 8", statl: "match built-in Insurance terms at once",
+      rows: [["4 · Domain", "Names such as Premium, Loss Ratio and Lapse Rate score 13: the domain is Insurance."],
+        ["5 · Look up", "Gross Written Premium, Loss Ratio, Combined Ratio, Lapse Rate, Persistency Ratio and Policy Count match the built-in Insurance terms. Claims TAT and Avg Claim Cost do not."],
+        ["5 · Not matched", "Offline: a draft from the formula. AI mode: the web and AI try first, then the draft."],
+        ["6 · Write", "Matched KPIs read cleanly. Drafts are marked please verify."],
+        ["7 · Ask", "The two KPIs with their drafts, and abbreviations such as TAT."],
+        ["Run 2", "You type “days from claim registration to settlement”. It is saved to glossary\\domains\\Insurance.csv and the file says No clarification needed."],
+        ["Next report", "The built-in terms plus your Insurance.csv cover most KPIs, so there are very few questions."]] },
+    hc: { kpis: "A healthcare report with 11 KPIs: Patient Admissions, Readmission Rate, Average Length of Stay, Bed Occupancy Rate, No Show Rate, Revenue, Average Wait Time, Net Promoter Score, Staff Turnover, Claims Rejection Rate and Cost per Patient.", stat: "5 of 11", statl: "match, all borrowed from other domains",
+      rows: [["4 · Domain", "Names such as Admissions, Readmission, Length of Stay and Bed Occupancy score 6: the domain is Healthcare."],
+        ["5 · Look up", "Only borrowed matches: Revenue (Finance), Average Wait Time and Net Promoter Score (Customer), Staff Turnover (HR & People), Claims Rejection Rate (Insurance). Six KPIs have no match: Patient Admissions, Readmission Rate, Length of Stay, Bed Occupancy, No Show Rate and Cost per Patient."],
+        ["5 · Not matched", "Offline: a draft from the formula. AI mode: the web and AI try first, then the draft."],
+        ["6 · Write", "Borrowed definitions may read generally, for example “customer” in Average Wait Time. Confirm them for a hospital."],
+        ["7 · Ask", "The six KPIs with their drafts, and the borrowed ones if you want to confirm them."],
+        ["Run 2", "You answer, for example “patients who return within 30 days of discharge”. They are saved to glossary\\domains\\Healthcare.csv."],
+        ["Next report", "Your Healthcare.csv covers the core KPIs, so the second hospital report asks very little. The first one cost the most questions."]] }
+  };
+  function exPick(k) {
+    var x = EX[k];
+    $$("#s-ex .seg button").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.x === k ? "true" : "false"); });
+    $("#ex-kpis").textContent = x.kpis; $("#ex-stat").textContent = x.stat; $("#ex-statl").textContent = x.statl;
+    $("#extab").innerHTML = x.rows.map(function (r) { return '<div class="exrow"><b>' + esc(r[0]) + "</b><span>" + esc(r[1]) + "</span></div>"; }).join("");
+  }
+  $$("#s-ex .seg button").forEach(function (b) { b.addEventListener("click", function () { exPick(b.dataset.x); }); });
+  exPick("ins");
 
   show(location.hash.slice(1) || "any", true);
 })();
