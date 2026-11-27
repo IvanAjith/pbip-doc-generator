@@ -2,7 +2,7 @@
 <title>PBIP Documentation Generator</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="author" content="Ajith Khan, Systech, Employee ID IN1661">
-<!-- Created by Ajith Khan (Employee ID IN1661), Systech. PBIP Documentation Generator presentation, version 1.17.0. -->
+<!-- Created by Ajith Khan (Employee ID IN1661), Systech. PBIP Documentation Generator presentation, version 1.18.0. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: sticky Systech header with progress bar; six slides (overview, how it works, clarification and glossary, developers, impact, security and limits) swapped with a directional slide-in.
@@ -366,7 +366,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 .cnt3 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 900px) { .cnt3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .filebox { background: var(--code-bg); color: var(--code-fg); border-radius: 14px; padding: 14px 16px; font-family: var(--font-mono); font-size: .8rem; line-height: 1.6; white-space: pre; overflow-x: auto; max-width: 100%; min-height: 250px; }
-.filebox .h { color: #FFB81C; } .filebox .d { color: #8FA6C9; } .filebox .a { color: #4EE0AE; } .filebox .q { color: #FF9C8A; }
+.filebox .h { color: #FFB81C; } .filebox .d { color: #8FA6C9; } .filebox .a { color: #4EE0AE; } .filebox .q { color: #FF9C8A; } .filebox .acc { color: #FFB81C; }
 .filebox .cur { display: inline-block; width: .55em; height: 1em; background: #DCE9FA; vertical-align: -2px; animation: blink 1s steps(2) infinite; }
 .stack3 { display: grid; gap: 10px; margin-top: 14px; }
 .layer { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; border-radius: 14px; padding: 12px 16px; border: 1px solid var(--line); background: var(--surface); }
@@ -620,7 +620,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   <div class="row two">
     <div class="panel rv" style="--i:4">
       <div class="runhead">
-        <div><h2 style="font-size:1.25rem">The clarification loop</h2><p class="note">Press the buttons in order. The file is an illustration of Needs_Your_Clarification.txt.</p></div>
+        <div><h2 style="font-size:1.25rem">The clarification loop</h2><p class="note">Press the buttons in order. The file is an illustration of Needs_Your_Clarification.txt. Under a draft, a blank line means accepted, so only the changes are typed. Abbreviations and KPIs with no draft need an answer.</p></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn" id="lp-fill">1 · Type answers</button>
           <button class="btn amber" id="lp-run" disabled>2 · Run again</button>
@@ -631,7 +631,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     <div class="panel rv" style="--i:5">
       <h2 style="font-size:1.25rem">What happens on the second run</h2>
       <div class="term" id="lp-term" aria-live="polite" style="min-height:250px"></div>
-      <p class="note" style="margin-top:10px">Console wording is shortened. When the file says &ldquo;No clarification needed&rdquo;, the three documents are ready to share and the next run asks the mode again.</p>
+      <p class="note" style="margin-top:10px">Console wording is shortened. When the file says &ldquo;No clarification needed&rdquo;, the three documents are ready to share. The mode is asked on every run, the second one included, so you can switch between Offline and AI.</p>
     </div>
   </div>
 
@@ -966,16 +966,18 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     ["d", "* KPI document: N definition(s) come from it; N KPI(s) missing from it. Details: output\\KPI_Document_Check.txt"],
     ["d", "* N drafts to verify (formula N, AI N, web N)"],
     ["", "* CLARIFICATION NEEDED -- N abbreviation(s) to explain; N KPI(s) without a definition."],
-    ["d", "  Open output\\Needs_Your_Clarification.txt, type your answers after the >>> marks,"],
-    ["d", "  save, and run the same command again."]
+    ["d", "  Open output\\Needs_Your_Clarification.txt, read it, type only what you want to change after the >>> marks"],
+    ["d", "  (a blank draft counts as accepted), save, and run the same command again."]
   ];
   var AGAIN = [
     ["p", "$ python run.py"],
     ["", ""],
-    ["", "Your last run was in OFFLINE mode and N clarification question(s) were waiting."],
-    ["d", "  Carrying on in offline mode. (To choose the mode again: python run.py --ask-mode)"],
+    ["", "Do you have an AI API key?"],
+    ["d", "  1. Yes - AI mode      2. No - Offline mode      (asked again on every run)"],
+    ["", "Type 1 or 2: 2"],
     ["", "Reading Name.Report + Name.SemanticModel ..."],
     ["d", "  N pages (N in the main navigation), N measures, N tables"],
+    ["ok", "  N draft(s) were left blank in Needs_Your_Clarification.txt, so they count as accepted"],
     ["ok", "  picked up from Needs_Your_Clarification.txt: N definition(s) (kept in glossary.json and domains\\Insurance.csv) and N abbreviation(s) (kept in context.txt)"],
     ["", "Building page content (offline) ..."],
     ["ok", "  wrote Name_User_Manual.docx"],
@@ -1044,7 +1046,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     { n: "Plant manager", q: "What does the TRIR card on the Safety page actually tell me?", a: "It shows how often work injuries needing medical treatment are happening, adjusted for hours worked so sites compare fairly. Lower is better.", w: "User Manual \u203A Safety page" },
     { n: "New team member", q: "I just joined. What is OTIF, and why is the card amber?", a: "OTIF is the share of orders delivered on time and in full. The manual's conventions section lists the status words and colors used across the report.", w: "KPI Glossary + Manual \u203A Display conventions" },
     { n: "Report developer", q: "Which tables feed the On time Delivery measure, and what's the DAX?", a: "Search the measure by name. You get the full formula, an auto-written summary, the tables and columns it touches, and the relationships between them.", w: "KPI Documentation (HTML)" },
-    { n: "Report owner", q: "A definition in the glossary is wrong, or an abbreviation is unexplained. How do I fix it?", a: "Type the answer after the >>> mark in Needs_Your_Clarification.txt and run python run.py again. The tool stores it in the glossary folder, rebuilds all three documents and never asks again. You can also type over the \u201cWhat it means\u201d cell in the glossary Word file.", w: "Needs_Your_Clarification.txt, then KPI Glossary \u203A What it means" },
+    { n: "Report owner", q: "A definition in the glossary is wrong, or an abbreviation is unexplained. How do I fix it?", a: "Type the answer after the >>> mark in Needs_Your_Clarification.txt (a draft you leave blank is accepted) and run python run.py again. The tool stores it in the glossary folder, rebuilds all three documents and never asks again. You can also type over the \u201cWhat it means\u201d cell in the glossary Word file.", w: "Needs_Your_Clarification.txt, then KPI Glossary \u203A What it means" },
     { n: "Leadership", q: "Which pages are the real report, and can I trust the definitions?", a: "The manual's report structure lists the main pages and how many test or duplicate pages were left out. In the glossary every definition shows its source, and anything drafted from a formula, the web or an AI is marked \u201cplease verify\u201d until a person confirms it.", w: "Manual \u203A Report structure + KPI Glossary \u203A Source column" }
   ];
   var persona = 0, chatTok = 0, pEl = $("#persons");
@@ -1128,7 +1130,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
       tip: "On Windows, py run.py also works if python is not recognised. A key you choose to save is stored in your own user folder or Windows Credential Manager, never in the tool's folder.", hl: "run" },
     { t: "Collect the files from output/", p: "The manual, the glossary and the HTML reference appear in the output folder, together with Needs_Your_Clarification.txt. Review the documents, and read the question file.",
       cmds: [], tip: "Delete the copies in source/ and output/ when you are completely done.", hl: "output" },
-    { t: "Answer the questions, then run the same command again", p: "Open Needs_Your_Clarification.txt in Notepad and type each answer after the >>> mark (plain words, blank to skip). Save. Run python run.py again: it carries on in the same mode, stores your answers in the glossary folder, and rebuilds all three documents. Repeat until the file says No clarification needed.",
+    { t: "Answer the questions, then run the same command again", p: "Open Needs_Your_Clarification.txt in Notepad and read every question. Under a draft, leave the line blank to accept it or type your own wording. An abbreviation or a KPI with no draft needs an answer. Save. Run python run.py again: it asks Offline or AI again, treats blank drafts as accepted, stores your answers in the glossary folder, and rebuilds all three documents. Repeat until the file says No clarification needed.",
       cmds: [["Run it again", "python run.py"]], tip: "Your answers are kept for every later run, so you never type one twice. You can still fix a single definition by typing over the What it means cell in the glossary Word file. Close Word files before re-running, and keep one glossary folder per report (--glossary).", hl: "clar" }
   ];
   function treeHtml(hl) {
@@ -1283,7 +1285,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     { k: "4 · Name the domain", a: "Reads the page, table and KPI names, scores them against domains_catalog.csv (125 industries) and against the built-in glossary, and names the domain, for example Insurance or Healthcare. A typed Domain: line in glossary\\context.txt overrides it. Too little evidence gives General.", b: "Names in the report, domains_catalog.csv and builtin_glossary\\*.csv.", c: "Limit the lookup to one domain: all built-in files and your own dictionary are searched together. The domain only names the file for your answers and gives the AI and web search some context." },
     { k: "5 · Find a definition", a: "For each KPI the tool walks down the order shown below: your own words, the KPI document, the built-in glossary and your own dictionary, earlier answers, the web and AI (AI mode only), then offline wording read from the KPI name or formula.", b: "KPI document, built-in glossary, your answers, the KPI name, the formula and, in AI mode, a one-sentence draft.", c: "Send your data or the KPI document to the AI. It sends only the KPI name, the formula wording, the page name and your abbreviation list." },
     { k: "6 · Write the files", a: "Builds the User Manual (Word), the KPI Glossary (Word), the KPI Documentation (HTML, with the full DAX), Needs_Your_Clarification.txt and, when a KPI document was found, KPI_Document_Check.txt. Yellow marks only the KPIs that still wait for a definition.", b: "The facts from stages 1 to 5.", c: "Put Draft or AI wording in a document without marking it please verify." },
-    { k: "7 · Ask what is missing", a: "Part 1 asks what abbreviations stand for. Part 2 lists every KPI with no definition and every draft to confirm (type OK to keep a draft). You answer once, run the same command again, and your answers are saved in glossary\\glossary.json and glossary\\domains\\<Domain>.csv.", b: "Plain-text answers after the >>> marks.", c: "Ask the same question twice." }
+    { k: "7 · Ask what is missing", a: "Part 1 asks what abbreviations stand for. Part 2 lists every KPI with no definition and every draft to confirm (leave a draft blank to accept it). You answer once, run the same command again, and your answers are saved in glossary\\glossary.json and glossary\\domains\\<Domain>.csv.", b: "Plain-text answers after the >>> marks.", c: "Ask the same question twice." }
   ];
   explorer($("#stlist"), $("#std"), STAGES, function (x) { return dr("What happens", x.a) + dr("Uses", x.b) + dr("Never does", x.c); }, function (i) { if (i === 4) tryPick(tryCur); });
 
@@ -1326,10 +1328,11 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   /* ---------- slide 3: clarification loop, domain bars ---------- */
   var FILE_Q = [
     ["h", "NEEDS YOUR CLARIFICATION  -  Name"], ["", ""],
-    ["d", "How this works:"], ["d", "  1. Type your answer on the line that starts with  >>>"], ["d", "  2. Save this file, then run the same command again."], ["", ""],
+    ["d", "How this works:"], ["d", "  1. Read everything. Type on the line that starts with  >>>"], ["d", "  2. A KPI with a draft: leave it BLANK to accept the draft."], ["d", "  3. Save, then run again. You are asked Offline or AI again."], ["", ""],
     ["h", "======== PART 1: WHAT DO THESE ABBREVIATIONS STAND FOR? ========"], ["", "[A1] WO"], ["d", "     seen in: WO Headcount"], ["ans", ">>> ", "work order"], ["", ""],
     ["h", "======== PART 2: WHAT DOES EACH KPI MEAN? ========"], ["", "[K1] Settlement Lag"], ["d", "     page: Operations"], ["d", "     formula: Settled Date − Order Date"], ["d", "     No definition was found for this one."],
-    ["ans", ">>> ", "How many days pass between an order and its payment."], ["", ""]
+    ["ans", ">>> ", "How many days pass between an order and its payment."], ["", ""],
+    ["", "[K2] Collection Efficiency"], ["d", "     draft: The share of money billed that was collected."], ["d", "     Leave blank to accept this draft, or write your own wording."], ["acc", ">>> "], ["d", "     (left blank: accepted on the next run)"], ["", ""]
   ];
   var lpTok = 0, lpFile = $("#lp-file"), lpTerm = $("#lp-term");
   function drawFile(done, partial) {            // done = answers fully typed; partial = text of the answer being typed
@@ -1345,8 +1348,10 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
   function drawTerm(lines, cur) { lpTerm.innerHTML = lines.map(function (l) { return '<span class="' + l[0] + '">' + esc(l[1]) + "</span>"; }).join("\n") + (cur ? '<span class="cur"></span>' : ""); }
   var T0 = [["d", "(nothing yet: type the answers first)"]];
   var T1 = [["p", "$ python run.py"], ["", ""],
-    ["", "Your last run was in OFFLINE mode and 3 clarification question(s) were waiting."],
-    ["d", "  Carrying on in offline mode. (To choose the mode again: python run.py --ask-mode)"],
+    ["", "Do you have an AI API key?"],
+    ["d", "  1. Yes - AI mode      2. No - Offline mode      (asked again on every run)"],
+    ["", "Type 1 or 2: 2"],
+    ["ok", "  1 draft(s) were left blank in Needs_Your_Clarification.txt, so they count as accepted"],
     ["ok", "  picked up from Needs_Your_Clarification.txt: 1 definition(s) (kept in glossary.json and domains\\Insurance.csv) and 1 abbreviation(s) (kept in context.txt)"],
     ["", "Building page content (offline) ..."],
     ["ok", "  wrote Name_User_Manual.docx"], ["ok", "  wrote Name_KPI_Glossary.docx"], ["ok", "  wrote Name_KPI_Documentation.html"], ["", ""],
@@ -1461,7 +1466,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
     $$(".slide").forEach(function (s) {
       if (!s.querySelector(".credit")) {
         var f = document.createElement("div"); f.className = "credit";
-        f.innerHTML = "<span>Created by <b>Ajith Khan</b>, Systech</span><span>Employee ID <b>IN1661</b></span><span>PBIP Documentation Generator \u00B7 v1.17.0</span>"; s.appendChild(f);
+        f.innerHTML = "<span>Created by <b>Ajith Khan</b>, Systech</span><span>Employee ID <b>IN1661</b></span><span>PBIP Documentation Generator \u00B7 v1.18.0</span>"; s.appendChild(f);
       }
     });
   }
@@ -1471,11 +1476,11 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
 
   /* ---------- v1.17: flowchart with folders ---------- */
   var FLOW = [
-    { t: "Start", d: "python run.py (or double-click run_windows.bat). It asks Offline or AI, unless the last run left questions waiting and it carries on in the same mode.", f: ["run.py", "glossary\\last_run.json"] },
+    { t: "Start", d: "python run.py (or double-click run_windows.bat). It asks Offline or AI on every run, so you can switch between runs.", f: ["run.py", "glossary\\last_run.json"] },
     { t: "Read the report", d: "Finds the .Report and .SemanticModel folders (unzips a .zip first) and reads pages, KPIs and DAX as text. Never touches your data.", f: ["source\\*.Report", "source\\*.SemanticModel", "app.py"] },
     { t: "Read the KPI document, if there is one", d: "Any Excel, CSV or Word file in source\\ is read in whatever layout it has: definitions, calculations and a legend of abbreviations. No document: this box is skipped.", f: ["source\\*.xlsx | *.csv | *.docx", "kpi_document.py"] },
     { t: "Name the domain", d: "Scores the page, table and KPI names against 125 industries and the built-in terms, for example Insurance. Nothing to type; a Domain: line in context.txt overrides it.", f: ["domains_catalog.csv", "builtin_glossary\\*.csv", "domain_detect.py"] },
-    { t: "Pick up your answers", d: "Reads what you typed after >>> in the clarification file and files it: meanings by domain, abbreviations in context.txt.", f: ["output\\Needs_Your_Clarification.txt", "glossary\\glossary.json", "glossary\\domains\\<Domain>.csv", "glossary\\context.txt"] },
+    { t: "Pick up your answers", d: "Reads the clarification file. What you typed is filed (meanings by domain, abbreviations in context.txt); a draft left blank counts as accepted and is filed too.", f: ["output\\Needs_Your_Clarification.txt", "glossary\\glossary.json", "glossary\\domains\\<Domain>.csv", "glossary\\context.txt"] },
     { t: "Define every KPI, first match wins", d: "Your own words, then the KPI document, then the built-in glossary and your dictionary, then earlier answers, then the web and an AI draft (AI mode only), then the formula wording, then a question for you.", f: ["builtin_glossary\\*.csv", "glossary\\domains\\*.csv", "shared_glossary.csv", "glossary\\web_cache.json", "glossary.py"] },
     { t: "Write the documents", d: "Builds the User Manual, the KPI Glossary and the KPI Documentation, with the logo. Drafts are marked please verify and shaded yellow where a definition is still missing.", f: ["output\\<Project>_User_Manual.docx", "output\\<Project>_KPI_Glossary.docx", "output\\<Project>_KPI_Documentation.html"] },
     { t: "Report back", d: "Writes the questions that only you can answer, a check of the KPI document against the report, and a short summary in the terminal.", f: ["output\\Needs_Your_Clarification.txt", "output\\KPI_Document_Check.txt"] }
@@ -1487,7 +1492,7 @@ canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events
         x.f.map(function (f) { return '<span class="cmdline">' + esc(f) + "</span>"; }).join("") + "</div></div>" + '<div class="fca" aria-hidden="true">↓</div>';
     });
     html += '<div class="fcn dec" data-i="' + FLOW.length + '"><span class="nb">?</span><b>Anything left to ask?</b><p>The tool looks at output\\Needs_Your_Clarification.txt.</p>' +
-      '<div class="fcb"><div class="yes"><b>Yes</b><span>You type the answers after the >>> marks, save, and run the same command again. The loop goes back to “Pick up your answers”.</span></div>' +
+      '<div class="fcb"><div class="yes"><b>Yes</b><span>You read the file, change only the drafts you disagree with, answer any abbreviation, save, and run again (Offline or AI is asked again). Blank drafts are accepted. The loop goes back to “Pick up your answers”.</span></div>' +
       '<div class="no"><b>No</b><span>The file says “No clarification needed”. The three documents in output\\ are ready to share.</span></div></div></div>';
     fc.innerHTML = html;
     var tree = [

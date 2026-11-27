@@ -2,8 +2,9 @@
 
 Every run writes  Needs_Your_Clarification.txt  next to the three documents. It asks, in plain words, for what only a person can supply:
   PART 1  what an abbreviation in a KPI name stands for (CB, EOL ...)
-  PART 2  what a KPI means, when no definition could be built or found and, unless you run with --skip-drafts, to confirm every draft (type OK to keep one)
-You type each answer after ">>>", save, and run the same command again: abbreviations go to context.txt, definitions go into the
+  PART 2  what a KPI means, when no definition could be built or found and, unless you run with --skip-drafts, to confirm every draft
+You type each answer after ">>>", save, and run the same command again. A draft you leave blank counts as accepted (typing OK does the same), so only the
+drafts you want to change need typing; an abbreviation or a KPI with no draft needs an answer, or it is asked again: abbreviations go to context.txt, definitions go into the
 glossary file and into your own dictionary, glossary/domains/<Domain>.csv (so it grows with every project), the three documents are rebuilt, and the file comes back saying nothing is needed.
 (An older Needs_Your_Clarification.csv from version 1.9 is still read.)
 """
@@ -31,9 +32,11 @@ def write(path, project, abbrs, needed, drafts=()):
         Path(path).write_text("\n".join(L), encoding="utf-8")
         return 0
     L += ["How this works:",
-          "  1. Type your answer on the line that starts with  >>>  (a few lines are fine; leave it blank to skip a question).",
-          "  2. Save this file, then run the same command again.",
-          "  3. Your answers are kept for later runs, the three documents are rebuilt with them, and this file shrinks.",
+          "  1. Read everything. Type your answer on the line that starts with  >>>  (a few lines are fine).",
+          "  2. A KPI that shows a draft: leave the line blank to ACCEPT the draft, or write your own wording to replace it.",
+          "     An abbreviation, or a KPI with no draft: a blank line means it is still unanswered, so it is asked again.",
+          "  3. Save this file, then run the same command again. The tool asks Offline or AI again, then rebuilds the three documents.",
+          "  4. Your answers and the drafts you accepted are kept for later runs, and this file shrinks.",
           "Write for someone who does not know the business: plain, everyday words.", ""]
     i = 0
     if abbrs:
@@ -54,15 +57,22 @@ def write(path, project, abbrs, needed, drafts=()):
             j += 1
             L += [f"[K{j}] {r['term']}", f"     page: {r.get('page') or '-'}", f"     formula: {_one_line(r.get('calc')) or '-'}",
                   f"     draft: {_one_line(r.get('draft'))}"] + ([f"     check: {_one_line(r['note'])}"] if r.get("note") else []) + [
-                  "     Type OK to keep this draft, or write your own wording.", ">>> ", ""]
+                  "     Leave blank to accept this draft, or write your own wording.", ">>> ", ""]
     Path(path).write_text("\n".join(L), encoding="utf-8")
     return n
 
 
-def read(path):
-    """-> (abbreviations {TOKEN: meaning}, definitions [(term, text)]). Blank answers are ignored; OK keeps the shown draft."""
+def read(path, accept_blank=True):
+    """-> (abbreviations {TOKEN: meaning}, definitions [(term, text)]). OK, or a blank answer under a draft, keeps the shown draft;
+    a blank abbreviation or a blank KPI without a draft is ignored (it is asked again)."""
+    a, d, _n = read_full(path, accept_blank)
+    return a, d
+
+
+def read_full(path, accept_blank=True):
+    """-> (abbreviations, definitions, number of drafts accepted only because the answer was left blank)."""
     p = Path(path)
-    abbr, defs = {}, []
+    abbr, defs, n_blank = {}, [], 0
     if p.exists():
         try:
             lines = p.read_text(encoding="utf-8-sig").splitlines()
@@ -71,10 +81,12 @@ def read(path):
         cur, ans, active, draft = None, [], False, ""
 
         def flush():
-            nonlocal cur, ans, active, draft
+            nonlocal cur, ans, active, draft, n_blank
             if cur:
                 text = " ".join(x.strip() for x in ans if x.strip()).strip()
-                if text:
+                if not text and accept_blank and cur[0] == "K" and draft and active:
+                    defs.append((cur[1], draft)); n_blank += 1       # left blank under a draft = accepted
+                elif text:
                     if cur[0] == "A":
                         abbr[cur[1].upper()] = text
                     else:
@@ -120,4 +132,4 @@ def read(path):
                         defs.append((term, mine))
         except Exception:
             pass
-    return abbr, defs
+    return abbr, defs, n_blank

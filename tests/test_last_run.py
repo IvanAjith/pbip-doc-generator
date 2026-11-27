@@ -46,9 +46,9 @@ for f in list((t / "syn" / "hr").rglob("*.tmdl")) + list((t / "syn" / "hr").rglo
     x = f.read_text(encoding="utf-8"); y = x.replace("Attrition %", "Zorp CB %")
     if y != x: f.write_text(y, encoding="utf-8")
 
-def tty_run(typed):
+def tty_run(typed, extra=()):
     m, s = pty.openpty()
-    cmd = [sys.executable, str(ROOT / "run.py"), "--source", str(t / "syn" / "hr"), "--output", str(t / "out"), "--glossary", str(t / "gl" / "glossary.json"), "--skip-drafts"]
+    cmd = [sys.executable, str(ROOT / "run.py"), "--source", str(t / "syn" / "hr"), "--output", str(t / "out"), "--glossary", str(t / "gl" / "glossary.json"), "--skip-drafts", *extra]
     proc = subprocess.Popen(cmd, stdin=s, stdout=s, stderr=s, close_fds=True, env=dict(os.environ))
     os.close(s)
     for line in typed:
@@ -77,16 +77,18 @@ def tty_run(typed):
 out1, rc = tty_run(["2"])                              # first run: the question is asked, answer 2 = offline
 assert rc == 0 and "Do you have an AI API key?" in out1 and "CLARIFICATION NEEDED" in out1, out1[-1500:]
 assert last_run.resume(t / "gl" / "last_run.json")["mode"] == "offline"
-out2, rc = tty_run([])                                  # second run: nothing is asked, it carries on in offline mode
-assert rc == 0 and "Do you have an AI API key?" not in out2 and "Carrying on in offline mode" in out2, out2[-1500:]
+out2, rc = tty_run(["2"])                               # second run: the mode is asked again (offline chosen again)
+assert rc == 0 and "Do you have an AI API key?" in out2 and "Carrying on" not in out2, out2[-1500:]
+out2b, rc = tty_run([], ["--same-mode"])                # --same-mode: nothing is asked, it carries on in offline mode
+assert rc == 0 and "Do you have an AI API key?" not in out2b and "Carrying on in offline mode" in out2b, out2b[-1500:]
 # answer everything, run again: it finishes and says so
 f = t / "out" / "Needs_Your_Clarification.txt"
 body = f.read_text(encoding="utf-8")
 body = re.sub(r"(\[A\d+\] CB\n.*\n>>> )", r"\1comeback", body)
 body = re.sub(r"(\[K\d+\] [^\n]*\n[^\n]*\n[^\n]*\n[^\n]*\n>>> )", r"\1A made up meaning for the test.", body)
 f.write_text(body, encoding="utf-8")
-out3, rc = tty_run([])
-assert rc == 0 and "Carrying on in offline mode" in out3 and "No clarification needed" in out3 and "asked the mode again" in out3, out3[-1500:]
+out3, rc = tty_run(["2"])
+assert rc == 0 and "Do you have an AI API key?" in out3 and "No clarification needed" in out3 and "asked the mode again" in out3, out3[-1500:]
 out4, rc = tty_run(["2"])                               # finished: next run asks again
 assert "Do you have an AI API key?" in out4 and "Carrying on" not in out4
 print("last run tests passed")

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.18.0 - 27/11/2026
+- A draft left blank in `Needs_Your_Clarification.txt` now counts as accepted on the next run (typing OK still works). Only the drafts you want to change need typing, so
+  a long list can be read once, edited where needed and saved. Abbreviations and KPIs with no draft still need an answer: a blank one stays open and is asked again.
+  The run says how many drafts were accepted this way. The file's own instructions say so, and each draft now reads "Leave blank to accept this draft, or write your own wording."
+- `python run.py` asks Offline or AI on every run, including the second, so the mode can be changed between runs. New option `--same-mode` carries on in the last mode while
+  questions are waiting (the old behaviour); `--ask-mode` is accepted and is now the default. Answer files passed with `--answers` do not accept blanks.
+- Tests: `test_clarification.py` (blank = accepted, blank abbreviation stays open, end to end) and `test_last_run.py` (the mode is asked again; `--same-mode`).
+
 ## 1.17.0 - 27/11/2026
 - The company's own KPI document is now the first source after your own typed words. New `kpi_document.py` reads Excel (every sheet), CSV and Word (tables, heading + paragraph,
   or "name: definition" lines) in whatever layout it comes: it finds the header row anywhere (tested on the real Timex KPI library: blank first row and column, header on row 2,

@@ -29,13 +29,16 @@ Do you have an AI API key?
 ### The loop (same in both modes)
 1. Run `python run.py` and choose the mode.
 2. The three documents are written to `output/`, together with `output\Needs_Your_Clarification.txt`.
-3. If that file lists questions, open it, type your answers after the `>>>` marks and save. Part 1 asks what abbreviations stand for, Part 2 asks what
-   a KPI means (in AI mode this includes AI sentences the tool was not sure about, with a `check:` line).
-4. Run `python run.py` again. **While questions were waiting it does not ask the mode again: it carries on in the same mode** (AI mode uses the saved
-   key) and rebuilds all three documents with your answers. Your answers are kept for good: abbreviations in `glossary\context.txt`, definitions in
-   `glossary\glossary.json`.
-5. Repeat until the file says **No clarification needed**. The next `python run.py` then asks the mode again. To choose the mode again earlier:
-   `python run.py --ask-mode`.
+3. Open that file and read it all. Part 1 asks what abbreviations stand for, Part 2 asks what a KPI means. Under a **draft** you have two choices: leave the
+   `>>>` line **blank to accept the draft**, or write your own wording to replace it (typing `OK` also accepts). An abbreviation, or a KPI that has no draft, needs
+   an answer: a blank line there means it is still open and is asked again. Save the file.
+4. Run `python run.py` again. **The mode is asked again on every run**, so you can switch between Offline and AI (`--same-mode` carries on in the last mode
+   instead). The tool picks up what you typed, treats every draft you left blank as accepted, says how many (`N draft(s) were left blank ... count as accepted`),
+   and rebuilds all three documents. Accepted drafts and typed answers are kept for good: definitions in `glossary\glossary.json` and
+   `glossary\domains\<Domain>.csv`, abbreviations in `glossary\context.txt`.
+5. Repeat until the file says **No clarification needed**.
+
+Take care: because a blank draft counts as accepted, running the command a second time without reading the file accepts every draft. Read first, then save and run.
 
 In AI mode the tool also writes the offline wording behind the scenes and keeps the safer one (see "AI mode checks itself against offline mode" below).
 Use one `output/` and one `glossary/` folder for one report; to keep two reports apart use `--output` and `--glossary`.
@@ -247,4 +250,4 @@ python tests/test_secret_scan.py        # no key-like text in files Git would pu
 `.gitignore` excludes `source/`, `output/` and `glossary/` (your reports, generated documents and definitions). Do not remove those lines, and never put API keys in any file in this folder - use `python run.py --setup-ai`.
 
 ## Presentation
-`docs/PBIP_Presentation.html` is the leadership presentation (open it in a browser; arrow keys move between slides). It describes version 1.17.x (eight slides: overview, the flowchart with the folders, how it works, Insurance and Healthcare as two worked domains, the clarification file and glossary dump, a guide for developers, impact, security and limitations); update it when the tool's behaviour changes. `docs/NEXT_PLAN.txt` holds the list of planned improvements.
+`docs/PBIP_Presentation.html` is the leadership presentation (open it in a browser; arrow keys move between slides). It describes version 1.18.x (eight slides: overview, the flowchart with the folders, how it works, Insurance and Healthcare as two worked domains, the clarification file and glossary dump, a guide for developers, impact, security and limitations); update it when the tool's behaviour changes. `docs/NEXT_PLAN.txt` holds the list of planned improvements.

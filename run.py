@@ -150,7 +150,7 @@ def main():
                          "(default: assets/logo.png; use --logo none to leave it out)")
     ap.add_argument("--clarify-drafts", action="store_true",
                     help="(now the default) every KPI the built-in glossary and your own dictionary do not know is listed in "
-                         "Needs_Your_Clarification.txt with its draft: type ok to accept the draft, or write your own wording")
+                         "Needs_Your_Clarification.txt with its draft: leave the answer blank (or type ok) to accept the draft, or write your own wording")
     ap.add_argument("--kpi-doc", nargs="+", default=[], metavar="FILE",
                     help="the company's own KPI document (.xlsx, .csv or .docx) when it is not in the source folder; any file of those "
                          "types lying in the source folder is found by itself")
@@ -158,7 +158,9 @@ def main():
     ap.add_argument("--skip-drafts", action="store_true",
                     help="do not ask about drafts: only KPIs with no definition at all are listed (the older behaviour)")
     ap.add_argument("--ask-mode", action="store_true",
-                    help="always ask offline or AI, even when the last run left clarification questions waiting (normally it carries on in the same mode)")
+                    help="(now the default) ask offline or AI on every run")
+    ap.add_argument("--same-mode", action="store_true",
+                    help="do not ask offline or AI while the last run left questions waiting: carry on in the same mode")
     ap.add_argument("--answers", nargs="+", default=[], metavar="FILE",
                     help="also read answers from other Needs_Your_Clarification.txt files (used by compare_test.py so one set of answers serves both runs)")
     ap.add_argument("--no-cross-check", action="store_true",
@@ -219,22 +221,22 @@ def main():
         ai_setup.show_status()
         return
 
-    # Started with no mode option on a normal keyboard session: carry on in the last mode while questions are waiting, else ask once.
+    # Started with no mode option on a normal keyboard session: ask Offline or AI on every run (--same-mode carries on in the last mode).
     session_key, session_cfg = None, {}
     import last_run
     last_path = last_run.path_for(args.glossary)
     if args.ai is None and not args.offline and not args.no_prompt and sys.stdin.isatty():
         import ai_setup
         choice = None
-        again = None if args.ask_mode else last_run.resume(last_path)
+        again = last_run.resume(last_path) if args.same_mode else None
         if again:
             print(f"\nYour last run ({again.get('when', '')}) was in {'AI' if again['mode'] == 'ai' else 'OFFLINE'} mode and "
                   f"{again['pending']} clarification question(s) were waiting.")
             if again["mode"] == "offline":
                 choice = {"mode": "offline"}
-                print("  Carrying on in offline mode. (To choose the mode again: python run.py --ask-mode)")
+                print("  Carrying on in offline mode because you used --same-mode.")
             else:
-                print("  Carrying on in AI mode with the saved key. (To choose the mode again: python run.py --ask-mode)")
+                print("  Carrying on in AI mode with the saved key because you used --same-mode.")
                 choice = ai_setup.resume_ai(again.get("provider"))
         if choice is None:
             choice = ai_setup.choose_mode()
@@ -276,9 +278,9 @@ def main():
     context.learn_from_report(m.get("expression") or "" for m in analysis["measuresByName"].values())
     import clarify
     clar_path = output / clarify.NAME
-    abbr_ans, def_ans = clarify.read(clar_path)          # what you typed in Needs_Your_Clarification.txt
+    abbr_ans, def_ans, n_blank = clarify.read_full(clar_path)   # what you typed in Needs_Your_Clarification.txt; a blank draft = accepted
     for extra in args.answers:                           # answers typed in another run's file fill the gaps; this run's own file wins
-        ea, ed = clarify.read(Path(extra))
+        ea, ed = clarify.read(Path(extra), accept_blank=False)
         for k, v in ea.items():
             abbr_ans.setdefault(k, v)
         have = {t.lower() for t, _ in def_ans}
@@ -359,6 +361,8 @@ def main():
     glossary.domain = context.domain                     # answers are kept in glossary\domains\<Domain>.csv
     glossary.cross_check = not args.no_cross_check
     n_ans = glossary.absorb_answers(def_ans)
+    if n_blank:
+        print(f"  {n_blank} draft(s) were left blank in {clarify.NAME}, so they count as accepted (kept like answers you typed)")
     if n_ans or n_abbr:
         print(f"  picked up from {clarify.NAME}: {n_ans} definition(s) (kept in {Path(args.glossary).name} and in your dictionary "
               f"domains\\{glossary.personal_file().name}) and "
@@ -527,9 +531,9 @@ def main():
         if needed_rows:
             parts.append(f"{len(needed_rows)} KPI(s) without a definition: " + ", ".join(r["term"] for r in needed_rows[:8]) + (" ..." if len(needed_rows) > 8 else ""))
         if draft_rows:
-            parts.append(f"{len(draft_rows)} draft(s) to confirm")
+            parts.append(f"{len(draft_rows)} draft(s) to read (leave one blank to accept it, or type your own wording)")
         print("* CLARIFICATION NEEDED -- " + "; ".join(parts) + ".")
-        print(f"  Open {clar_path}, type your answers after the >>> marks, save, and run the same command again.")
+        print(f"  Open {clar_path}, read it, type only what you want to change after the >>> marks (a blank draft counts as accepted), save, and run the same command again. You will be asked Offline or AI again.")
         print("  Your answers are kept (definitions in the glossary file and in your own dictionary, abbreviations in context.txt) and all three documents are rebuilt.")
     last_run.write(last_path, "ai" if ai is not None else "offline", args.ai if ai is not None else "", n_clar or 0)
     for n in notes:

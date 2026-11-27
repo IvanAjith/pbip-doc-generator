@@ -80,6 +80,29 @@ rows = list(_csv.DictReader(open(dom, newline="", encoding="utf-8-sig")))
 assert list(rows[0].keys()) == ["Term", "Also known as", "Better", "Definition"], rows[0].keys()
 assert any(r["Definition"] == "The share of jobs that came back as claims." for r in rows), rows
 assert any(r["Definition"] == draft for r in rows), (draft, rows)
+# a draft left blank counts as accepted: unit level ...
+u = Path(tempfile.mkdtemp()) / clarify.NAME
+clarify.write(u, "P", [("CB", ["Zorp CB %"])], [{"term": "No Draft KPI", "page": "p", "calc": "x"}],
+              [{"term": "Draft A", "page": "p", "calc": "x", "draft": "Draft A means a thing."}, {"term": "Draft B", "page": "p", "calc": "x", "draft": "Draft B means another."}])
+a, d, nb = clarify.read_full(u)
+assert a == {} and d == [("Draft A", "Draft A means a thing."), ("Draft B", "Draft B means another.")] and nb == 2, (a, d, nb)   # blank abbreviation / blank no-draft KPI stay open
+txt = u.read_text(encoding="utf-8").replace(">>> \n\n[K3]", ">>> Mine for A.\n\n[K3]")
+u.write_text(txt, encoding="utf-8")
+assert clarify.read_full(u)[1][0] == ("Draft A", "Mine for A.") and clarify.read(u, accept_blank=False)[1] == [("Draft A", "Mine for A.")]
+assert "ACCEPT the draft" in txt and "Leave blank to accept this draft" in txt
+# ... and end to end: a first default run lists drafts, a second run with the file untouched accepts them all
+import shutil
+shutil.rmtree(t / "gl"); shutil.rmtree(t / "out")
+o1 = run(skip=False)
+n_drafts = f.read_text(encoding="utf-8").count("     draft:")
+assert n_drafts >= 1, f.read_text(encoding="utf-8")
+body = f.read_text(encoding="utf-8")
+body = re.sub(r"(\[A\d+\] \w+\n.*\n>>> )", r"\1some words", body)                              # answer the abbreviations ...
+body = re.sub(r"(No definition was found for this one\.\n>>> )", r"\1A typed meaning.", body)     # ... and the KPIs with no draft; leave every draft blank
+f.write_text(body, encoding="utf-8")
+o2 = run(skip=False)
+assert f"{n_drafts} draft(s) were left blank" in o2, o2[-1500:]
+assert "No clarification needed" in f.read_text(encoding="utf-8").replace("NO CLARIFICATION NEEDED", "No clarification needed"), f.read_text(encoding="utf-8")
 print("clarification loop tests passed")
 # an older 1.9 csv with typed answers is still read
 import csv
