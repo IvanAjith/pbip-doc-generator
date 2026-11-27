@@ -258,6 +258,40 @@ def data_table(document, headers, rows, col_widths=None, mono_cols=None, fills=N
     return t
 
 
+def swatch_table(document, headers, rows, col_widths):
+    """rows: [(hex or None, text, text ...)] -- the first column is a colour swatch showing the hex code."""
+    t = document.add_table(rows=1, cols=len(headers))
+    t.alignment = WD_TABLE_ALIGNMENT.CENTER
+    for i, htext in enumerate(headers):
+        cell = t.rows[0].cells[i]
+        cell.text = ""
+        r = cell.paragraphs[0].add_run(htext)
+        r.bold = True
+        r.font.size = Pt(9)
+        r.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+        shade_cell(cell, "1F3864")
+        set_cell_border(cell)
+    for hexv, *vals in rows:
+        tr = t.add_row()
+        c0 = tr.cells[0]
+        c0.text = ""
+        r0 = c0.paragraphs[0].add_run(hexv or "")
+        r0.font.size = Pt(8)
+        r0.font.name = "Consolas"
+        if hexv:
+            rr, gg, bb = (int(hexv[i:i + 2], 16) for i in (1, 3, 5))
+            r0.font.color.rgb = RGBColor(0, 0, 0) if (0.299 * rr + 0.587 * gg + 0.114 * bb) > 150 else RGBColor(255, 255, 255)
+            shade_cell(c0, hexv.lstrip("#"))
+        set_cell_border(c0)
+        for i, val in enumerate(vals, 1):
+            c = tr.cells[i]
+            c.text = ""
+            c.paragraphs[0].add_run(str(val) if val not in (None, "") else "\u2014").font.size = Pt(9)
+            set_cell_border(c)
+    layout_table(t, col_widths)
+    return t
+
+
 def page_break(document):
     document.add_page_break()
 

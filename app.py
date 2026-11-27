@@ -750,7 +750,11 @@ def analyze_project(report_dir: Path, sm_dir: Path):
             r"(?:'([^']+)'|\b([A-Za-z_][A-Za-z0-9_]*)\b)\[([^\]\[]+)\]", m["expression"]
         )
 
+    import design_language                                  # how the report looks: theme, colours, fonts, canvas, card style
+    design = design_language.collect(report_dir, pages, all_measures)
+
     return {
+        "design": design,
         "tables": tables, "realTables": real_tables, "dateTableCount": date_table_count,
         "relationships": relationships, "roles": roles,
         "pages": pages, "activePage": active_page,

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.19.0 - 27/11/2026
+- The User Manual has a new **Design Language** section for every report. New `design_language.py` reads the theme (`report.json`, the theme files in `StaticResources`),
+  every `page.json` and `visual.json`, and the HTML written inside measures, and the manual shows: the theme and a colour palette (swatch, hex, plain name, what it is used for),
+  fonts and sizes, canvas size and ratio, page and wallpaper colours, the usual margin and gap between visuals, how many visuals set a background, border with corner radius,
+  shadow, title and padding, the theme's default card style, and a short list for building a new page in the same style.
+- Only what the files say is written; a report with no formatting gets a short note that Power BI's defaults apply. Nothing is sent to an AI. Colours chosen by a rule or a
+  measure are counted, not listed.
+- Later sections of the manual move down by one number. New `tests/test_design_language.py`.
+
 ## 1.18.0 - 27/11/2026
 - A draft left blank in `Needs_Your_Clarification.txt` now counts as accepted on the next run (typing OK still works). Only the drafts you want to change need typing, so
   a long list can be read once, edited where needed and saved. Abbreviations and KPIs with no draft still need an answer: a blank one stays open and is asked again.
