@@ -113,6 +113,7 @@ class Glossary:
         except Exception:
             pass
         self.domain = ""                                  # set by run.py from the Domain: line in context.txt
+        self.kpidoc = None                                # kpi_document.KpiDocument: the company's own KPI document, if there is one
         self.domains_dir = self.path.parent / DOMAINS_DIR
         for e in self._read_personal():                   # my own dictionary: what I answered in earlier projects, by domain
             self._index_seed(e)
@@ -235,6 +236,12 @@ class Glossary:
             e = self.entries.get(k)
             if e and e.get("source") == "manual" and e.get("definition"):
                 return self._from_entry(e)
+        if self.kpidoc:                                   # 1b. the company's own KPI document
+            doc = next((e for e in (self.kpidoc.find(n) for n in names if n) if e is not None), None)
+            if doc is not None:
+                self.used[keys[0]]["doc"] = doc
+                if doc.definition:
+                    return Definition(doc.definition, "seed", "KPI document: " + doc.where, category=doc.area)
         for n in names:                                   # 2. seed
             s = self._seed_match(n)
             if s:
@@ -441,7 +448,7 @@ class Glossary:
             mine = d.text if d and d.source == "manual" else ""
             sugg = d.text if d and d.source != "manual" else ""
             origin = {"web": "Web: " + (d.origin if d else ""), "ai": (d.origin if d else "AI draft"),
-                      "seed": "Built-in glossary",
+                      "seed": (d.origin if d and d.origin.startswith("KPI document") else "Built-in glossary"),
                       "draft": (d.origin if d and d.origin in (ORIGIN_NAME,) or (d and d.origin.startswith(ORIGIN_DRAFT)) else "Draft built from the formula")}.get(d.source if d else "", "")
             rows.append([u["term"], mine, sugg, origin if sugg else "", u["page"], u.get("calc", "")])
             done.add(k)

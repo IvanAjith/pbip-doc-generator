@@ -151,6 +151,10 @@ def main():
     ap.add_argument("--clarify-drafts", action="store_true",
                     help="(now the default) every KPI the built-in glossary and your own dictionary do not know is listed in "
                          "Needs_Your_Clarification.txt with its draft: type ok to accept the draft, or write your own wording")
+    ap.add_argument("--kpi-doc", nargs="+", default=[], metavar="FILE",
+                    help="the company's own KPI document (.xlsx, .csv or .docx) when it is not in the source folder; any file of those "
+                         "types lying in the source folder is found by itself")
+    ap.add_argument("--no-kpi-doc", action="store_true", help="ignore any KPI document in the source folder")
     ap.add_argument("--skip-drafts", action="store_true",
                     help="do not ask about drafts: only KPIs with no definition at all are listed (the older behaviour)")
     ap.add_argument("--ask-mode", action="store_true",
@@ -280,6 +284,19 @@ def main():
         have = {t.lower() for t, _ in def_ans}
         def_ans += [(t, x) for t, x in ed if t.lower() not in have]
     n_abbr = context.set_meanings(abbr_ans)              # abbreviations -> context.txt, before the AI or the checks are used
+    import kpi_document as KD
+    kdoc, unreadable_docs, doc_results = KD.KpiDocument(), [], []
+    if not args.no_kpi_doc:                              # the company's own KPI document: its definitions come first
+        _found, unreadable_docs = KD.find_documents(source)
+        _found += [Path(x) for x in args.kpi_doc if Path(x).exists() and Path(x) not in _found]
+        doc_results = [KD.read_document(p) for p in _found]
+        kdoc = KD.KpiDocument(doc_results)
+        for r in doc_results:
+            print(f"  KPI document {r.path.name}: " + (f"{len(r.entries)} KPIs read" if r.entries else (r.error or "no KPI table found")))
+        _abbr = {k: v for r in doc_results for k, v in r.abbreviations.items() if not context.known(k)}
+        if _abbr:
+            context.set_meanings(_abbr)                  # a legend in the document explains its abbreviations
+            print(f"  {len(_abbr)} abbreviation(s) taken from the document's legend: " + ", ".join(sorted(_abbr)))
     checker = checks.Checker(context)
 
     web = None
@@ -330,6 +347,7 @@ def main():
     if n_edits:
         print(f"  picked up {n_edits} definition(s) you edited in the previous glossary document")
     glossary.context = context
+    glossary.kpidoc = kdoc if kdoc else None
     if not context.domain:                               # nobody typed a Domain: line -> read it from the report itself
         import domain_detect
         _names = [project_name] + [p["displayName"].strip() for p in analysis["pages"]] + [t["name"] for t in analysis["realTables"]] \
@@ -483,6 +501,25 @@ def main():
     if checker.flagged:
         print(f"* {len(checker.flagged)} AI draft(s) contain words that are not in the report; the Source column says "
               "'Check:' with the words: " + ", ".join(t for t, _ in checker.flagged[:6]) + (" ..." if len(checker.flagged) > 6 else ""))
+    if kdoc:                                             # what happened with the KPI document
+        used_view = {k: {**u, "dax": (analysis["measuresByName"].get(u["term"]) or {}).get("expression") or ""} for k, u in glossary.used.items()}
+        rep = KD.check(kdoc, used_view, [m["name"] for m in analysis["allMeasures"]])
+        check_path = output / "KPI_Document_Check.txt"
+        try:
+            KD.write_check(check_path, project_name, kdoc, rep, unreadable_docs)
+        except PermissionError:
+            print(f"  could NOT write {check_path.name} -- it is open in another program. Close it and run again.")
+        print(f"* KPI document ({', '.join(r.path.name for r in doc_results if r.entries)}): {len(rep['from_doc'])} definition(s) in the glossary "
+              f"come from it; {len(rep['calc_only'])} KPI(s) have a calculation but no definition there; {len(rep['not_in_doc'])} KPI(s) of the report "
+              f"are not in it; {len(rep['not_in_report'])} of its KPIs were not found in the report.")
+        if rep["differ"]:
+            print(f"  PLEASE VERIFY: {len(rep['differ'])} KPI(s) where the document's calculation may not match the formula: "
+                  + ", ".join(t for t, _, _ in rep["differ"][:6]) + (" ..." if len(rep["differ"]) > 6 else ""))
+        print(f"  Details: {check_path}")
+    elif doc_results or unreadable_docs:
+        print("* A file in the source folder looked like a KPI document but no KPI table could be read from it: "
+              + "; ".join(f"{r.path.name} ({r.error or '; '.join(r.skipped) or 'nothing found'})" for r in doc_results)
+              + "".join(f"; {p.name} (save as .xlsx/.docx/.csv)" for p in unreadable_docs) + ".")
     if n_clar:
         parts = []
         if abbr_rows:

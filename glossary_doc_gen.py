@@ -37,6 +37,8 @@ def _source_text(item):
             return "AI draft — please verify." + (f"\nCheck: {d.note}" if getattr(d, "note", "") else "")
         if d.source == "draft":
             return "Draft from the formula — please verify."
+        if d.origin.startswith("KPI document"):
+            return d.origin.replace("KPI document:", "KPI document \u2014", 1)
         if d.origin == "shared glossary":
             return "Shared glossary — added and reviewed by your team."
         return "Built-in glossary"

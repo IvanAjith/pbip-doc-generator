@@ -29,6 +29,7 @@ jobs:
           python tests/test_compose_lead.py
           python tests/test_personal_glossary.py
           python tests/test_domain_detect.py
+          python tests/test_kpi_document.py
           python tests/test_cross_check.py
           python tests/test_compare_test.py
           python tests/test_last_run.py

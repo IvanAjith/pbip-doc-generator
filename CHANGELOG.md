@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.17.0 - 27/11/2026
+- The company's own KPI document is now the first source after your own typed words. New `kpi_document.py` reads Excel (every sheet), CSV and Word (tables, heading + paragraph,
+  or "name: definition" lines) in whatever layout it comes: it finds the header row anywhere (tested on the real Timex KPI library: blank first row and column, header on row 2,
+  77 KPIs, 18 with a definition, the rest with a calculation only), reads a sheet without a header by its shape, skips cover pages, hidden lists and worked examples, understands
+  names such as "# of Outlets\n(IDDs)" and "A or B or C", and reads a Legend sheet (even a hidden one) as abbreviations when each token is the initials of its meaning.
+- Only the document's definition column is used as a KPI's "What it means" (lightly tidied). Its calculation text cross-checks the formula and is never used as a definition.
+- At the end of the run: a summary in the terminal and `KPI_Document_Check.txt` (definitions taken from the document, calculation-only KPIs, report KPIs missing from the document,
+  document KPIs missing from the report, and KPIs where the document's calculation may not match the formula, to verify). No document in the folder: nothing changes.
+- New options `--kpi-doc FILE...` and `--no-kpi-doc`. Nothing from the document is sent to the AI. New `tests/test_kpi_document.py`.
+
 ## 1.16.0 - 27/11/2026
 - The domain is found automatically. New `domain_detect.py` and `domains_catalog.csv` (125 industries and the words their reports use) read the report's page, table and KPI
   names, add a vote from every KPI that matches a built-in glossary term, and name the domain (an industry beats a business function such as Finance unless the function has
